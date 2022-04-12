@@ -2,8 +2,11 @@
  * @description: Login interface parameters
  */
 export interface LoginParams {
-  username: string;
+  account: string;
   password: string;
+  acsData: string;
+  type: string;
+  tnt: string;
 }
 
 export interface RoleInfo {
@@ -28,9 +31,9 @@ export interface GetUserInfoModel {
   // 用户id
   userId: string | number;
   // 用户名
-  username: string;
+  account: string;
   // 真实名字
-  realName: string;
+  name: string;
   // 头像
   avatar: string;
   // 介绍

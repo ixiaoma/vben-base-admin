@@ -48,7 +48,6 @@
   import { PageWrapperFixedHeightKey } from '/@/components/Page';
   import HeaderCell from './components/HeaderCell.vue';
   import { InnerHandlers } from './types/table';
-
   import { usePagination } from './hooks/usePagination';
   import { useColumns } from './hooks/useColumns';
   import { useDataSource } from './hooks/useDataSource';
@@ -372,7 +371,7 @@
 
       .ant-form {
         padding: 12px 10px 6px;
-        margin-bottom: 16px;
+        border-bottom: 1px solid #DDDDDD;
         background-color: @component-background;
         border-radius: 2px;
       }
@@ -382,8 +381,12 @@
       margin-right: 0;
     }
 
+    .ant-table-thead > tr > th {
+      background-color: @table-header-bg;
+    }
+
     .ant-table-wrapper {
-      padding: 6px;
+      padding: 20px;
       background-color: @component-background;
       border-radius: 2px;
 

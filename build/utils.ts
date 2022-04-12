@@ -23,7 +23,6 @@ export function wrapperEnv(envConf: Recordable): ViteEnv {
 
   for (const envName of Object.keys(envConf)) {
     let realName = envConf[envName].replace(/\\n/g, '\n');
-    console.log(realName)
     realName = realName === 'true' ? true : realName === 'false' ? false : realName;
 
     if (envName === 'VITE_PORT') {

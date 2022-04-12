@@ -334,6 +334,14 @@
           align-items: center;
         }
       }
+
+      .time-full{
+        width: 100%;
+
+        input{
+          text-align: center;
+        }
+      }
     }
 
     .ant-form-explain {

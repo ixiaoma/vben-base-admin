@@ -90,7 +90,7 @@ export function useTableScroll(
 
     bodyEl!.style.height = 'unset';
 
-    if (!unref(getCanResize) || tableData.length === 0) return;
+    if (!unref(getCanResize) || tableData && tableData.length === 0) return;
 
     await nextTick();
     // Add a delay to get the correct bottomIncludeBody paginationHeight footerHeight headerHeight
@@ -100,7 +100,7 @@ export function useTableScroll(
     if (!headEl) return;
 
     // Table height from bottom height-custom offset
-    let paddingHeight = 32;
+    let paddingHeight = 44;
     // Pager height
     let paginationHeight = 2;
     if (!isBoolean(pagination)) {
