@@ -1,11 +1,3 @@
-<div align="center"> 
-<h1>Vue vben admin</h1>
-</div>
-
-## 简介
-
-Vue Vben Admin 是一个免费开源的中后台模版。使用了最新的`vue3`,`vite2`,`TypeScript`等主流技术开发，开箱即用的中后台前端解决方案，也可用于学习参考。
-
 ## 特性
 
 - **最新技术栈**：使用 Vue3/vite2 等前端前沿技术开发

@@ -1,5 +1,5 @@
 <template>
-  <template v-if="getShow">
+  <template>
     <LoginFormTitle class="enter-x" />
     <Form class="p-4 enter-x" :model="formData" :rules="getFormRules" ref="formRef">
       <FormItem name="mobile" class="enter-x">
