@@ -1,7 +1,6 @@
 <template>
-  <LoginFormTitle v-show="getShow" class="enter-x" />
   <Form
-    class="p-4 enter-x"
+    class="account-login enter-x"
     :model="formData"
     :rules="getFormRules"
     ref="formRef"
@@ -11,21 +10,31 @@
     <FormItem name="account" class="enter-x">
       <Input
         size="large"
+        allow-clear
         v-model:value="formData.account"
         :placeholder="t('sys.login.userName')"
         class="fix-auto-fill"
-      />
+      >
+        <template #prefix>
+          <SvgIcon size="26" name="login-user" />
+        </template>
+      </Input>
     </FormItem>
     <FormItem name="password" class="enter-x">
       <InputPassword
         size="large"
+        allow-clear
         visibilityToggle
         v-model:value="formData.password"
         :placeholder="t('sys.login.password')"
-      />
+      >
+        <template #prefix>
+          <SvgIcon size="26" name="login-pwd" />
+        </template>
+      </InputPassword>
     </FormItem>
 
-    <ARow class="enter-x">
+    <ARow class="enter-x" v-if="false">
       <ACol :span="12">
         <FormItem>
           <!-- No logic, you need to deal with it yourself -->
@@ -34,65 +43,37 @@
           </Checkbox>
         </FormItem>
       </ACol>
+    </ARow>
+
+    <FormItem class="enter-x btn-form">
+      <Button type="primary" class="login-btn" size="large" block @click="handleLogin" :loading="loading">
+        {{ t('sys.login.loginButton') }}
+      </Button>
+    </FormItem>
+
+    <ARow class="enter-x">
+      <ACol :span="12">
+        <FormItem>
+          <Button type="link" size="small">
+            <SvgIcon size="24" name="back" />{{ t('sys.login.backHome') }}
+          </Button>
+        </FormItem>
+      </ACol>
       <ACol :span="12">
         <FormItem :style="{ 'text-align': 'right' }">
-          <!-- No logic, you need to deal with it yourself -->
           <Button type="link" size="small" @click="setLoginState(LoginStateEnum.RESET_PASSWORD)">
             {{ t('sys.login.forgetPassword') }}
           </Button>
         </FormItem>
       </ACol>
     </ARow>
-
-    <FormItem class="enter-x">
-      <Button type="primary" size="large" block @click="handleLogin" :loading="loading">
-        {{ t('sys.login.loginButton') }}
-      </Button>
-      <!-- <Button size="large" class="mt-4 enter-x" block @click="handleRegister">
-        {{ t('sys.login.registerButton') }}
-      </Button> -->
-    </FormItem>
-    <ARow class="enter-x">
-      <ACol :md="8" :xs="24">
-        <Button block @click="setLoginState(LoginStateEnum.MOBILE)">
-          {{ t('sys.login.mobileSignInFormTitle') }}
-        </Button>
-      </ACol>
-      <ACol :md="8" :xs="24" class="!my-2 !md:my-0 xs:mx-0 md:mx-2">
-        <Button block @click="setLoginState(LoginStateEnum.QR_CODE)">
-          {{ t('sys.login.qrSignInFormTitle') }}
-        </Button>
-      </ACol>
-      <ACol :md="7" :xs="24">
-        <Button block @click="setLoginState(LoginStateEnum.REGISTER)">
-          {{ t('sys.login.registerButton') }}
-        </Button>
-      </ACol>
-    </ARow>
-
-    <Divider class="enter-x">{{ t('sys.login.otherSignIn') }}</Divider>
-
-    <div class="flex justify-evenly enter-x" :class="`${prefixCls}-sign-in-way`">
-      <GithubFilled />
-      <WechatFilled />
-      <AlipayCircleFilled />
-      <GoogleCircleFilled />
-      <TwitterCircleFilled />
-    </div>
   </Form>
 </template>
 <script lang="ts" setup>
   import { reactive, ref, unref, computed } from 'vue';
 
-  import { Checkbox, Form, Input, Row, Col, Button, Divider } from 'ant-design-vue';
-  import {
-    GithubFilled,
-    WechatFilled,
-    AlipayCircleFilled,
-    GoogleCircleFilled,
-    TwitterCircleFilled,
-  } from '@ant-design/icons-vue';
-  import LoginFormTitle from './LoginFormTitle.vue';
+  import { Checkbox, Form, Input, Row, Col, Button } from 'ant-design-vue';
+  import { SvgIcon } from '/@/components/Icon';
 
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useMessage } from '/@/hooks/web/useMessage';
@@ -128,7 +109,7 @@
   //onKeyStroke('Enter', handleLogin);
 
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN);
-  let nvc = null
+  let nvc:any = null
   function init() {
     AWSC.use("nvc", function (state, module) {
         // 初始化 调用module.init进行初始化
@@ -170,7 +151,7 @@
   async function handleLogin() {
     const data = await validForm();
     if (!data) return;
-    nvc.getNVCValAsync(async (nvcVal)=> {
+    nvc && nvc.getNVCValAsync(async (nvcVal)=> {
       // 获取人机信息串
       // 将以下getNVCVal()函数的值，跟随业务请求一起上传，由后端请求AnalyzeNvc接口并返回200，400，600或者800。
       // 正式上线前务必将该服务端接口，更改为您自己的业务服务端接口
@@ -203,3 +184,35 @@
     })
   }
 </script>
+<style lang="less" scoped>
+.account-login{
+  .btn-form{
+    margin-top: 60px;
+
+    .login-btn{
+      box-shadow: 0px 12px 20px -4px rgba(8, 88, 241, 0.4);
+    }
+  }
+
+  .ant-input-affix-wrapper{
+    border: none;
+    border-bottom: 1px solid #655446;
+
+    &:focus{
+      box-shadow: none;
+    }
+  }
+
+  .ant-input-affix-wrapper-focused{
+    box-shadow: none;
+  }
+
+  .ant-form-item-has-error{
+    .ant-input-affix-wrapper, .ant-input-affix-wrapper:hover{
+      border-color: initial;
+      box-shadow: none;
+      border-bottom-color: #ED6F6F;
+    }
+  }
+}
+</style>

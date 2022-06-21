@@ -1,37 +1,19 @@
 <template>
-  <div :class="prefixCls" class="relative w-full h-full px-4">
-    <AppLocalePicker
-      class="absolute text-white top-4 right-4 enter-x xl:text-gray-600"
-      :showText="false"
-      v-if="!sessionTimeout && showLocale"
-    />
-    <AppDarkModeToggle class="absolute top-3 right-7 enter-x" v-if="!sessionTimeout" />
-
-    <div class="container relative h-full py-2 mx-auto sm:px-10">
-      <div class="flex h-full">
-        <div class="hidden min-h-full pl-4 mr-4 xl:flex xl:flex-col xl:w-6/12">
-          <div class="my-auto">
-            <img
-              :alt="title"
-              src="../../../assets/svg/login-box-bg.svg"
-              class="w-1/2 -mt-16 -enter-x"
-            />
+  <div :class="prefixCls">
+    <div class="container">
+      <div class="left-con"></div>
+      <div class="right-con">
+        <div :class="`${prefixCls}-tabs`">
+          <div class="tabs-item">
+            <span :class="activeKey === '1' ? 'active-tabs' : ''">账号登录</span>
+          </div>
+          <div class="tabs-item">
+            <span :class="activeKey === '2' ? 'active-tabs' : ''">手机登录</span>
           </div>
         </div>
-        <div class="flex w-full h-full py-5 xl:h-auto xl:py-0 xl:my-0 xl:w-6/12">
-          <div
-            :class="`${prefixCls}-form`"
-            class="relative w-full px-5 py-8 mx-auto my-auto rounded-md shadow-md xl:ml-16 xl:bg-transparent sm:px-8 xl:p-4 xl:shadow-none sm:w-3/4 lg:w-2/4 xl:w-auto enter-x"
-          >
-            <Tabs v-model:activeKey="activeKey" @change="changeTab">
-              <Tabs.TabPane :key="1" tab="账号登录">
-                <LoginForm />
-              </Tabs.TabPane>
-              <Tabs.TabPane :key="LoginStateEnum.MOBILE" tab="手机登录" force-render>
-                <MobileForm />
-              </Tabs.TabPane>
-            </Tabs>
-          </div>
+        <div :class="`${prefixCls}-form`">
+          <LoginForm v-show="activeKey === '1'"/>
+          <MobileForm v-show="activeKey === '2'"/>
         </div>
       </div>
     </div>
@@ -40,10 +22,10 @@
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
   import { Tabs } from 'ant-design-vue';
-  import { AppLocalePicker, AppDarkModeToggle } from '/@/components/Application';
+  // import { AppLocalePicker, AppDarkModeToggle } from '/@/components/Application';
   import LoginForm from './LoginForm.vue';
-  import ForgetPasswordForm from './ForgetPasswordForm.vue';
-  import RegisterForm from './RegisterForm.vue';
+  // import ForgetPasswordForm from './ForgetPasswordForm.vue';
+  // import RegisterForm from './RegisterForm.vue';
   import MobileForm from './MobileForm.vue';
   import { useGlobSetting } from '/@/hooks/setting';
   import { useI18n } from '/@/hooks/web/useI18n';
@@ -67,7 +49,7 @@
     setLoginState(LoginStateEnum.MOBILE)
   }
 </script>
-<style lang="less">
+<style lang="less" scoped>
   @prefix-cls: ~'@{namespace}-login';
   @logo-prefix-cls: ~'@{namespace}-app-logo';
   @countdown-prefix-cls: ~'@{namespace}-countdown-input';
@@ -76,10 +58,7 @@
   html[data-theme='dark'] {
     .@{prefix-cls} {
       background-color: @dark-bg;
-
-      &::before {
-        background-image: url(/@/assets/svg/login-bg-dark.svg);
-      }
+      background-image: url(/@/assets/svg/login-bg-dark.svg);
 
       .ant-input,
       .ant-input-password {
@@ -109,30 +88,60 @@
   .@{prefix-cls} {
     min-height: 100%;
     overflow: hidden;
+    background: url(/@/assets/images/login-bg.png) no-repeat;
+    background-size: 100% 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     @media (max-width: @screen-xl) {
-      background-color: #293146;
-
       .@{prefix-cls}-form {
         background-color: #fff;
       }
     }
 
-    &::before {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      margin-left: -48%;
-      background-image: url(/@/assets/svg/login-bg.svg);
-      background-position: 100%;
-      background-repeat: no-repeat;
-      background-size: auto 100%;
-      content: '';
-      @media (max-width: @screen-xl) {
-        display: none;
+    .container{
+      width: 1040px;
+      display: flex;
+      background-color: #fff;
+
+      .left-con{
+        width: 600px;
+        background: linear-gradient(155deg, #208AFD 0%, #1465F8 100%);
+      }
+
+      .right-con{
+        flex: 1;
+        padding: 53px 40px 23px;
+        .@{prefix-cls}-tabs {
+          display: flex;
+          margin-bottom: 40px;
+
+          .tabs-item{
+            font-size: 26px;
+            width: 50%;
+            font-family: SourceHanSansCN-Regular, SourceHanSansCN;
+            color: #999;
+            line-height: 45px;
+            letter-spacing: 4px;
+            cursor: pointer;
+
+            &:hover {
+              color: @primary-color;
+            }
+
+            &:last-child{
+              text-align: end;
+            }
+          }
+
+          .active-tabs{
+            color: @primary-color;
+            border-bottom: 3px solid @primary-color;
+          }
+        }
       }
     }
+    
 
     .@{logo-prefix-cls} {
       position: absolute;

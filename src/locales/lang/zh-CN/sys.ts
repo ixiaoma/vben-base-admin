@@ -72,6 +72,7 @@ export default {
     rememberMe: '记住我',
     forgetPassword: '忘记密码?',
     otherSignIn: '其他登录方式',
+    backHome: '返回首页',
 
     // notify
     loginSuccessTitle: '登录成功',

@@ -3,9 +3,8 @@
     @register="registerTable"
     :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys, onChange: onSelectChange }"
   >
-    <template #form-custom> custom-slot </template>
     <template #toolbar>
-      <a-button type="primary" @click="getFormValues">获取表单数据</a-button>
+      <a-button type="primary" @click="getFormValues">案件分配</a-button>
     </template>
   </BasicTable>
 </template>
