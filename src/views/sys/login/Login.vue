@@ -4,50 +4,56 @@
       <div class="left-con"></div>
       <div class="right-con">
         <div :class="`${prefixCls}-tabs`">
-          <div class="tabs-item">
-            <span :class="activeKey === '1' ? 'active-tabs' : ''">账号登录</span>
+          <div class="tabs-item" @click="setLoginState(LoginStateEnum.ACCOUNT_PASSWORD)">
+            <span :class="unref(getLoginState) === LoginStateEnum.ACCOUNT_PASSWORD ? 'active-tabs' : ''">账号登录</span>
           </div>
-          <div class="tabs-item">
-            <span :class="activeKey === '2' ? 'active-tabs' : ''">手机登录</span>
+          <div class="tabs-item" @click="setLoginState(LoginStateEnum.SMS_CODE)">
+            <span :class="unref(getLoginState) === LoginStateEnum.SMS_CODE ? 'active-tabs' : ''">手机登录</span>
           </div>
         </div>
         <div :class="`${prefixCls}-form`">
-          <LoginForm v-show="activeKey === '1'"/>
-          <MobileForm v-show="activeKey === '2'"/>
+          <LoginForm/>
+          <MobileForm/>
         </div>
+        <ARow class="enter-x">
+          <ACol :span="12">
+            <Button type="link" size="small">
+              <SvgIcon size="24" name="back" />{{ t('sys.login.backHome') }}
+            </Button>
+          </ACol>
+          <ACol :span="12">
+            <Button type="link" size="small" :style="{ 'text-align': 'right' }">
+              {{ t('sys.login.forgetPassword') }}
+            </Button>
+          </ACol>
+        </ARow>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-  import { computed, ref } from 'vue';
-  import { Tabs } from 'ant-design-vue';
-  // import { AppLocalePicker, AppDarkModeToggle } from '/@/components/Application';
+  import { computed, unref } from 'vue';
+  import { SvgIcon } from '/@/components/Icon';
   import LoginForm from './LoginForm.vue';
-  // import ForgetPasswordForm from './ForgetPasswordForm.vue';
-  // import RegisterForm from './RegisterForm.vue';
   import MobileForm from './MobileForm.vue';
   import { useGlobSetting } from '/@/hooks/setting';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useLocaleStore } from '/@/store/modules/locale';
-  import { LoginStateEnum } from './useLogin';
+  import { LoginStateEnum, useLoginState } from './useLogin';
 
   defineProps({
     sessionTimeout: {
       type: Boolean,
     },
   });
-  const activeKey = ref("1");
   const globSetting = useGlobSetting();
   const { prefixCls } = useDesign('login');
   const { t } = useI18n();
   const localeStore = useLocaleStore();
   const showLocale = localeStore.getShowPicker;
   const title = computed(() => globSetting?.title ?? '');
-  function changeTab(activeKey){
-    setLoginState(LoginStateEnum.MOBILE)
-  }
+  const { setLoginState, getLoginState } = useLoginState();
 </script>
 <style lang="less" scoped>
   @prefix-cls: ~'@{namespace}-login';
@@ -101,6 +107,7 @@
 
     .container{
       width: 1040px;
+      min-height: 445px;
       display: flex;
       background-color: #fff;
 

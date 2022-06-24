@@ -50,30 +50,12 @@
         {{ t('sys.login.loginButton') }}
       </Button>
     </FormItem>
-
-    <ARow class="enter-x">
-      <ACol :span="12">
-        <FormItem>
-          <Button type="link" size="small">
-            <SvgIcon size="24" name="back" />{{ t('sys.login.backHome') }}
-          </Button>
-        </FormItem>
-      </ACol>
-      <ACol :span="12">
-        <FormItem :style="{ 'text-align': 'right' }">
-          <Button type="link" size="small" @click="setLoginState(LoginStateEnum.RESET_PASSWORD)">
-            {{ t('sys.login.forgetPassword') }}
-          </Button>
-        </FormItem>
-      </ACol>
-    </ARow>
   </Form>
 </template>
 <script lang="ts" setup>
   import { reactive, ref, unref, computed } from 'vue';
 
   import { Checkbox, Form, Input, Row, Col, Button } from 'ant-design-vue';
-  import { SvgIcon } from '/@/components/Icon';
 
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useMessage } from '/@/hooks/web/useMessage';
@@ -108,7 +90,7 @@
 
   //onKeyStroke('Enter', handleLogin);
 
-  const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN);
+  const getShow = computed(() => unref(getLoginState) === LoginStateEnum.ACCOUNT_PASSWORD);
   let nvc:any = null
   function init() {
     AWSC.use("nvc", function (state, module) {

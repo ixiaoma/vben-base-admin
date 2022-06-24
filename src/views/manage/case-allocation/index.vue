@@ -13,6 +13,7 @@
   import { BasicTable, useTable } from '/@/components/Table';
   import { getBasicColumns, getFormConfig } from './tableData';
   import { getCaseAllocationList } from '/@/api/manage/caseallocation';
+  import { isSelect } from '/@/utils/checkUtil'
   const checkedKeys = ref<Array<string | number>>([]);
   const [registerTable, { getForm }] = useTable({
     api: getCaseAllocationList,
@@ -25,6 +26,7 @@
     rowKey: 'id',
   });
   function getFormValues() {
+    isSelect(checkedKeys.value)
     console.log(getForm().getFieldsValue());
   }
   function onSelectChange(selectedRowKeys: (string | number)[]) {

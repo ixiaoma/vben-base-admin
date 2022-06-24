@@ -4,14 +4,11 @@ import { ref, computed, unref, Ref } from 'vue';
 import { useI18n } from '/@/hooks/web/useI18n';
 
 export enum LoginStateEnum {
-  LOGIN,
-  REGISTER,
-  RESET_PASSWORD,
-  MOBILE,
-  QR_CODE,
+  ACCOUNT_PASSWORD,
+  SMS_CODE,
 }
 
-const currentState = ref(LoginStateEnum.LOGIN);
+const currentState = ref(LoginStateEnum.ACCOUNT_PASSWORD);
 
 export function useLoginState() {
   function setLoginState(state: LoginStateEnum) {
@@ -21,7 +18,7 @@ export function useLoginState() {
   const getLoginState = computed(() => currentState.value);
 
   function handleBackLogin() {
-    setLoginState(LoginStateEnum.LOGIN);
+    setLoginState(LoginStateEnum.ACCOUNT_PASSWORD);
   }
 
   return { setLoginState, getLoginState, handleBackLogin };
@@ -73,27 +70,7 @@ export function useFormRules(formData?: Recordable) {
       mobile: mobileFormRule,
     };
     switch (unref(currentState)) {
-      // register form rules
-      case LoginStateEnum.REGISTER:
-        return {
-          account: accountFormRule,
-          password: passwordFormRule,
-          confirmPassword: [
-            { validator: validateConfirmPassword(formData?.password), trigger: 'change' },
-          ],
-          policy: [{ validator: validatePolicy, trigger: 'change' }],
-          ...mobileRule,
-        };
-
-      // reset password form rules
-      case LoginStateEnum.RESET_PASSWORD:
-        return {
-          account: accountFormRule,
-          ...mobileRule,
-        };
-
-      // mobile form rules
-      case LoginStateEnum.MOBILE:
+      case LoginStateEnum.SMS_CODE:
         return mobileRule;
 
       // login form rules
