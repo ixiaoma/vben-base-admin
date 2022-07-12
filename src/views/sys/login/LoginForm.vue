@@ -1,5 +1,5 @@
 <template>
-  <Form
+  <a-form
     class="account-login enter-x"
     :model="formData"
     :rules="getFormRules"
@@ -7,8 +7,8 @@
     v-show="getShow"
     @keypress.enter="handleLogin"
   >
-    <FormItem name="account" class="enter-x">
-      <Input
+    <a-form-item name="account" class="enter-x">
+      <a-input
         size="large"
         allow-clear
         v-model:value="formData.account"
@@ -18,10 +18,10 @@
         <template #prefix>
           <SvgIcon size="26" name="login-user" />
         </template>
-      </Input>
-    </FormItem>
-    <FormItem name="password" class="enter-x">
-      <InputPassword
+      </a-input>
+    </a-form-item>
+    <a-form-item name="password" class="enter-x">
+      <a-input-password
         size="large"
         allow-clear
         visibilityToggle
@@ -31,31 +31,28 @@
         <template #prefix>
           <SvgIcon size="26" name="login-pwd" />
         </template>
-      </InputPassword>
-    </FormItem>
+      </a-input-password>
+    </a-form-item>
 
-    <ARow class="enter-x" v-if="false">
-      <ACol :span="12">
-        <FormItem>
-          <!-- No logic, you need to deal with it yourself -->
-          <Checkbox v-model:checked="rememberMe" size="small">
+    <a-row class="enter-x" v-if="false">
+      <a-col :span="12">
+        <a-form-item>
+          <a-checkbox v-model:checked="rememberMe" size="small">
             {{ t('sys.login.rememberMe') }}
-          </Checkbox>
-        </FormItem>
-      </ACol>
-    </ARow>
+          </a-checkbox>
+        </a-form-item>
+      </a-col>
+    </a-row>
 
-    <FormItem class="enter-x btn-form">
-      <Button type="primary" class="login-btn" size="large" block @click="handleLogin" :loading="loading">
+    <a-form-item class="enter-x btn-form">
+      <a-button type="primary" class="login-btn" size="large" block @click="handleLogin" :loading="loading">
         {{ t('sys.login.loginButton') }}
-      </Button>
-    </FormItem>
-  </Form>
+      </a-button>
+    </a-form-item>
+  </a-form>
 </template>
 <script lang="ts" setup>
   import { reactive, ref, unref, computed } from 'vue';
-
-  import { Checkbox, Form, Input, Row, Col, Button } from 'ant-design-vue';
 
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useMessage } from '/@/hooks/web/useMessage';
@@ -64,11 +61,6 @@
   import { LoginStateEnum, useLoginState, useFormRules, useFormValid } from './useLogin';
   import { useDesign } from '/@/hooks/web/useDesign';
   //import { onKeyStroke } from '@vueuse/core';
-
-  const ACol = Col;
-  const ARow = Row;
-  const FormItem = Form.Item;
-  const InputPassword = Input.Password;
   const { t } = useI18n();
   const { notification, createErrorModal } = useMessage();
   const { prefixCls } = useDesign('login');

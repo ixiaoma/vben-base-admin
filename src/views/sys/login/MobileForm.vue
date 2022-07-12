@@ -1,37 +1,35 @@
 <template>
-  <Form v-show="getShow" class="p-4 enter-x" :model="formData" :rules="getFormRules" ref="formRef">
-    <FormItem name="mobile" class="enter-x">
-      <Input
+  <a-form v-show="getShow" class="p-4 enter-x" :model="formData" :rules="getFormRules" ref="formRef">
+    <a-form-item name="mobile" class="enter-x">
+      <a-input
         size="large"
         v-model:value="formData.mobile"
         :placeholder="t('sys.login.mobile')"
         class="fix-auto-fill"
       />
-    </FormItem>
-    <FormItem name="sms" class="enter-x">
-      <CountdownInput
+    </a-form-item>
+    <a-form-item name="sms" class="enter-x">
+      <countdown-input
         size="large"
         class="fix-auto-fill"
         v-model:value="formData.sms"
         :placeholder="t('sys.login.smsCode')"
       />
-    </FormItem>
+    </a-form-item>
 
-    <FormItem class="enter-x">
-      <Button type="primary" size="large" block @click="handleLogin" :loading="loading">
+    <a-form-item class="enter-x">
+      <a-button type="primary" size="large" block @click="handleLogin" :loading="loading">
         {{ t('sys.login.loginButton') }}
-      </Button>
-    </FormItem>
-  </Form>
+      </a-button>
+    </a-form-item>
+  </a-form>
 </template>
 <script lang="ts" setup>
   import { reactive, ref, computed, unref } from 'vue';
-  import { Form, Input, Button } from 'ant-design-vue';
   import { CountdownInput } from '/@/components/CountDown';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
 
-  const FormItem = Form.Item;
   const { t } = useI18n();
   const { getLoginState } = useLoginState();
   const { getFormRules } = useFormRules();

@@ -12,21 +12,18 @@
           </div>
         </div>
         <div :class="`${prefixCls}-form`">
-          <LoginForm/>
-          <MobileForm/>
+          <login-form/>
+          <mobile-form/>
         </div>
-        <ARow class="enter-x">
-          <ACol :span="12">
-            <Button type="link" size="small">
-              <SvgIcon size="24" name="back" />{{ t('sys.login.backHome') }}
-            </Button>
-          </ACol>
-          <ACol :span="12">
-            <Button type="link" size="small" :style="{ 'text-align': 'right' }">
-              {{ t('sys.login.forgetPassword') }}
-            </Button>
-          </ACol>
-        </ARow>
+        <a-row class="enter-x" type="flex" justify="space-between">
+          <a-button type="link" size="small" class="back-btn">
+            <svg-icon size="20" name="back" class="back-icon"/>
+            {{ t('sys.login.backHome') }}
+          </a-button>
+          <a-button type="link" size="small" :style="{ 'text-align': 'right' }">
+            {{ t('sys.login.forgetPassword') }}
+          </a-button>
+        </a-row>
       </div>
     </div>
   </div>
@@ -144,6 +141,15 @@
           .active-tabs{
             color: @primary-color;
             border-bottom: 3px solid @primary-color;
+          }
+        }
+
+        .back-btn{
+          padding-left: 20px;
+
+          .back-icon{
+            position: absolute;
+            left: 0;
           }
         }
       }

@@ -1,7 +1,7 @@
 <template>
   <transition>
     <div :class="prefixCls">
-      <Login sessionTimeout />
+      <login sessionTimeout />
     </div>
   </transition>
 </template>

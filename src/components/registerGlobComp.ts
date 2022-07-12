@@ -1,7 +1,7 @@
 import type { App } from 'vue';
 import { Button } from './Button';
-import { Input, Layout } from 'ant-design-vue';
+import { Layout, Checkbox, Form, Input, Row, Col } from 'ant-design-vue';
 
 export function registerGlobComp(app: App) {
-  app.use(Input).use(Button).use(Layout);
+  app.use(Input).use(Button).use(Layout).use(Checkbox).use(Form).use(Row).use(Col)
 }
