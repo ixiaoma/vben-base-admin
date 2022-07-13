@@ -1,13 +1,13 @@
 <template>
-  <CollapseContainer title="基本设置" :canExpan="false">
+  <collapse-container title="基本设置" :canExpan="false">
     <a-row :gutter="24">
       <a-col :span="14">
-        <BasicForm @register="register" />
+        <basic-form @register="register" />
       </a-col>
       <a-col :span="10">
         <div class="change-avatar">
           <div class="mb-2">头像</div>
-          <CropperAvatar
+          <cropper-avatar
             :uploadApi="uploadApi"
             :value="avatar"
             btnText="更换头像"
@@ -18,11 +18,10 @@
         </div>
       </a-col>
     </a-row>
-    <Button type="primary" @click="handleSubmit"> 更新基本信息 </Button>
-  </CollapseContainer>
+    <a-button type="primary" @click="handleSubmit"> 更新基本信息 </a-button>
+  </collapse-container>
 </template>
 <script lang="ts">
-  import { Button, Row, Col } from 'ant-design-vue';
   import { computed, defineComponent, onMounted } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { CollapseContainer } from '/@/components/Container';
@@ -40,9 +39,6 @@
     components: {
       BasicForm,
       CollapseContainer,
-      Button,
-      a-row: Row,
-      ACol: Col,
       CropperAvatar,
     },
     setup() {

@@ -66,9 +66,9 @@ const transform: AxiosTransform = {
     //     userStore.logout(true);
     //     break;
     //   default:
-        if (errorMessage) {
-          timeoutMsg = errorMessage;
-        }
+    if (errorMessage) {
+      timeoutMsg = errorMessage;
+    }
     // }
 
     // errorMessageMode=‘modal’的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
@@ -165,7 +165,7 @@ const transform: AxiosTransform = {
     const msg: string = response?.data?.error?.message ?? '';
     const err: string = error?.toString?.() ?? '';
     let errMessage = '';
-    
+
     try {
       if (code === 'ECONNABORTED' && message.indexOf('timeout') !== -1) {
         errMessage = t('sys.api.apiTimeoutMessage');
@@ -185,7 +185,7 @@ const transform: AxiosTransform = {
     } catch (error) {
       throw new Error(error as unknown as string);
     }
-    if(error?.response?.status === 401){
+    if (error?.response?.status === 401) {
       const userStore = useUserStoreWithOut();
       userStore.logout(true);
     }

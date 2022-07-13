@@ -169,7 +169,7 @@
       const getMenuMode = computed(() => {
         return unref(getSplit) ? MenuModeEnum.HORIZONTAL : null;
       });
-  
+
       return {
         prefixCls,
         getHeaderClass,

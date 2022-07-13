@@ -52,7 +52,7 @@ export const REDIRECT_ROUTE: AppRouteRecordRaw = {
     },
   ],
 };
-export const SELF_SETTING: AppRouteRecordRaw= {
+export const SELF_SETTING: AppRouteRecordRaw = {
   path: '/self',
   name: 'SelfSetting',
   component: LAYOUT,
@@ -60,7 +60,7 @@ export const SELF_SETTING: AppRouteRecordRaw= {
   meta: {
     title: t('routes.demo.page.accountSetting'),
   },
-  children:[
+  children: [
     {
       path: '/self/setting',
       name: 'AccountSettingPage',
@@ -68,6 +68,6 @@ export const SELF_SETTING: AppRouteRecordRaw= {
       meta: {
         title: t('routes.demo.page.accountSetting'),
       },
-    }
-  ]
-}
+    },
+  ],
+};

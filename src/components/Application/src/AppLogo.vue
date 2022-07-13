@@ -1,9 +1,9 @@
 <template>
   <div class="anticon" :class="getAppLogoClass" @click="goHome">
     <img src="../../../assets/images/logo.png" />
-    <!-- <div class="ml-2 truncate md:opacity-100" :class="getTitleClass" v-show="showTitle">
+    <div class="ml-2 truncate md:opacity-100" :class="getTitleClass" v-if="showTitle">
       {{ title }}
-    </div> -->
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -23,7 +23,7 @@
     /**
      * Whether to show title
      */
-    showTitle: { type: Boolean, default: true },
+    showTitle: { type: Boolean, default: false },
     /**
      * The title is also displayed when the menu is collapsed
      */

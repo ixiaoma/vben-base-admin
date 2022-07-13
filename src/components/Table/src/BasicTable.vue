@@ -1,6 +1,6 @@
 <template>
   <div ref="wrapRef" :class="getWrapperClass">
-    <BasicForm
+    <basic-form
       ref="formRef"
       submitOnReset
       v-bind="getFormProps"
@@ -13,7 +13,7 @@
       <template #[replaceFormSlotKey(item)]="data" v-for="item in getFormSlotKeys">
         <slot :name="item" v-bind="data || {}"></slot>
       </template>
-    </BasicForm>
+    </basic-form>
 
     <Table
       ref="tableElRef"
@@ -26,7 +26,7 @@
         <slot :name="item" v-bind="data || {}"></slot>
       </template>
       <template #headerCell="{ column }">
-        <HeaderCell :column="column" />
+        <header-cell :column="column" />
       </template>
       <!--      <template #[`header-${column.dataIndex}`] v-for="(column, index) in columns" :key="index">-->
       <!--        <HeaderCell :column="column" />-->
@@ -371,7 +371,7 @@
 
       .ant-form {
         padding: 12px 10px 6px;
-        border-bottom: 1px solid #DDDDDD;
+        border-bottom: 1px solid #dddddd;
         background-color: @component-background;
         border-radius: 2px;
       }

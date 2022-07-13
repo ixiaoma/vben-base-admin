@@ -1,5 +1,11 @@
 <template>
-  <a-form v-show="getShow" class="p-4 enter-x" :model="formData" :rules="getFormRules" ref="formRef">
+  <a-form
+    v-show="getShow"
+    class="p-4 enter-x"
+    :model="formData"
+    :rules="getFormRules"
+    ref="formRef"
+  >
     <a-form-item name="mobile" class="enter-x">
       <a-input
         size="large"

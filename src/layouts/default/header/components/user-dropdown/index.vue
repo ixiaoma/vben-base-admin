@@ -79,7 +79,7 @@
       const [register, { openModal }] = useModal();
 
       const { push } = useRouter();
-      
+
       function handleLock() {
         openModal(true);
       }

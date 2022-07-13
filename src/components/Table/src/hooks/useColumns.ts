@@ -213,12 +213,12 @@ export function useColumns(
     if (!isString(firstColumn) && !isArray(firstColumn)) {
       columnsRef.value = columns as BasicColumn[];
     } else {
-      const columnKeys = (columns as (string | string[])[]).map(m => m.toString());
+      const columnKeys = (columns as (string | string[])[]).map((m) => m.toString());
       const newColumns: BasicColumn[] = [];
       cacheColumns.forEach((item) => {
         newColumns.push({
           ...item,
-          defaultHidden: !columnKeys.includes(item.dataIndex?.toString() || (item.key as string))
+          defaultHidden: !columnKeys.includes(item.dataIndex?.toString() || (item.key as string)),
         });
       });
       // Sort according to another array
@@ -237,6 +237,8 @@ export function useColumns(
   function getColumns(opt?: GetColumnsParams) {
     const { ignoreIndex, ignoreAction, sort } = opt || {};
     let columns = toRaw(unref(getColumnsRef));
+    console.log(columns);
+    
     if (ignoreIndex) {
       columns = columns.filter((item) => item.flag !== INDEX_COLUMN_FLAG);
     }

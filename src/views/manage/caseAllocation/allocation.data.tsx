@@ -6,91 +6,91 @@ export function getBasicColumns(): BasicColumn[] {
   return [
     {
       title: '调解号',
-      dataIndex: 'mediateNo'
+      dataIndex: 'mediateNo',
     },
     {
       title: '原告',
-      dataIndex: 'applyName'
+      dataIndex: 'applyName',
     },
     {
       title: '被告',
-      dataIndex: 'receiveName'
+      dataIndex: 'receiveName',
     },
     {
       title: '身份证号',
-      dataIndex: 'receiveCardId'
+      dataIndex: 'receiveCardId',
     },
     {
       title: '标的金额(元)',
-      dataIndex: 'targetAmount'
+      dataIndex: 'targetAmount',
     },
     {
       title: '逾期天数',
-      dataIndex: 'ovdDays'
+      dataIndex: 'ovdDays',
     },
     {
       title: '联系状态',
-      dataIndex: 'contactStatus'
+      dataIndex: 'contactStatus',
     },
     {
       title: '调解状态',
-      dataIndex: 'mediationStatus'
+      dataIndex: 'mediationStatus',
     },
     {
       title: '协议状态',
-      dataIndex: 'agrStatus'
+      dataIndex: 'agrStatus',
     },
     {
       title: '还款状态',
-      dataIndex: 'repayStatus'
+      dataIndex: 'repayStatus',
     },
     {
       title: '调解员',
-      dataIndex: 'currentMediatorName'
+      dataIndex: 'currentMediatorName',
     },
     {
       title: '调解组织',
-      dataIndex: 'orgName'
+      dataIndex: 'orgName',
     },
     {
       title: '分配日期',
-      dataIndex: 'assignDate'
+      dataIndex: 'assignDate',
     },
     {
       title: '批次号',
-      dataIndex: 'batchNo'
+      dataIndex: 'batchNo',
     },
     {
       title: '案件编号',
-      dataIndex: 'applyOrgCaseNo'
+      dataIndex: 'applyOrgCaseNo',
     },
     {
       title: '受理日期',
-      dataIndex: 'acceptDate'
+      dataIndex: 'acceptDate',
     },
     {
       title: '手机号',
-      dataIndex: 'receivePhone'
+      dataIndex: 'receivePhone',
     },
     {
       title: '所在城市',
-      dataIndex: 'receiveAddress'
+      dataIndex: 'receiveAddress',
     },
     {
       title: '案由',
-      dataIndex: 'reasonDisplayName'
+      dataIndex: 'reasonDisplayName',
     },
     {
       title: '产品',
-      dataIndex: 'prodName'
+      dataIndex: 'prodName',
     },
     {
       title: '利息(元)',
-      dataIndex: 'interestAmount'
+      dataIndex: 'interestAmount',
     },
     {
       title: '锁定状态',
-      dataIndex: 'locked'
+      dataIndex: 'locked',
     },
   ];
 }
@@ -138,9 +138,9 @@ export function getFormConfig(): Partial<FormProps> {
         componentProps: {
           api: getOrgList,
           params: {
-            "orgType":"FINANCE_ORG", 
-            pageSize: 999, 
-            current: 1
+            orgType: 'FINANCE_ORG',
+            pageSize: 999,
+            current: 1,
           },
           resultField: 'list',
           // use name as label

@@ -5,19 +5,24 @@
       <div class="right-con">
         <div :class="`${prefixCls}-tabs`">
           <div class="tabs-item" @click="setLoginState(LoginStateEnum.ACCOUNT_PASSWORD)">
-            <span :class="unref(getLoginState) === LoginStateEnum.ACCOUNT_PASSWORD ? 'active-tabs' : ''">账号登录</span>
+            <span
+              :class="unref(getLoginState) === LoginStateEnum.ACCOUNT_PASSWORD ? 'active-tabs' : ''"
+              >账号登录</span
+            >
           </div>
           <div class="tabs-item" @click="setLoginState(LoginStateEnum.SMS_CODE)">
-            <span :class="unref(getLoginState) === LoginStateEnum.SMS_CODE ? 'active-tabs' : ''">手机登录</span>
+            <span :class="unref(getLoginState) === LoginStateEnum.SMS_CODE ? 'active-tabs' : ''"
+              >手机登录</span
+            >
           </div>
         </div>
         <div :class="`${prefixCls}-form`">
-          <login-form/>
-          <mobile-form/>
+          <login-form />
+          <mobile-form />
         </div>
         <a-row class="enter-x" type="flex" justify="space-between">
           <a-button type="link" size="small" class="back-btn">
-            <svg-icon size="20" name="back" class="back-icon"/>
+            <svg-icon size="20" name="back" class="back-icon" />
             {{ t('sys.login.backHome') }}
           </a-button>
           <a-button type="link" size="small" :style="{ 'text-align': 'right' }">
@@ -102,25 +107,25 @@
       }
     }
 
-    .container{
+    .container {
       width: 1040px;
       min-height: 445px;
       display: flex;
       background-color: #fff;
 
-      .left-con{
+      .left-con {
         width: 600px;
-        background: linear-gradient(155deg, #208AFD 0%, #1465F8 100%);
+        background: linear-gradient(155deg, #208afd 0%, #1465f8 100%);
       }
 
-      .right-con{
+      .right-con {
         flex: 1;
         padding: 53px 40px 23px;
         .@{prefix-cls}-tabs {
           display: flex;
           margin-bottom: 40px;
 
-          .tabs-item{
+          .tabs-item {
             font-size: 26px;
             width: 50%;
             font-family: SourceHanSansCN-Regular, SourceHanSansCN;
@@ -133,28 +138,27 @@
               color: @primary-color;
             }
 
-            &:last-child{
+            &:last-child {
               text-align: end;
             }
           }
 
-          .active-tabs{
+          .active-tabs {
             color: @primary-color;
             border-bottom: 3px solid @primary-color;
           }
         }
 
-        .back-btn{
+        .back-btn {
           padding-left: 20px;
 
-          .back-icon{
+          .back-icon {
             position: absolute;
             left: 0;
           }
         }
       }
     }
-    
 
     .@{logo-prefix-cls} {
       position: absolute;

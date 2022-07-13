@@ -3,5 +3,5 @@ import { Button } from './Button';
 import { Layout, Checkbox, Form, Input, Row, Col } from 'ant-design-vue';
 
 export function registerGlobComp(app: App) {
-  app.use(Input).use(Button).use(Layout).use(Checkbox).use(Form).use(Row).use(Col)
+  app.use(Input).use(Button).use(Layout).use(Checkbox).use(Form).use(Row).use(Col);
 }
