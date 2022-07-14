@@ -41,7 +41,7 @@
       BasicForm,
       CollapseContainer,
       Button,
-      a-row: Row,
+      'a-row': Row,
       ACol: Col,
       CropperAvatar,
     },
