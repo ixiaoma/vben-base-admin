@@ -8,6 +8,7 @@ export default {
     apiRequestFailed: '请求出错，请稍候重试',
     networkException: '网络异常',
     networkExceptionMsg: '网络异常，请检查您的网络连接是否正常!',
+    validationFailed: '验证失败，正在刷新...',
 
     errMsg401: '权限过期请重新登录!',
     errMsg403: '用户得到授权，但是访问是被禁止的。!',
@@ -91,6 +92,7 @@ export default {
     confirmPassword: '确认密码',
     email: '邮箱',
     smsCode: '短信验证码',
+    sendSmsCodeSuccess: '发送验证码成功',
     mobile: '手机号码',
   },
 };

@@ -9,6 +9,7 @@ export default {
     networkException: 'network anomaly',
     networkExceptionMsg:
       'Please check if your network connection is normal! The network is abnormal',
+    validationFailed: 'Validation failed, refreshing',
 
     errMsg401: 'The user does not have permission (token, user name, password error)!',
     errMsg403: 'The user is authorized, but access is forbidden!',
@@ -96,6 +97,7 @@ export default {
     confirmPassword: 'Confirm Password',
     email: 'Email',
     smsCode: 'SMS code',
+    sendSmsCodeSuccess: 'Sending verification code succeeded',
     mobile: 'Mobile',
   },
 };

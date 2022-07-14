@@ -1,5 +1,11 @@
 import { defHttp } from '/@/utils/http/axios';
-import { LoginParams, LoginResultModel, GetUserInfoModel } from './model/userModel';
+import {
+  LoginParams,
+  LoginResultModel,
+  GetUserInfoModel,
+  SendSmsCodeParams,
+  LoginByPhoneParams,
+} from './model/userModel';
 
 import { ErrorMessageMode } from '/#/axios';
 
@@ -9,8 +15,38 @@ enum Api {
   GetUserInfo = '/api/smartf-authx/authx/getLoginUser',
   GetPermCode = '/getPermCode',
   TestRetry = '/testRetry',
+  SendSmsCode = '/api/smartf-authx/authx/sendSmsCode',
 }
 
+/**
+ * @description: user login api
+ */
+export function sendSmsCodeApi(params: SendSmsCodeParams, mode: ErrorMessageMode = 'modal') {
+  return defHttp.post(
+    {
+      url: Api.SendSmsCode,
+      params,
+    },
+    {
+      isReturnNativeResponse: true,
+      errorMessageMode: mode,
+    },
+  );
+}
+/**
+ * @description: 手机号登录
+ */
+export function loginByPhoneApi(params: LoginByPhoneParams, mode: ErrorMessageMode = 'modal') {
+  return defHttp.post<LoginResultModel>(
+    {
+      url: Api.Login,
+      params,
+    },
+    {
+      errorMessageMode: mode,
+    },
+  );
+}
 /**
  * @description: user login api
  */

@@ -6,8 +6,13 @@ import { RoleEnum } from '/@/enums/roleEnum';
 import { PageEnum } from '/@/enums/pageEnum';
 import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum';
 import { getAuthCache, setAuthCache } from '/@/utils/auth';
-import { GetUserInfoModel, LoginParams } from '/@/api/sys/model/userModel';
-import { doLogout, getUserInfo, loginApi } from '/@/api/sys/user';
+import {
+  GetUserInfoModel,
+  LoginParams,
+  SendSmsCodeParams,
+  LoginByPhoneParams,
+} from '/@/api/sys/model/userModel';
+import { getUserInfo, loginApi, sendSmsCodeApi, loginByPhoneApi } from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
@@ -80,6 +85,22 @@ export const useUserStore = defineStore({
       this.sessionTimeout = false;
     },
     /**
+     * @description: 发送验证码
+     */
+    async sendSmsCode(
+      params: SendSmsCodeParams & {
+        isReturnNativeResponse?: boolean;
+        mode?: ErrorMessageMode;
+      },
+    ): Promise<null> {
+      try {
+        const { mode, ...SendSmsCodeParams } = params;
+        return await sendSmsCodeApi(SendSmsCodeParams, mode);
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    },
+    /**
      * @description: login
      */
     async login(
@@ -91,6 +112,23 @@ export const useUserStore = defineStore({
       try {
         const { goHome = true, mode, ...loginParams } = params;
         await loginApi(loginParams, mode);
+        return this.afterLoginAction(goHome);
+      } catch (error) {
+        return Promise.reject(error);
+      }
+    },
+    /**
+     * @description: 手机号登录
+     */
+    async loginByPhone(
+      params: LoginByPhoneParams & {
+        goHome?: boolean;
+        mode?: ErrorMessageMode;
+      },
+    ): Promise<GetUserInfoModel | null> {
+      try {
+        const { goHome = true, mode, ...LoginByPhoneParams } = params;
+        await loginByPhoneApi(LoginByPhoneParams, mode);
         return this.afterLoginAction(goHome);
       } catch (error) {
         return Promise.reject(error);

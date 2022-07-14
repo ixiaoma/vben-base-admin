@@ -8,6 +8,17 @@ export interface LoginParams {
   type: string;
   tnt: string;
 }
+export interface LoginByPhoneParams {
+  acsData: string;
+  type: string;
+  tnt: string;
+  phone: string;
+  smsCode: string;
+}
+export interface SendSmsCodeParams {
+  phone: string;
+  acsData: string;
+}
 
 export interface RoleInfo {
   roleName: string;
