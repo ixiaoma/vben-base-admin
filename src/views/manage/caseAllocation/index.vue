@@ -4,9 +4,10 @@
     :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys, onChange: onSelectChange }"
   >
     <template #toolbar>
-      <a-button type="primary" @click="getFormValues">案件分配</a-button>
+      <a-button type="primary" @click="handleAssign">案件分配</a-button>
     </template>
-    <template #action="{ record }">
+    <template #bodyCell="{ column, record }">
+      <template v-if="column.key === 'action'">
         <table-action
           :actions="[
             {
@@ -16,16 +17,24 @@
           ]"
         />
       </template>
+    </template>
   </basic-table>
+  <assign-modal @register="registerModal" @success="submitSuccess"/>
 </template>
 <script lang="ts" setup name="CaseAllocation">
   import { ref } from 'vue';
+  import { useRouter } from 'vue-router';
+  import { isSelect } from '/@/utils/checkUtil';
+  import AssignModal from './AssignModal.vue';
+  import { useModal } from '/@/components/Modal';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { getBasicColumns, getFormConfig } from './allocation.data';
   import { getCaseAllocationList } from '/@/api/manage/caseallocation';
-  import { isSelect } from '/@/utils/checkUtil';
 
+  const router = useRouter();
   const checkedKeys = ref<Array<string | number>>([]); //当前列表选中的key
+
+  const [registerModal, { openModal }] = useModal();
 
   const [registerTable, { getForm }] = useTable({
     api: getCaseAllocationList,
@@ -38,24 +47,35 @@
     actionColumn: {
       width: 120,
       title: '操作',
-      dataIndex: 'action',
-      slots: { customRender: 'action' },
+      dataIndex: 'action'
     }
   });
 
   //获取form表单数据
-  function getFormValues() {
-    isSelect(checkedKeys.value);
-    console.log(getForm().getFieldsValue());
+  function handleAssign() {
+    if(!isSelect(checkedKeys.value)){
+      return
+    }
+    openModal(true)
+    console.log('查询区域数据', getForm().getFieldsValue());
   }
   //列表复选框勾选
   function onSelectChange(selectedRowKeys: (string | number)[]) {
     console.log(selectedRowKeys);
     checkedKeys.value = selectedRowKeys;
   }
-
-  function handleDetail(record) {
-    console.log(record);
-    
+  //跳转详情页
+  function handleDetail({ id, mediateNo }: ReadonlyRecordable) {
+    router.push({
+      name: 'CaseDetail',
+      query: {
+        id,
+        mediateNo
+      }
+    });
+  }
+  //弹框emit的方法
+  function submitSuccess(data){
+    console.log('submit', data);
   }
 </script>

@@ -58,7 +58,7 @@ export const SELF_SETTING: AppRouteRecordRaw = {
   component: LAYOUT,
   redirect: '/self/setting',
   meta: {
-    title: t('routes.demo.page.accountSetting'),
+    title: '个人中心',
   },
   children: [
     {
@@ -66,7 +66,26 @@ export const SELF_SETTING: AppRouteRecordRaw = {
       name: 'AccountSettingPage',
       component: () => import('/@/views/sys/setting/index.vue'),
       meta: {
-        title: t('routes.demo.page.accountSetting'),
+        title: '个人中心',
+      },
+    },
+  ],
+};
+export const CASE_DETAIL: AppRouteRecordRaw = {
+  path: '/case',
+  name: 'CaseDetail',
+  component: LAYOUT,
+  redirect: '/case/detail',
+  meta: {
+    title: '案件详情',
+  },
+  children: [
+    {
+      path: '/case/detail',
+      name: 'CaseDetailPage',
+      component: () => import('/@/views/manage/caseDetail/index.vue'),
+      meta: {
+        title: '案件详情',
       },
     },
   ],

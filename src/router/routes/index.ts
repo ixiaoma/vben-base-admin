@@ -1,6 +1,6 @@
 import type { AppRouteRecordRaw, AppRouteModule } from '/@/router/types';
 
-import { PAGE_NOT_FOUND_ROUTE, REDIRECT_ROUTE, SELF_SETTING } from '/@/router/routes/basic';
+import { PAGE_NOT_FOUND_ROUTE, REDIRECT_ROUTE, SELF_SETTING, CASE_DETAIL } from '/@/router/routes/basic';
 
 import { PageEnum } from '/@/enums/pageEnum';
 import { t } from '/@/hooks/web/useI18n';
@@ -42,4 +42,5 @@ export const basicRoutes = [
   REDIRECT_ROUTE,
   PAGE_NOT_FOUND_ROUTE,
   SELF_SETTING,
+  CASE_DETAIL
 ];

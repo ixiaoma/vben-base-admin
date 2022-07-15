@@ -132,38 +132,37 @@
   async function handleLogin() {
     const data = await validForm();
     if (!data) return;
-    nvc &&
-      nvc.getNVCValAsync(async (nvcVal) => {
-        // 获取人机信息串
-        // 将以下getNVCVal()函数的值，跟随业务请求一起上传，由后端请求AnalyzeNvc接口并返回200，400，600或者800。
-        // 正式上线前务必将该服务端接口，更改为您自己的业务服务端接口
-        try {
-          loading.value = true;
-          const userInfo = await userStore.login({
-            password: data.password,
-            account: data.account,
-            acsData: nvcVal,
-            type: 'ACCOUNT_PASSWORD',
-            tnt: 'TTCSZ6CN',
-            mode: 'none', //不要默认的错误提示
+    nvc && nvc.getNVCValAsync(async (nvcVal) => {
+      // 获取人机信息串
+      // 将以下getNVCVal()函数的值，跟随业务请求一起上传，由后端请求AnalyzeNvc接口并返回200，400，600或者800。
+      // 正式上线前务必将该服务端接口，更改为您自己的业务服务端接口
+      try {
+        loading.value = true;
+        const userInfo = await userStore.login({
+          password: data.password,
+          account: data.account,
+          acsData: nvcVal,
+          type: 'ACCOUNT_PASSWORD',
+          tnt: 'TTCSZ6CN',
+          mode: 'none', //不要默认的错误提示
+        });
+        if (userInfo) {
+          notification.success({
+            message: t('sys.login.loginSuccessTitle'),
+            description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.name}`,
+            duration: 3,
           });
-          if (userInfo) {
-            notification.success({
-              message: t('sys.login.loginSuccessTitle'),
-              description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.name}`,
-              duration: 3,
-            });
-          }
-        } catch (error) {
-          createErrorModal({
-            title: t('sys.api.errorTip'),
-            content: (error as unknown as Error).message || t('sys.api.networkExceptionMsg'),
-            getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
-          });
-        } finally {
-          loading.value = false;
         }
-      });
+      } catch (error) {
+        createErrorModal({
+          title: t('sys.api.errorTip'),
+          content: (error as unknown as Error).message || t('sys.api.networkExceptionMsg'),
+          getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
+        });
+      } finally {
+        loading.value = false;
+      }
+    });
   }
 </script>
 <style lang="less" scoped>

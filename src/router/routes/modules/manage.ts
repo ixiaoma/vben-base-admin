@@ -22,7 +22,7 @@ const manage: AppRouteModule = {
         // affix: true,
         title: t('routes.manage.searchtable'),
       },
-    },
+    }
   ],
 };
 

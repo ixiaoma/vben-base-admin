@@ -1,6 +1,6 @@
 import { FormProps } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
-import { getOrgList } from '/@/api/sys/org';
+import { getOrgList, getOrgTree } from '/@/api/sys/org';
 
 export function getBasicColumns(): BasicColumn[] {
   return [
@@ -143,11 +143,8 @@ export function getFormConfig(): Partial<FormProps> {
             current: 1,
           },
           resultField: 'list',
-          // use name as label
           labelField: 'orgName',
-          // use id as value
           valueField: 'orgCode',
-          // not request untill to select
           immediate: false,
           onChange: (e) => {
             console.log('selected:', e);
@@ -178,6 +175,67 @@ export function getFormConfig(): Partial<FormProps> {
         field: 'receiveCardId',
         component: 'Input',
         label: '身份证',
+        colProps: {
+          span: 6,
+        },
+      },
+      {
+        field: 'cascader',
+        component: 'Cascader',
+        label: 'Cascader示例',
+        colProps: {
+          span: 6,
+        },
+        componentProps: {
+          options: [
+            {
+              value: 'zhejiang',
+              label: 'Zhejiang',
+              children: [
+                {
+                  value: 'hangzhou',
+                  label: 'Hangzhou',
+                  children: [
+                    {
+                      value: 'xihu',
+                      label: 'West Lake',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              value: 'jiangsu',
+              label: 'Jiangsu',
+              children: [
+                {
+                  value: 'nanjing',
+                  label: 'Nanjing',
+                  children: [
+                    {
+                      value: 'zhonghuamen',
+                      label: 'Zhong Hua Men',
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        field: 'apiTreeSelect',
+        component: 'ApiTreeSelect',
+        label: '远程下拉树',
+        componentProps: {
+          api: getOrgTree,
+          resultField: 'list',
+          fieldNames:{
+            label: 'name',
+            value: 'code',
+            children: 'children'
+          }
+        },
         colProps: {
           span: 6,
         },
