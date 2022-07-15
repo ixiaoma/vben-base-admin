@@ -1,7 +1,6 @@
 import { defHttp } from '/@/utils/http/axios';
 import {
   LoginParams,
-  LoginResultModel,
   GetUserInfoModel,
   SendSmsCodeParams,
   LoginByPhoneParams,
@@ -37,26 +36,28 @@ export function sendSmsCodeApi(params: SendSmsCodeParams, mode: ErrorMessageMode
  * @description: 手机号登录
  */
 export function loginByPhoneApi(params: LoginByPhoneParams, mode: ErrorMessageMode = 'modal') {
-  return defHttp.post<LoginResultModel>(
+  return defHttp.post(
     {
       url: Api.Login,
       params,
     },
     {
+      isReturnNativeResponse: true,
       errorMessageMode: mode,
     },
   );
 }
 /**
- * @description: user login api
+ * @description: 账号登录
  */
 export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') {
-  return defHttp.post<LoginResultModel>(
+  return defHttp.post(
     {
       url: Api.Login,
       params,
     },
     {
+      isReturnNativeResponse: true,
       errorMessageMode: mode,
     },
   );

@@ -111,8 +111,9 @@ export const useUserStore = defineStore({
     ): Promise<GetUserInfoModel | null> {
       try {
         const { goHome = true, mode, ...loginParams } = params;
-        await loginApi(loginParams, mode);
-        return this.afterLoginAction(goHome);
+        const result = await loginApi(loginParams, mode);
+        this.afterLoginAction(goHome);
+        return result;
       } catch (error) {
         return Promise.reject(error);
       }
@@ -128,8 +129,9 @@ export const useUserStore = defineStore({
     ): Promise<GetUserInfoModel | null> {
       try {
         const { goHome = true, mode, ...LoginByPhoneParams } = params;
-        await loginByPhoneApi(LoginByPhoneParams, mode);
-        return this.afterLoginAction(goHome);
+        const result = await loginByPhoneApi(LoginByPhoneParams, mode);
+        this.afterLoginAction(goHome);
+        return result;
       } catch (error) {
         return Promise.reject(error);
       }

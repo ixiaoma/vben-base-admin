@@ -27,22 +27,24 @@
     setup(props) {
       const loading = ref(false);
       const useUser = useUserStore();
-      const { notification, createMessage } = useMessage();
-      const { currentCount, isStart, start, reset } = useCountdown(props.count);
-      const { t } = useI18n();
       const formData: any = inject('formData');
+      const ncCodeFun: any = inject('ncCodeFun');
       const getButtonText = computed(() => {
         return !unref(isStart)
           ? t('component.countdown.normalText')
           : t('component.countdown.sendText', [unref(currentCount)]);
       });
 
+      const { createMessage } = useMessage();
+      const { currentCount, isStart, start, reset } = useCountdown(props.count);
+      const { t } = useI18n();
+
       watchEffect(() => {
         props.value === undefined && reset();
       });
 
       /**
-       * @description: Judge whether there is an external function before execution, and decide whether to start after execution
+       * @description: 发送验证码 启动倒计时
        */
       async function handleStart() {
         if (!formData.mobile) {
@@ -68,35 +70,13 @@
           sendSmsCodeWithNvc(nvcVal);
         });
       }
-      async function sendSmsCodeWithNvc(nvcVal) {
+      function sendSmsCodeWithNvc(nvcVal) {
         formData.showNc = false;
+        formData.ncTimer = +new Date();
         useUser.sendSmsCode({ phone: formData.mobile, acsData: nvcVal }).then((res: any) => {
-          if (!res || res?.data.success != true) {
-            const errorCode = res?.data.errorCode;
-            if (errorCode == '400') {
-              if (formData.showNc) {
-                return;
-              } else {
-                formData.showNc = true;
-              }
-              var ncoption = {
-                // 声明滑动验证需要渲染的目标ID。
-                renderTo: 'nc',
-              };
-              // 唤醒二次验证（滑动验证码）
-              (window as any).nvc.getNC(ncoption);
-            } else if (errorCode == '800' || errorCode == '900') {
-              setTimeout(() => {
-                window.location.reload();
-              }, 1000);
-              notification.error({
-                message: res?.data.errorMessage || t('sys.api.validationFailed'),
-              });
-            }
-            return;
+          if (ncCodeFun(res, formData, 'nc')) {
+            createMessage.success(t('sys.login.sendSmsCodeSuccess'));
           }
-          createMessage.success(t('sys.login.sendSmsCodeSuccess'));
-          reset();
         });
       }
       return { handleStart, currentCount, loading, getButtonText, isStart, formData };
