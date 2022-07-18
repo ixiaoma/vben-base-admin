@@ -52,7 +52,7 @@
         class="login-btn"
         size="large"
         block
-        @click="handleLogin(parentLogin)"
+        @click="handleLogin(PARENT_LOGIN)"
         :loading="loading"
       >
         {{ t('sys.login.loginButton') }}
@@ -76,8 +76,8 @@
   const formRef = ref();
   const loading = ref(false);
   const rememberMe = ref(false);
-  const userStore = useUserStore();
-  const parentLogin: any = inject('handleLogin');
+  const USERSTORE = useUserStore();
+  const PARENT_LOGIN: any = inject('handleLogin');
 
   const { t } = useI18n();
   const { getLoginState } = useLoginState();
@@ -89,7 +89,7 @@
   async function handleLogin(callback: Function, acsData?: any) {
     const data = await validForm();
     if (!data) return;
-    callback(userStore.login, {
+    callback(USERSTORE.login, {
       password: data.password,
       account: data.account,
       type: 'ACCOUNT_PASSWORD',

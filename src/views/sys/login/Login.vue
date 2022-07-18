@@ -17,8 +17,8 @@
           </div>
         </div>
         <div :class="`${prefixCls}-form`">
-          <login-form ref="loginRef" />
-          <mobile-form ref="mobileRef" />
+          <login-form ref="LOGINREF" />
+          <mobile-form ref="MOBILEREF" />
         </div>
         <a-row class="enter-x" type="flex" justify="space-between">
           <a-button type="link" size="small" class="back-btn">
@@ -50,21 +50,32 @@
     },
   });
 
-  const mobileRef = ref<InstanceType<typeof MobileForm>>();
-  // const mobileRef = ref<null | any>(MobileForm);
-  const loginRef = ref<InstanceType<typeof LoginForm>>();
-  const userStore = useUserStore();
+  const MOBILEREF = ref<InstanceType<typeof MobileForm>>();
+  const LOGINREF = ref<InstanceType<typeof LoginForm>>();
+  const USERSTORE = useUserStore();
 
   const { t } = useI18n();
   const { prefixCls } = useDesign('login');
   const { setLoginState, getLoginState } = useLoginState();
   const { createMessage, notification, createErrorModal } = useMessage();
+  let tntId = '';
 
+  // 域名拆解
+  const urlDisassembly = (): void => {
+    //  const FULLPATH: string = window.location.href;
+    const PATH_HOST: string = window.location.host;
+    if (import.meta.env.MODE === 'development') {
+      // tntId = FULLPATH.slice(FULLPATH.lastIndexOf('/')+1, FULLPATH.length);
+      tntId = 'TTCSZ6CN';
+    } else {
+      tntId = PATH_HOST.split('.')[0];
+    }
+  };
   provide('handleLogin', handleLogin);
   provide('ncCodeFun', ncCodeFun);
   init();
+  urlDisassembly();
 
-  console.log(import.meta.env);
   // 初始化无痕验证
   function init() {
     AWSC.use('nvc', function (_state, module) {
@@ -80,12 +91,12 @@
           console.log('144-----:', data);
           if (unref(getLoginState) === LoginStateEnum.SMS_CODE) {
             //验证码登录
-            mobileRef.value!.formData.showNc = false;
-            mobileRef.value!.sonFun()();
+            MOBILEREF.value!.formData.showNc = false;
+            MOBILEREF.value!.sonFun()();
           } else {
             // 账号登录
-            loginRef.value!.formData.showNc = false;
-            loginRef.value!.handleLogin(getLoginData, data);
+            LOGINREF.value!.formData.showNc = false;
+            LOGINREF.value!.handleLogin(getLoginData, data);
           }
           // that.showNCView = false
           // that.handleSendWithNvc(data)
@@ -93,8 +104,8 @@
         // 前端二次验证失败时触发该回调参数
         fail: function (failCode) {
           console.log('150----:', failCode);
-          mobileRef.value!.formData.showNc = false;
-          loginRef.value!.formData.showNc = false;
+          MOBILEREF.value!.formData.showNc = false;
+          LOGINREF.value!.formData.showNc = false;
           window.console && console.log(failCode);
           createMessage.error('人机验证失败!');
           setTimeout(() => {
@@ -104,8 +115,8 @@
         // 前端二次验证加载异常时触发该回调参数。
         error: function (errorCode) {
           console.log('160----:', errorCode);
-          mobileRef.value!.formData.showNc = false;
-          loginRef.value!.formData.showNc = false;
+          MOBILEREF.value!.formData.showNc = false;
+          LOGINREF.value!.formData.showNc = false;
           window.console && console.log(errorCode);
           createMessage.error('人机验证失败!');
           setTimeout(() => {
@@ -118,8 +129,8 @@
   // 无痕验证 错误校验
   function ncCodeFun(res: any, params: any, idName: string): Boolean {
     if (!res || res?.data.success != true) {
-      const errorCode = res?.data.errorCode;
-      if (errorCode == '400') {
+      const ERRORCODE = res?.data.errorCode;
+      if (ERRORCODE == '400') {
         if (params!.showNc) {
           return false;
         } else {
@@ -131,7 +142,7 @@
         };
         // 唤醒二次验证（滑动验证码）
         (window as any).nvc.getNC(ncoption);
-      } else if (errorCode == '800' || errorCode == '900') {
+      } else if (ERRORCODE == '800' || ERRORCODE == '900') {
         setTimeout(() => {
           window.location.reload();
         }, 1000);
@@ -145,26 +156,26 @@
   }
   // 登录接口请求
   async function getLoginData(ajaxFun: Function, params: any, acsData?: any) {
-    let newRef: any = loginRef;
+    let newRef: any = LOGINREF;
     let idName: any = 'nd';
     if (unref(getLoginState) === LoginStateEnum.SMS_CODE) {
-      newRef = mobileRef.value;
+      newRef = MOBILEREF.value;
       idName = 'nc';
     } else {
-      newRef = loginRef.value;
+      newRef = LOGINREF.value;
       idName = 'nd';
     }
     newRef.loading = true;
     params.acsData = params.acsData || acsData;
     params.mode = 'none';
-    params.tnt = 'TTCSZ6CN';
-    const userInfo = await ajaxFun(params);
-    const isPass: Boolean = await ncCodeFun(userInfo, newRef.formData, idName);
-    if (isPass) {
-      userStore.afterLoginAction(true);
+    params.tnt = tntId;
+    const USERINFO = await ajaxFun(params);
+    const ISPASS: Boolean = await ncCodeFun(USERINFO, newRef.formData, idName);
+    if (ISPASS) {
+      USERSTORE.afterLoginAction(true);
       notification.success({
         message: t('sys.login.loginSuccessTitle'),
-        description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.name}`,
+        description: `${t('sys.login.loginSuccessDesc')}: ${USERINFO.name}`,
         duration: 3,
       });
     }

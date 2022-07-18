@@ -32,7 +32,7 @@
         type="primary"
         size="large"
         block
-        @click="handleLogin(parentLogin)"
+        @click="handleLogin(PARENT_LOGIN)"
         :loading="loading"
       >
         {{ t('sys.login.loginButton') }}
@@ -55,9 +55,9 @@
   });
 
   const formRef = ref();
-  const useUser = useUserStore();
+  const USERSTORE = useUserStore();
   const loading = ref(false);
-  const parentLogin: any = inject('handleLogin');
+  const PARENT_LOGIN: any = inject('handleLogin');
   const countdownRef = ref<null | any>(CountdownInput);
 
   const { t } = useI18n();
@@ -73,7 +73,7 @@
   async function handleLogin(callback: Function) {
     const data = await validForm();
     if (!data) return;
-    callback(useUser.loginByPhone, {
+    callback(USERSTORE.loginByPhone, {
       phone: data.mobile,
       smsCode: data.sms,
       type: 'ACCOUNT_PASSWORD',
