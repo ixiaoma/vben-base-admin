@@ -86,13 +86,14 @@
 
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.ACCOUNT_PASSWORD);
 
-  async function handleLogin(callback: Function) {
+  async function handleLogin(callback: Function, acsData?: any) {
     const data = await validForm();
     if (!data) return;
     callback(userStore.login, {
       password: data.password,
       account: data.account,
       type: 'ACCOUNT_PASSWORD',
+      acsData: acsData || '',
     });
   }
 
@@ -104,9 +105,11 @@
   });
 </script>
 <style lang="less" scoped>
+  @import '/@/styles/login.scss';
+
   .account-login {
     .btn-form {
-      margin-top: 60px;
+      // margin-top: 60px;
 
       .login-btn {
         box-shadow: 0px 12px 20px -4px rgba(8, 88, 241, 0.4);

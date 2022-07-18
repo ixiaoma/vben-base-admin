@@ -42,6 +42,7 @@
   import { useDesign } from '/@/hooks/web/useDesign';
   import { LoginStateEnum, useLoginState } from './useLogin';
   import { useMessage } from '/@/hooks/web/useMessage';
+  import { useUserStore } from '/@/store/modules/user';
 
   defineProps({
     sessionTimeout: {
@@ -49,18 +50,21 @@
     },
   });
 
+  const mobileRef = ref<InstanceType<typeof MobileForm>>();
+  // const mobileRef = ref<null | any>(MobileForm);
+  const loginRef = ref<InstanceType<typeof LoginForm>>();
+  const userStore = useUserStore();
+
   const { t } = useI18n();
   const { prefixCls } = useDesign('login');
   const { setLoginState, getLoginState } = useLoginState();
   const { createMessage, notification, createErrorModal } = useMessage();
 
-  const mobileRef = ref<InstanceType<typeof MobileForm>>();
-  const loginRef = ref<InstanceType<typeof LoginForm>>();
-
   provide('handleLogin', handleLogin);
   provide('ncCodeFun', ncCodeFun);
   init();
 
+  console.log(import.meta.env);
   // 初始化无痕验证
   function init() {
     AWSC.use('nvc', function (_state, module) {
@@ -77,11 +81,11 @@
           if (unref(getLoginState) === LoginStateEnum.SMS_CODE) {
             //验证码登录
             mobileRef.value!.formData.showNc = false;
-            mobileRef.value!.handleLogin();
+            mobileRef.value!.sonFun()();
           } else {
             // 账号登录
             loginRef.value!.formData.showNc = false;
-            loginRef.value!.handleLogin(handleLogin);
+            loginRef.value!.handleLogin(getLoginData, data);
           }
           // that.showNCView = false
           // that.handleSendWithNvc(data)
@@ -111,13 +115,13 @@
       });
     });
   }
-  // 无痕验证提示
+  // 无痕验证 错误校验
   function ncCodeFun(res: any, params: any, idName: string): Boolean {
     if (!res || res?.data.success != true) {
       const errorCode = res?.data.errorCode;
       if (errorCode == '400') {
         if (params!.showNc) {
-          return true;
+          return false;
         } else {
           params!.showNc = true;
         }
@@ -140,43 +144,48 @@
     return true;
   }
   // 登录接口请求
-  function handleLogin(ajaxFun: Function, params: any) {
+  async function getLoginData(ajaxFun: Function, params: any, acsData?: any) {
     let newRef: any = loginRef;
-    let idName: any = 'nc';
+    let idName: any = 'nd';
     if (unref(getLoginState) === LoginStateEnum.SMS_CODE) {
       newRef = mobileRef.value;
-      idName = 'nd';
+      idName = 'nc';
     } else {
       newRef = loginRef.value;
-      idName = 'nc';
+      idName = 'nd';
     }
+    newRef.loading = true;
+    params.acsData = params.acsData || acsData;
+    params.mode = 'none';
+    params.tnt = 'TTCSZ6CN';
+    const userInfo = await ajaxFun(params);
+    const isPass: Boolean = await ncCodeFun(userInfo, newRef.formData, idName);
+    if (isPass) {
+      userStore.afterLoginAction(true);
+      notification.success({
+        message: t('sys.login.loginSuccessTitle'),
+        description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.name}`,
+        duration: 3,
+      });
+    }
+    newRef.loading = false;
+  }
+
+  // 无痕验证 校验
+  function handleLogin(ajaxFun: Function, params: any) {
     (window as any).nvc &&
       (window as any).nvc.getNVCValAsync(async (nvcVal) => {
         // 获取人机信息串
         // 将以下getNVCVal()函数的值，跟随业务请求一起上传，由后端请求AnalyzeNvc接口并返回200，400，600或者800。
         // 正式上线前务必将该服务端接口，更改为您自己的业务服务端接口
         try {
-          newRef.loading.value = true;
-          params.acsData = nvcVal;
-          params.mode = 'none';
-          params.tnt = 'TTCSZ6CN';
-          const userInfo = await ajaxFun(params);
-          const isPass: Boolean = await ncCodeFun(userInfo, newRef, idName);
-          if (isPass) {
-            notification.success({
-              message: t('sys.login.loginSuccessTitle'),
-              description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.name}`,
-              duration: 3,
-            });
-          }
+          await getLoginData(ajaxFun, params, nvcVal);
         } catch (error) {
           createErrorModal({
             title: t('sys.api.errorTip'),
             content: (error as unknown as Error).message || t('sys.api.networkExceptionMsg'),
-            // getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
+            getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
           });
-        } finally {
-          newRef.loading = false;
         }
       });
   }

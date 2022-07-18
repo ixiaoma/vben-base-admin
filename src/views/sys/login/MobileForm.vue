@@ -16,6 +16,7 @@
     </a-form-item>
     <a-form-item name="sms" class="enter-x">
       <countdown-input
+        ref="countdownRef"
         size="large"
         class="fix-auto-fill"
         v-model:value="formData.sms"
@@ -57,6 +58,7 @@
   const useUser = useUserStore();
   const loading = ref(false);
   const parentLogin: any = inject('handleLogin');
+  const countdownRef = ref<null | any>(CountdownInput);
 
   const { t } = useI18n();
   const { validForm } = useFormValid(formRef);
@@ -65,7 +67,9 @@
 
   const getShow = computed(() => unref(getLoginState) === LoginStateEnum.SMS_CODE);
   provide('formData', formData);
-
+  function sonFun() {
+    return countdownRef.value.countButtonRef.handleStart;
+  }
   async function handleLogin(callback: Function) {
     const data = await validForm();
     if (!data) return;
@@ -80,6 +84,7 @@
     handleLogin,
     formRef,
     loading,
+    sonFun,
   });
 </script>
 <style lang="scss" scoped>

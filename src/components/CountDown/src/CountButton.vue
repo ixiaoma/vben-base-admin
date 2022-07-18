@@ -46,7 +46,7 @@
       /**
        * @description: 发送验证码 启动倒计时
        */
-      async function handleStart() {
+      const handleStart = async () => {
         if (!formData.mobile) {
           createMessage.warning(t('sys.login.mobilePlaceholder'));
           return;
@@ -69,7 +69,7 @@
           // 正式上线前务必将该服务端接口，更改为您自己的业务服务端接口
           sendSmsCodeWithNvc(nvcVal);
         });
-      }
+      };
       function sendSmsCodeWithNvc(nvcVal) {
         formData.showNc = false;
         formData.ncTimer = +new Date();
