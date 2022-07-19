@@ -1,12 +1,12 @@
 <template>
-  <basic-modal v-bind="$attrs" title="案件分配" width="700px" @ok="handleSubmit" @register="register">
+  <BasicModal v-bind="$attrs" title="案件分配" width="700px" @ok="handleSubmit" @register="register">
     <p class="h-20" v-for="index in 20" :key="index">根据屏幕高度自适应</p>
     <!-- 自定义页脚
     <template #footer>
       <a-button key="back">Return</a-button>
       <a-button key="submit" type="primary">Submit</a-button>
     </template> -->
-  </basic-modal>
+  </BasicModal>
 </template>
 <script lang="ts" setup name="AllocationModal">
   import { BasicModal, useModalInner } from '/@/components/Modal'

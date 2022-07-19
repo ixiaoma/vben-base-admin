@@ -47,6 +47,7 @@ async function bootstrap() {
   // await router.isReady();
 
   app.mount('#app');
+  
 }
 
 bootstrap();

@@ -91,6 +91,7 @@ export const useUserStore = defineStore({
       try {
         const { goHome = true, mode, ...loginParams } = params;
         await loginApi(loginParams, mode);
+        this.setToken(Date.toLocaleString());
         return this.afterLoginAction(goHome);
       } catch (error) {
         return Promise.reject(error);
@@ -134,13 +135,13 @@ export const useUserStore = defineStore({
      * @description: logout
      */
     async logout(goLogin = false) {
-      // if (this.getToken) {
-      //   try {
-      //     await doLogout();
-      //   } catch {
-      //     console.log('注销Token失败');
-      //   }
-      // }
+      if (this.getToken) {
+        try {
+          await doLogout();
+        } catch {
+          console.log('注销Token失败');
+        }
+      }
       this.setToken(undefined);
       this.setSessionTimeout(false);
       this.setUserInfo(null);

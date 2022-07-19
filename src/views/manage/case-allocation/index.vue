@@ -1,5 +1,5 @@
 <template>
-  <basic-table
+  <BasicTable
     @register="registerTable"
     :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys, onChange: onSelectChange }"
   >
@@ -8,7 +8,7 @@
     </template>
     <template #bodyCell="{ column, record }">
       <template v-if="column.key === 'action'">
-        <table-action
+        <TableAction
           :actions="[
             {
               label: '详情',
@@ -18,19 +18,23 @@
         />
       </template>
     </template>
-  </basic-table>
-  <assign-modal @register="registerModal" @success="submitSuccess"/>
+  </BasicTable>
+  <AssignModal @register="registerModal" @success="submitSuccess"/>
 </template>
 <script lang="ts" setup name="CaseAllocation">
-  import { ref } from 'vue';
+  import { computed, ref } from 'vue';
   import { useRouter } from 'vue-router';
   import { isSelect } from '/@/utils/checkUtil';
   import AssignModal from './AssignModal.vue';
   import { useModal } from '/@/components/Modal';
+  import { useEnumStore } from '/@/store/modules/enum';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { getBasicColumns, getFormConfig } from './allocation.data';
   import { getCaseAllocationList } from '/@/api/manage/caseallocation';
-
+  
+  const emumStore = useEnumStore()
+  const enumInfo = computed(() => emumStore.getEnumData);
+  console.log(enumInfo)
   const router = useRouter();
   const checkedKeys = ref<Array<string | number>>([]); //当前列表选中的key
 

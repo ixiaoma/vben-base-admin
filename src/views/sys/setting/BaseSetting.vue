@@ -65,6 +65,7 @@
         const userinfo = userStore.getUserInfo;
         userinfo.avatar = src;
         userStore.setUserInfo(userinfo);
+
       }
 
       return {

@@ -65,6 +65,8 @@
   import { useMessage } from '/@/hooks/web/useMessage';
 
   import { useUserStore } from '/@/store/modules/user';
+  import { useEnumStore } from '/@/store/modules/enum';
+  
   import { LoginStateEnum, useLoginState, useFormRules, useFormValid } from './useLogin';
   import { useDesign } from '/@/hooks/web/useDesign';
   //import { onKeyStroke } from '@vueuse/core';
@@ -72,6 +74,7 @@
   const { notification, createErrorModal } = useMessage();
   const { prefixCls } = useDesign('login');
   const userStore = useUserStore();
+  const enumStore = useEnumStore();
 
   const { setLoginState, getLoginState } = useLoginState();
   const { getFormRules } = useFormRules();
@@ -147,18 +150,16 @@
           mode: 'none', //不要默认的错误提示
         });
         if (userInfo) {
+          enumStore.getEnumListAction().then(res=>{
+            console.log(res);
+            
+          })
           notification.success({
             message: t('sys.login.loginSuccessTitle'),
             description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.name}`,
             duration: 3,
           });
         }
-      } catch (error) {
-        createErrorModal({
-          title: t('sys.api.errorTip'),
-          content: (error as unknown as Error).message || t('sys.api.networkExceptionMsg'),
-          getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
-        });
       } finally {
         loading.value = false;
       }

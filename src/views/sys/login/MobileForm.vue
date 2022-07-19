@@ -15,11 +15,12 @@
       />
     </a-form-item>
     <a-form-item name="sms" class="enter-x">
-      <countdown-input
+      <CountdownInput
         size="large"
         class="fix-auto-fill"
         v-model:value="formData.sms"
         :placeholder="t('sys.login.smsCode')"
+        :sendCodeApi="sendCodeApi"
       />
     </a-form-item>
 
@@ -56,5 +57,9 @@
     const data = await validForm();
     if (!data) return;
     console.log(data);
+  }
+  //倒计时执行前的函数
+  function sendCodeApi() {
+    return getCaptcha(formData);
   }
 </script>

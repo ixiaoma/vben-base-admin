@@ -17,7 +17,7 @@ const manage: AppRouteModule = {
     {
       path: 'caseAllocation',
       name: 'CaseAllocation',
-      component: () => import('/@/views/manage/caseAllocation/index.vue'),
+      component: () => import('/@/views/manage/case-allocation/index.vue'),
       meta: {
         // affix: true,
         title: t('routes.manage.searchtable'),

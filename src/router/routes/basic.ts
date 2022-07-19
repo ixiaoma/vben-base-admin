@@ -83,7 +83,7 @@ export const CASE_DETAIL: AppRouteRecordRaw = {
     {
       path: '/case/detail',
       name: 'CaseDetailPage',
-      component: () => import('/@/views/manage/caseDetail/index.vue'),
+      component: () => import('/@/views/manage/case-detail/index.vue'),
       meta: {
         title: '案件详情',
       },
