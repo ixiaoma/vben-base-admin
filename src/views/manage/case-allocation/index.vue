@@ -24,7 +24,7 @@
 <script lang="ts" setup name="CaseAllocation">
   import { computed, ref } from 'vue';
   import { useRouter } from 'vue-router';
-  import { isSelect } from '/@/utils/checkUtil';
+  import { isSelect } from '/@/utils/commonUtil';
   import AssignModal from './AssignModal.vue';
   import { useModal } from '/@/components/Modal';
   import { useEnumStore } from '/@/store/modules/enum';

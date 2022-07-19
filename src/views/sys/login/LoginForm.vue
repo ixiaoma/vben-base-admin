@@ -65,7 +65,7 @@
   import { useMessage } from '/@/hooks/web/useMessage';
 
   import { useUserStore } from '/@/store/modules/user';
-  import { useEnumStore } from '/@/store/modules/enum';
+  // import { useEnumStore } from '/@/store/modules/enum';
   
   import { LoginStateEnum, useLoginState, useFormRules, useFormValid } from './useLogin';
   import { useDesign } from '/@/hooks/web/useDesign';
@@ -74,7 +74,7 @@
   const { notification, createErrorModal } = useMessage();
   const { prefixCls } = useDesign('login');
   const userStore = useUserStore();
-  const enumStore = useEnumStore();
+  // const enumStore = useEnumStore();
 
   const { setLoginState, getLoginState } = useLoginState();
   const { getFormRules } = useFormRules();
@@ -150,10 +150,6 @@
           mode: 'none', //不要默认的错误提示
         });
         if (userInfo) {
-          enumStore.getEnumListAction().then(res=>{
-            console.log(res);
-            
-          })
           notification.success({
             message: t('sys.login.loginSuccessTitle'),
             description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.name}`,

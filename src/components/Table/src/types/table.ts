@@ -332,6 +332,13 @@ export interface BasicTableProps<T = any> {
   title?: VNodeChild | JSX.Element | string | ((data: Recordable) => string);
 
   /**
+   *
+   * 枚举code:
+   *
+   */
+   enumCode?: string | null | undefined
+
+  /**
    * Set props on per header row
    * @type Function
    */
@@ -413,6 +420,7 @@ export type CellFormat =
 
 // @ts-ignore
 export interface BasicColumn extends ColumnProps<Recordable> {
+  [x: string]: any;
   children?: BasicColumn[];
   filters?: {
     text: string;

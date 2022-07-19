@@ -39,6 +39,7 @@ export function getBasicColumns(): BasicColumn[] {
     {
       title: '协议状态',
       dataIndex: 'agrStatus',
+      enumCode: 'AgrStatusEnum'
     },
     {
       title: '还款状态',

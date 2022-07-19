@@ -12,8 +12,10 @@ import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
 import { usePermissionStore } from '/@/store/modules/permission';
+import { useEnumStore } from '/@/store/modules/enum';
 import { RouteRecordRaw } from 'vue-router';
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
+
 import { isArray } from '/@/utils/is';
 import { h } from 'vue';
 
@@ -98,9 +100,7 @@ export const useUserStore = defineStore({
       }
     },
     async afterLoginAction(goHome?: boolean): Promise<GetUserInfoModel | null> {
-      // get user info
       const userInfo = await this.getUserInfoAction();
-
       const sessionTimeout = this.sessionTimeout;
       if (sessionTimeout) {
         this.setSessionTimeout(false);
@@ -116,6 +116,8 @@ export const useUserStore = defineStore({
         }
         goHome && (await router.replace(userInfo?.homePath || PageEnum.BASE_HOME));
       }
+      const enumStore = useEnumStore();
+      enumStore.getEnumListAction()
       return userInfo;
     },
     async getUserInfoAction(): Promise<UserInfo | null> {

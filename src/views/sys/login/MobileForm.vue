@@ -60,6 +60,9 @@
   }
   //倒计时执行前的函数
   function sendCodeApi() {
+    if(!formData.mobile){
+      return
+    }
     return getCaptcha(formData);
   }
 </script>

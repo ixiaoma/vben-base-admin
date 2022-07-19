@@ -1,4 +1,5 @@
 import { message } from 'ant-design-vue';
+import { useEnumStore } from '/@/store/modules/enum';
 //判断列表是否选中
 export function isSelect(list: Array<string | number>, isSingle: Boolean = false): boolean {
   if (!list.length) {
@@ -10,4 +11,17 @@ export function isSelect(list: Array<string | number>, isSingle: Boolean = false
     return true;
   }
   return true
+}
+
+export function getEnum(enumCode: string, codeValue: string){
+  const enumStore = useEnumStore();
+  const globalEnum = enumStore.getGlobalEnum
+  if(codeValue){
+    const chooseEnum = globalEnum[enumCode]
+    return chooseEnum[codeValue]?.label
+  }
+  if(enumCode){
+    return globalEnum[enumCode]
+  }
+  return globalEnum
 }

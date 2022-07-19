@@ -1,6 +1,6 @@
 <template>
   <div ref="wrapRef" :class="getWrapperClass">
-    <basic-form
+    <BasicForm
       ref="formRef"
       submitOnReset
       v-bind="getFormProps"
@@ -13,7 +13,7 @@
       <template #[replaceFormSlotKey(item)]="data" v-for="item in getFormSlotKeys">
         <slot :name="item" v-bind="data || {}"></slot>
       </template>
-    </basic-form>
+    </BasicForm>
 
     <Table
       ref="tableElRef"
@@ -26,7 +26,10 @@
         <slot :name="item" v-bind="data || {}"></slot>
       </template>
       <template #headerCell="{ column }">
-        <header-cell :column="column" />
+        <HeaderCell :column="column" />
+      </template>
+      <template #bodyCell="data">
+        <slot name="bodyCell" v-bind="data || {}"></slot>
       </template>
       <!--      <template #[`header-${column.dataIndex}`] v-for="(column, index) in columns" :key="index">-->
       <!--        <HeaderCell :column="column" />-->
@@ -63,7 +66,6 @@
   import { useTableFooter } from './hooks/useTableFooter';
   import { useTableForm } from './hooks/useTableForm';
   import { useDesign } from '/@/hooks/web/useDesign';
-
   import { omit } from 'lodash-es';
   import { basicProps } from './props';
   import { isFunction } from '/@/utils/is';

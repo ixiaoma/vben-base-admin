@@ -16,12 +16,12 @@ export const useEnumStore = defineStore({
     globalEnum: null,
   }),
   getters: {
-    getEnumData(): EnumInfo {
+    getGlobalEnum(): EnumInfo {
       return this.globalEnum || getAuthCache(ENUM_KEY) || null;
     }
   },
   actions: {
-    setEnumData(globalEnum: EnumInfo | null) {
+    setGlobalEnum(globalEnum: EnumInfo | null) {
       this.globalEnum = globalEnum;
       setAuthCache(ENUM_KEY, globalEnum);
     },
@@ -32,16 +32,8 @@ export const useEnumStore = defineStore({
      * @description: 全量枚举
      */
     async getEnumListAction(): Promise<EnumInfo | null> {
-      const enumRes = await enumApi();
-      const globalEnum = {}
-      for(let i in enumRes){
-        const enumList: any[] = []
-        for(let j in enumRes[i]){
-          enumList.push(enumRes[i][j])
-        }
-        globalEnum[i] = enumList
-      }
-      this.setEnumData(globalEnum)
+      const globalEnum = await enumApi();
+      this.setGlobalEnum(globalEnum)
       return globalEnum;
     }
   },

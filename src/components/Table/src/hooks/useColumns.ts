@@ -9,6 +9,7 @@ import { isArray, isBoolean, isFunction, isMap, isString } from '/@/utils/is';
 import { cloneDeep, isEqual } from 'lodash-es';
 import { formatToDate } from '/@/utils/dateUtil';
 import { ACTION_COLUMN_FLAG, DEFAULT_ALIGN, INDEX_COLUMN_FLAG, PAGE_SIZE } from '../const';
+import { getEnum } from '/@/utils/commonUtil';
 
 function handleItem(item: BasicColumn, ellipsis: boolean) {
   const { key, dataIndex, children } = item;
@@ -50,12 +51,17 @@ function handleIndexColumn(
   if (unref(isTreeTable)) {
     return;
   }
-  columns.forEach(() => {
+  columns.forEach((ele: any) => {
     const indIndex = columns.findIndex((column) => column.flag === INDEX_COLUMN_FLAG);
     if (showIndexColumn) {
       pushIndexColumns = indIndex === -1;
     } else if (!showIndexColumn && indIndex !== -1) {
       columns.splice(indIndex, 1);
+    }
+    if(ele.enumCode){
+      ele.customRender = ({ record }) => {
+        return getEnum(ele.enumCode, record[ele.dataIndex])
+      }
     }
   });
 
