@@ -9,6 +9,7 @@ import { isArray, isBoolean, isFunction, isMap, isString } from '/@/utils/is';
 import { cloneDeep, isEqual } from 'lodash-es';
 import { formatToDate } from '/@/utils/dateUtil';
 import { ACTION_COLUMN_FLAG, DEFAULT_ALIGN, INDEX_COLUMN_FLAG, PAGE_SIZE } from '../const';
+// import { useEnumStore } from '/@/store/modules/enum';   
 import { getEnum } from '/@/utils/commonUtil';
 
 function handleItem(item: BasicColumn, ellipsis: boolean) {
@@ -46,21 +47,23 @@ function handleIndexColumn(
   const { t } = useI18n();
 
   const { showIndexColumn, indexColumnProps, isTreeTable } = unref(propsRef);
-
+  // const enumStore = useEnumStore();
+  // const globalEnum = enumStore.getGlobalEnum
   let pushIndexColumns = false;
   if (unref(isTreeTable)) {
     return;
   }
-  columns.forEach((ele: any) => {
+  columns.forEach((column: any) => {
     const indIndex = columns.findIndex((column) => column.flag === INDEX_COLUMN_FLAG);
     if (showIndexColumn) {
       pushIndexColumns = indIndex === -1;
     } else if (!showIndexColumn && indIndex !== -1) {
       columns.splice(indIndex, 1);
     }
-    if(ele.enumCode){
-      ele.customRender = ({ record }) => {
-        return getEnum(ele.enumCode, record[ele.dataIndex])
+    if(column.enumCode){
+      const chooseEnum = getEnum(column.enumCode)
+      column.customRender = ({ record }) => {
+        return chooseEnum[record[column.dataIndex]]?.label
       }
     }
   });
@@ -159,7 +162,6 @@ export function useColumns(
       })
       .map((column) => {
         const { slots, customRender, format, edit, editRow, flag } = column;
-
         if (!slots || !slots?.title) {
           // column.slots = { title: `header-${dataIndex}`, ...(slots || {}) };
           column.customTitle = column.title;
