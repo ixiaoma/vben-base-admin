@@ -15,11 +15,15 @@ import { setupGlobDirectives } from '/@/directives';
 import { setupI18n } from '/@/locales/setupI18n';
 import { registerGlobComp } from '/@/components/registerGlobComp';
 import { checkStatus } from '/@/utils/http/axios/checkStatus';
+import { getCache, setCache, clearCache } from '/@/utils/auth';
 
 async function bootstrap() {
   const app = createApp(App);
 
   app.provide('$checkStatus', checkStatus);
+  app.provide('$getCache', getCache);
+  app.provide('$setCaches', setCache);
+  app.provide('$clearCache', clearCache);
 
   // Configure store
   setupStore(app);

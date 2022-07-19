@@ -43,8 +43,7 @@
   import { LoginStateEnum, useLoginState } from './useLogin';
   import { useUserStore } from '/@/store/modules/user';
   import { urlDisassembly, isProdMode, isDevMode } from '/@/utils/env';
-  // import { Persistent } from '/@/utils/cache/persistent';
-  // import { TNT_KEY } from '/@/enums/cacheEnum';
+  import { TNT_KEY } from '/@/enums/cacheEnum';
 
   defineProps({
     sessionTimeout: {
@@ -57,6 +56,7 @@
   const USERSTORE = useUserStore();
   const TNTID = urlDisassembly().tnt;
   const checkStatus: any = inject('$checkStatus');
+  const setCaches: any = inject('$setCaches');
 
   const { t } = useI18n();
   const { prefixCls } = useDesign('login');
@@ -65,6 +65,7 @@
   isDevMode();
   provide('handleLogin', handleLogin);
   provide('ncCodeFun', ncCodeFun);
+  setCaches(TNT_KEY, TNTID);
   init();
 
   // 初始化无痕验证
