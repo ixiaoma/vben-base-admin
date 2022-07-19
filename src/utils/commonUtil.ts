@@ -13,10 +13,10 @@ export function isSelect(list: Array<string | number>, isSingle: Boolean = false
   return true;
 }
 
-export function getEnum(enumCode: string, codeValue: string) {
+export function getEnum(enumCode?: string, codeValue?: string) {
   const enumStore = useEnumStore();
   const globalEnum = enumStore.getGlobalEnum;
-  if (codeValue) {
+  if (codeValue && enumCode) {
     const chooseEnum = globalEnum[enumCode];
     return chooseEnum[codeValue]?.label;
   }
