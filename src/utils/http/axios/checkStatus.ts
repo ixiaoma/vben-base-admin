@@ -1,25 +1,20 @@
-import type { ErrorMessageMode } from '/#/axios';
+import type { ErrorMessageMode, ModeType } from '/#/axios';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { useI18n } from '/@/hooks/web/useI18n';
-// import router from '/@/router';
-// import { PageEnum } from '/@/enums/pageEnum';
 import { useUserStoreWithOut } from '/@/store/modules/user';
-import projectSetting from '/@/settings/projectSetting';
-import { SessionTimeoutProcessingEnum } from '/@/enums/appEnum';
 
-const { createMessage, createErrorModal } = useMessage();
-const error = createMessage.error!;
-const stp = projectSetting.sessionTimeoutProcessing;
+const { createMessage, notification, createModal } = useMessage();
 
 export function checkStatus(
   status: number,
   msg: string,
   errorMessageMode: ErrorMessageMode = 'message',
+  type: ModeType = 'error',
+  description: string,
 ): void {
   const { t } = useI18n();
   const userStore = useUserStoreWithOut();
   let errMessage = '';
-
   switch (status) {
     case 400:
       errMessage = `${msg}`;
@@ -29,7 +24,7 @@ export function checkStatus(
     // Return to the current page after successful login. This step needs to be operated on the login page.
     case 401:
       errMessage = t('sys.api.errMsg401');
-        userStore.logout(true);
+      userStore.logout(true);
       break;
     case 403:
       errMessage = t('sys.api.errMsg403');
@@ -63,13 +58,16 @@ export function checkStatus(
       errMessage = t('sys.api.errMsg505');
       break;
     default:
+      errMessage = msg || t('sys.api.errorMessage');
   }
 
   if (errMessage) {
     if (errorMessageMode === 'modal') {
-      createErrorModal({ title: t('sys.api.errorTip'), content: errMessage });
+      createModal[type]({ title: t('sys.api.errorTip'), content: errMessage });
     } else if (errorMessageMode === 'message') {
-      error({ content: errMessage, key: `global_error_message_status_${status}` });
+      createMessage[type]({ content: errMessage, key: `global_error_message_status_${status}` });
+    } else if (errorMessageMode === 'notify') {
+      notification[type]({ message: errMessage, description: description });
     }
   }
 }

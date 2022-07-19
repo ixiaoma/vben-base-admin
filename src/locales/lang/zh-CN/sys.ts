@@ -9,6 +9,7 @@ export default {
     networkException: '网络异常',
     networkExceptionMsg: '网络异常，请检查您的网络连接是否正常!',
     validationFailed: '验证失败，正在刷新...',
+    manMachineFailed: '人机验证失败!',
 
     errMsg401: '权限过期请重新登录!',
     errMsg403: '用户得到授权，但是访问是被禁止的。!',

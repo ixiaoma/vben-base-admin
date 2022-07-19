@@ -76,7 +76,7 @@
     callback(USERSTORE.loginByPhone, {
       phone: data.mobile,
       smsCode: data.sms,
-      type: 'ACCOUNT_PASSWORD',
+      type: 'SMS_CODE',
     });
   }
   defineExpose({

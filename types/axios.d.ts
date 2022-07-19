@@ -1,4 +1,5 @@
-export type ErrorMessageMode = 'none' | 'modal' | 'message' | undefined;
+export type ErrorMessageMode = 'none' | 'modal' | 'message' | 'notify' | undefined;
+export type ModeType = 'success' | 'warning' | 'error' | 'info' | undefined;
 
 export interface RequestOptions {
   // Splicing request parameters to url

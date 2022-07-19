@@ -14,9 +14,12 @@ import { setupStore } from '/@/store';
 import { setupGlobDirectives } from '/@/directives';
 import { setupI18n } from '/@/locales/setupI18n';
 import { registerGlobComp } from '/@/components/registerGlobComp';
+import { checkStatus } from '/@/utils/http/axios/checkStatus';
 
 async function bootstrap() {
   const app = createApp(App);
+
+  app.provide('$checkStatus', checkStatus);
 
   // Configure store
   setupStore(app);

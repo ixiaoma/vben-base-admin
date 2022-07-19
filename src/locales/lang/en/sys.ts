@@ -10,6 +10,7 @@ export default {
     networkExceptionMsg:
       'Please check if your network connection is normal! The network is abnormal',
     validationFailed: 'Validation failed, refreshing',
+    manMachineFailed: 'Man machine verification failed!',
 
     errMsg401: 'The user does not have permission (token, user name, password error)!',
     errMsg403: 'The user is authorized, but access is forbidden!',

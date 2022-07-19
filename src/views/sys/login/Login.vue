@@ -34,15 +34,17 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { unref, ref, provide } from 'vue';
+  import { unref, ref, provide, inject } from 'vue';
   import { SvgIcon } from '/@/components/Icon';
   import LoginForm from './LoginForm.vue';
   import MobileForm from './MobileForm.vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { LoginStateEnum, useLoginState } from './useLogin';
-  import { useMessage } from '/@/hooks/web/useMessage';
   import { useUserStore } from '/@/store/modules/user';
+  import { urlDisassembly, isProdMode, isDevMode } from '/@/utils/env';
+  // import { Persistent } from '/@/utils/cache/persistent';
+  // import { TNT_KEY } from '/@/enums/cacheEnum';
 
   defineProps({
     sessionTimeout: {
@@ -53,28 +55,17 @@
   const MOBILEREF = ref<InstanceType<typeof MobileForm>>();
   const LOGINREF = ref<InstanceType<typeof LoginForm>>();
   const USERSTORE = useUserStore();
+  const TNTID = urlDisassembly().tnt;
+  const checkStatus: any = inject('$checkStatus');
 
   const { t } = useI18n();
   const { prefixCls } = useDesign('login');
   const { setLoginState, getLoginState } = useLoginState();
-  const { createMessage, notification, createErrorModal } = useMessage();
-  let tntId = '';
-
-  // 域名拆解
-  const urlDisassembly = (): void => {
-    //  const FULLPATH: string = window.location.href;
-    const PATH_HOST: string = window.location.host;
-    if (import.meta.env.MODE === 'development') {
-      // tntId = FULLPATH.slice(FULLPATH.lastIndexOf('/')+1, FULLPATH.length);
-      tntId = 'TTCSZ6CN';
-    } else {
-      tntId = PATH_HOST.split('.')[0];
-    }
-  };
+  isProdMode();
+  isDevMode();
   provide('handleLogin', handleLogin);
   provide('ncCodeFun', ncCodeFun);
   init();
-  urlDisassembly();
 
   // 初始化无痕验证
   function init() {
@@ -107,7 +98,7 @@
           MOBILEREF.value!.formData.showNc = false;
           LOGINREF.value!.formData.showNc = false;
           window.console && console.log(failCode);
-          createMessage.error('人机验证失败!');
+          checkStatus(failCode, t('sys.api.manMachineFailed'));
           setTimeout(() => {
             window.location.reload();
           }, 1000);
@@ -118,7 +109,7 @@
           MOBILEREF.value!.formData.showNc = false;
           LOGINREF.value!.formData.showNc = false;
           window.console && console.log(errorCode);
-          createMessage.error('人机验证失败!');
+          checkStatus(errorCode, t('sys.api.manMachineFailed'));
           setTimeout(() => {
             window.location.reload();
           }, 1000);
@@ -126,7 +117,7 @@
       });
     });
   }
-  // 无痕验证 错误校验
+  // 登录无痕验证 错误校验
   function ncCodeFun(res: any, params: any, idName: string): Boolean {
     if (!res || res?.data.success != true) {
       const ERRORCODE = res?.data.errorCode;
@@ -146,9 +137,9 @@
         setTimeout(() => {
           window.location.reload();
         }, 1000);
-        notification.error({
-          message: res?.data.errorMessage || t('sys.api.validationFailed'),
-        });
+        checkStatus(ERRORCODE, res?.data.errorMessage || t('sys.api.validationFailed'));
+      } else {
+        checkStatus(ERRORCODE, res?.data.errorMessage);
       }
       return false;
     }
@@ -168,16 +159,18 @@
     newRef.loading = true;
     params.acsData = params.acsData || acsData;
     params.mode = 'none';
-    params.tnt = tntId;
-    const USERINFO = await ajaxFun(params);
-    const ISPASS: Boolean = await ncCodeFun(USERINFO, newRef.formData, idName);
+    params.tnt = TNTID;
+    const RESULT = await ajaxFun(params);
+    const ISPASS: Boolean = await ncCodeFun(RESULT, newRef.formData, idName);
     if (ISPASS) {
-      USERSTORE.afterLoginAction(true);
-      notification.success({
-        message: t('sys.login.loginSuccessTitle'),
-        description: `${t('sys.login.loginSuccessDesc')}: ${USERINFO.name}`,
-        duration: 3,
-      });
+      const USERINFO: any = await USERSTORE.afterLoginAction(true);
+      checkStatus(
+        null,
+        t('sys.login.loginSuccessTitle'),
+        'notify',
+        'success',
+        `${t('sys.login.loginSuccessDesc')}: ${USERINFO.name}`,
+      );
     }
     newRef.loading = false;
   }
@@ -192,11 +185,7 @@
         try {
           await getLoginData(ajaxFun, params, nvcVal);
         } catch (error) {
-          createErrorModal({
-            title: t('sys.api.errorTip'),
-            content: (error as unknown as Error).message || t('sys.api.networkExceptionMsg'),
-            getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body,
-          });
+          checkStatus(1, (error as unknown as Error).message || t('sys.api.networkExceptionMsg'));
         }
       });
   }

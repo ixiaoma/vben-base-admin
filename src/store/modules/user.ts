@@ -137,7 +137,6 @@ export const useUserStore = defineStore({
       }
     },
     async afterLoginAction(goHome?: boolean): Promise<GetUserInfoModel | null> {
-      console.log(goHome);
       // get user info
       const userInfo = await this.getUserInfoAction();
 

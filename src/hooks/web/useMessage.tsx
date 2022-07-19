@@ -101,7 +101,20 @@ function createInfoModal(options: ModalOptionsPartial) {
 function createWarningModal(options: ModalOptionsPartial) {
   return Modal.warning(createModalOptions(options, 'warning'));
 }
-
+class createModal {
+  static success(options: ModalOptionsPartial) {
+    return createSuccessModal(options);
+  }
+  static error(options: ModalOptionsPartial) {
+    return createErrorModal(options);
+  }
+  static warning(options: ModalOptionsPartial) {
+    return createWarningModal(options);
+  }
+  static info(options: ModalOptionsPartial) {
+    return createInfoModal(options);
+  }
+}
 notification.config({
   placement: 'topRight',
   duration: 3,
@@ -115,6 +128,7 @@ export function useMessage() {
     createMessage: Message,
     notification: notification as NotifyApi,
     createConfirm: createConfirm,
+    createModal,
     createSuccessModal,
     createErrorModal,
     createInfoModal,

@@ -4,14 +4,21 @@ import { warn } from '/@/utils/log';
 import pkg from '../../package.json';
 import { getConfigFileName } from '../../build/getConfigFileName';
 
+// 域名拆解 获取租户id
+export const urlDisassembly = () => {
+  const PATH_HOST: string = window.location.host;
+  const TNT = isDevMode() ? 'TTCSZ6CN' : PATH_HOST.split('.')[0];
+  return { key: `${getEnv()}_${TNT}`.toUpperCase(), tnt: TNT };
+};
+
 export function getCommonStoragePrefix() {
   const { VITE_GLOB_APP_SHORT_NAME } = getAppEnvConfig();
-  return `${VITE_GLOB_APP_SHORT_NAME}__${getEnv()}`.toUpperCase();
+  return `${VITE_GLOB_APP_SHORT_NAME}_${getEnv()}_${urlDisassembly().tnt}`.toUpperCase();
 }
 
 // Generate cache key according to version
 export function getStorageShortName() {
-  return `${getCommonStoragePrefix()}${`__${pkg.version}`}__`.toUpperCase();
+  return `${getCommonStoragePrefix()}${`_${pkg.version}`}_`.toUpperCase();
 }
 
 export function getAppEnvConfig() {
@@ -49,6 +56,11 @@ export function getAppEnvConfig() {
  * @description: Development mode
  */
 export const devMode = 'development';
+
+/**
+ * @description: test mode
+ */
+export const testMode = 'test';
 
 /**
  * @description: Production mode
