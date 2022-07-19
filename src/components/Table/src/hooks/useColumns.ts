@@ -9,6 +9,7 @@ import { isArray, isBoolean, isFunction, isMap, isString } from '/@/utils/is';
 import { cloneDeep, isEqual } from 'lodash-es';
 import { formatToDate } from '/@/utils/dateUtil';
 import { ACTION_COLUMN_FLAG, DEFAULT_ALIGN, INDEX_COLUMN_FLAG, PAGE_SIZE } from '../const';
+import { getEnum } from '/@/utils/commonUtil';
 
 function handleItem(item: BasicColumn, ellipsis: boolean) {
   const { key, dataIndex, children } = item;
@@ -50,12 +51,17 @@ function handleIndexColumn(
   if (unref(isTreeTable)) {
     return;
   }
-  columns.forEach(() => {
+  columns.forEach((ele: any) => {
     const indIndex = columns.findIndex((column) => column.flag === INDEX_COLUMN_FLAG);
     if (showIndexColumn) {
       pushIndexColumns = indIndex === -1;
     } else if (!showIndexColumn && indIndex !== -1) {
       columns.splice(indIndex, 1);
+    }
+    if (ele.enumCode) {
+      ele.customRender = ({ record }) => {
+        return getEnum(ele.enumCode, record[ele.dataIndex]);
+      };
     }
   });
 
@@ -213,12 +219,12 @@ export function useColumns(
     if (!isString(firstColumn) && !isArray(firstColumn)) {
       columnsRef.value = columns as BasicColumn[];
     } else {
-      const columnKeys = (columns as (string | string[])[]).map(m => m.toString());
+      const columnKeys = (columns as (string | string[])[]).map((m) => m.toString());
       const newColumns: BasicColumn[] = [];
       cacheColumns.forEach((item) => {
         newColumns.push({
           ...item,
-          defaultHidden: !columnKeys.includes(item.dataIndex?.toString() || (item.key as string))
+          defaultHidden: !columnKeys.includes(item.dataIndex?.toString() || (item.key as string)),
         });
       });
       // Sort according to another array
@@ -237,6 +243,8 @@ export function useColumns(
   function getColumns(opt?: GetColumnsParams) {
     const { ignoreIndex, ignoreAction, sort } = opt || {};
     let columns = toRaw(unref(getColumnsRef));
+    // console.log(columns);
+
     if (ignoreIndex) {
       columns = columns.filter((item) => item.flag !== INDEX_COLUMN_FLAG);
     }

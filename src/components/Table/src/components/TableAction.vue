@@ -59,7 +59,7 @@
       },
       divider: propTypes.bool.def(true),
       outside: propTypes.bool,
-      stopButtonPropagation: propTypes.bool.def(false),
+      stopButtonPropagation: propTypes.bool.def(true),
     },
     setup(props) {
       const { prefixCls } = useDesign('basic-table-action');

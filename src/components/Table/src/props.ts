@@ -27,7 +27,7 @@ export const basicProps = {
     type: Function as PropType<(data: Partial<Recordable<string[]>>) => any>,
     default: DEFAULT_FILTER_FN,
   },
-  showTableSetting: Boolean,
+  showTableSetting: { type: Boolean, default: false },
   autoCreateKey: { type: Boolean, default: true },
   striped: { type: Boolean, default: false },
   showSummary: Boolean,
@@ -119,7 +119,7 @@ export const basicProps = {
   },
   rowKey: {
     type: [String, Function] as PropType<string | ((record: Recordable) => string)>,
-    default: '',
+    default: 'id',
   },
   bordered: propTypes.bool,
   pagination: {

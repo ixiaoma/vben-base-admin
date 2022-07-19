@@ -39,6 +39,9 @@ export interface UserInfo {
   homePath?: string;
   roles: RoleInfo[];
 }
+export interface EnumInfo {
+  [key: string]: any;
+}
 
 export interface BeforeMiniState {
   menuCollapsed?: boolean;

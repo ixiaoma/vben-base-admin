@@ -15,14 +15,14 @@ const manage: AppRouteModule = {
   },
   children: [
     {
-      path: 'case-allocation',
+      path: 'caseAllocation',
       name: 'CaseAllocation',
       component: () => import('/@/views/manage/case-allocation/index.vue'),
       meta: {
         // affix: true,
         title: t('routes.manage.searchtable'),
       },
-    }
+    },
   ],
 };
 

@@ -10,7 +10,7 @@ import { ErrorMessageMode } from '/#/axios';
 
 enum Api {
   Login = '/api/smartf-authx/authx/login',
-  Logout = '/logout',
+  Logout = '/api/smartf-authx/authx/logout',
   GetUserInfo = '/api/smartf-authx/authx/getLoginUser',
   GetPermCode = '/getPermCode',
   TestRetry = '/testRetry',
@@ -67,7 +67,7 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
  * @description: getUserInfo
  */
 export function getUserInfo() {
-  return defHttp.post<GetUserInfoModel>({ url: Api.GetUserInfo }, { errorMessageMode: 'none' });
+  return defHttp.post<GetUserInfoModel>({ url: Api.GetUserInfo });
 }
 
 export function getPermCode() {
@@ -75,7 +75,7 @@ export function getPermCode() {
 }
 
 export function doLogout() {
-  return defHttp.get({ url: Api.Logout });
+  return defHttp.post({ url: Api.Logout });
 }
 
 export function testRetry() {

@@ -12,13 +12,15 @@ import {
   SendSmsCodeParams,
   LoginByPhoneParams,
 } from '/@/api/sys/model/userModel';
-import { getUserInfo, loginApi, sendSmsCodeApi, loginByPhoneApi } from '/@/api/sys/user';
+import { getUserInfo, loginApi, sendSmsCodeApi, loginByPhoneApi, doLogout } from '/@/api/sys/user';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
 import { usePermissionStore } from '/@/store/modules/permission';
+import { useEnumStore } from '/@/store/modules/enum';
 import { RouteRecordRaw } from 'vue-router';
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
+
 import { isArray } from '/@/utils/is';
 import { h } from 'vue';
 
@@ -137,9 +139,7 @@ export const useUserStore = defineStore({
       }
     },
     async afterLoginAction(goHome?: boolean): Promise<GetUserInfoModel | null> {
-      // get user info
       const userInfo = await this.getUserInfoAction();
-
       const sessionTimeout = this.sessionTimeout;
       if (sessionTimeout) {
         this.setSessionTimeout(false);
@@ -155,6 +155,8 @@ export const useUserStore = defineStore({
         }
         goHome && (await router.replace(userInfo?.homePath || PageEnum.BASE_HOME));
       }
+      const enumStore = useEnumStore();
+      enumStore.getEnumListAction();
       return userInfo;
     },
     async getUserInfoAction(): Promise<UserInfo | null> {
@@ -174,13 +176,13 @@ export const useUserStore = defineStore({
      * @description: logout
      */
     async logout(goLogin = false) {
-      // if (this.getToken) {
-      //   try {
-      //     await doLogout();
-      //   } catch {
-      //     console.log('注销Token失败');
-      //   }
-      // }
+      if (this.getToken) {
+        try {
+          await doLogout();
+        } catch {
+          console.log('注销Token失败');
+        }
+      }
       this.setToken(undefined);
       this.setSessionTimeout(false);
       this.setUserInfo(null);

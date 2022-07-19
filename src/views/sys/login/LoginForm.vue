@@ -64,6 +64,8 @@
   import { reactive, ref, unref, computed, inject } from 'vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useUserStore } from '/@/store/modules/user';
+  // import { useEnumStore } from '/@/store/modules/enum';
+
   import { LoginStateEnum, useLoginState, useFormRules, useFormValid } from './useLogin';
 
   const formData = reactive({

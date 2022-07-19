@@ -1,5 +1,5 @@
 import type { AppRouteRecordRaw } from '/@/router/types';
-import { t } from '/@/hooks/web/useI18n';
+// import { t } from '/@/hooks/web/useI18n';
 import {
   REDIRECT_NAME,
   LAYOUT,
@@ -52,22 +52,41 @@ export const REDIRECT_ROUTE: AppRouteRecordRaw = {
     },
   ],
 };
-export const SELF_SETTING: AppRouteRecordRaw= {
+export const SELF_SETTING: AppRouteRecordRaw = {
   path: '/self',
   name: 'SelfSetting',
   component: LAYOUT,
   redirect: '/self/setting',
   meta: {
-    title: t('routes.demo.page.accountSetting'),
+    title: '个人中心',
   },
-  children:[
+  children: [
     {
       path: '/self/setting',
       name: 'AccountSettingPage',
       component: () => import('/@/views/sys/setting/index.vue'),
       meta: {
-        title: t('routes.demo.page.accountSetting'),
+        title: '个人中心',
       },
-    }
-  ]
-}
+    },
+  ],
+};
+export const CASE_DETAIL: AppRouteRecordRaw = {
+  path: '/case',
+  name: 'CaseDetail',
+  component: LAYOUT,
+  redirect: '/case/detail',
+  meta: {
+    title: '案件详情',
+  },
+  children: [
+    {
+      path: '/case/detail',
+      name: 'CaseDetailPage',
+      component: () => import('/@/views/manage/case-detail/index.vue'),
+      meta: {
+        title: '案件详情',
+      },
+    },
+  ],
+};

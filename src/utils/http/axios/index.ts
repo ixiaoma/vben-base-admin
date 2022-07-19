@@ -16,8 +16,8 @@ import { setObjToUrlParams, deepMerge } from '/@/utils';
 import { useErrorLogStoreWithOut } from '/@/store/modules/errorLog';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { joinTimestamp, formatRequestDate } from './helper';
-import { useUserStoreWithOut } from '/@/store/modules/user';
-// import { AxiosRetry } from '/@/utils/http/axios/axiosRetry';
+// import { useUserStoreWithOut } from '/@/store/modules/user';
+import { AxiosRetry } from '/@/utils/http/axios/axiosRetry';
 
 const globSetting = useGlobSetting();
 const urlPrefix = globSetting.urlPrefix;
@@ -28,11 +28,12 @@ const { createMessage, createErrorModal } = useMessage();
  */
 const transform: AxiosTransform = {
   /**
-   * @description: 处理请求数据。如果数据不是预期格式，可直接抛出错误
+   * @description: 处理响应数据。如果数据不是预期格式，可直接抛出错误
    */
-  transformRequestHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
+  transformResponseHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
     const { t } = useI18n();
     const { isTransformResponse, isReturnNativeResponse } = options;
+
     // 是否返回原生响应头 比如：需要获取响应头时使用该属性
     if (isReturnNativeResponse) {
       return res;
@@ -47,39 +48,23 @@ const transform: AxiosTransform = {
       // return '[HTTP] Request has no return value';
       throw new Error(t('sys.api.apiRequestFailed'));
     }
-    //  这里 code，result，message为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
+    //  这里为 后台统一的字段，需要在 types.ts内修改为项目自己的接口返回格式
     const { success, data, errorMessage } = res.data;
-
-    // 这里逻辑可以根据项目进行修改
     if (success) {
       return data;
     }
-
-    // 在此处根据自己项目的实际情况对不同的code执行不同的操作
     // 如果不希望中断当前请求，请return数据，否则直接抛出异常即可
-    let timeoutMsg = '';
-    // switch (code) {
-    //   case ResultEnum.TIMEOUT:
-    //     timeoutMsg = t('sys.api.timeoutMessage');
-    //     const userStore = useUserStoreWithOut();
-    //     userStore.setToken(undefined);
-    //     userStore.logout(true);
-    //     break;
-    //   default:
-    if (errorMessage) {
-      timeoutMsg = errorMessage;
-    }
-    // }
 
     // errorMessageMode=‘modal’的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
     // errorMessageMode='none' 一般是调用时明确表示不希望自动弹出错误提示
-    if (options.errorMessageMode === 'modal') {
-      createErrorModal({ title: t('sys.api.errorTip'), content: timeoutMsg });
-    } else if (options.errorMessageMode === 'message') {
-      createMessage.error(timeoutMsg);
+    if (options.errorMessageMode === 'none') {
+    } else if (options.errorMessageMode === 'modal') {
+      createErrorModal({ title: t('sys.api.errorTip'), content: errorMessage });
+    } else {
+      createMessage.error(errorMessage);
     }
 
-    throw new Error(timeoutMsg || t('sys.api.apiRequestFailed'));
+    throw new Error(errorMessage || t('sys.api.apiRequestFailed'));
   },
 
   // 请求之前处理config
@@ -165,7 +150,54 @@ const transform: AxiosTransform = {
     // const msg: string = response?.data?.error?.message ?? '';
     const err: string = error?.toString?.() ?? '';
     let errMessage = '';
+    // const userStore = useUserStoreWithOut();
     try {
+      if (error?.response?.status) {
+        switch (error?.response?.status) {
+          case 400:
+            errMessage = `${message}`;
+            break;
+          // 401: Not logged in
+          // Jump to the login page if not logged in, and carry the path of the current page
+          // Return to the current page after successful login. This step needs to be operated on the login page.
+          case 401:
+            errMessage = t('sys.api.errMsg401');
+            // userStore.logout(true);smartf-authx/authx/getLoginUser
+            break;
+          case 403:
+            errMessage = t('sys.api.errMsg403');
+            break;
+          // 404请求不存在
+          case 404:
+            errMessage = t('sys.api.errMsg404');
+            break;
+          case 405:
+            errMessage = t('sys.api.errMsg405');
+            break;
+          case 408:
+            errMessage = t('sys.api.errMsg408');
+            break;
+          case 500:
+            errMessage = t('sys.api.errMsg500');
+            break;
+          case 501:
+            errMessage = t('sys.api.errMsg501');
+            break;
+          case 502:
+            errMessage = t('sys.api.errMsg502');
+            break;
+          case 503:
+            errMessage = t('sys.api.errMsg503');
+            break;
+          case 504:
+            errMessage = t('sys.api.errMsg504');
+            break;
+          case 505:
+            errMessage = t('sys.api.errMsg505');
+            break;
+          default:
+        }
+      }
       if (code === 'ECONNABORTED' && message.indexOf('timeout') !== -1) {
         errMessage = t('sys.api.apiTimeoutMessage');
       }
@@ -184,24 +216,22 @@ const transform: AxiosTransform = {
     } catch (error) {
       throw new Error(error as unknown as string);
     }
-    if (error?.response?.status === 401) {
-      const userStore = useUserStoreWithOut();
-      userStore.logout(true);
-    }
     // checkStatus(error?.response?.status, msg, errorMessageMode);
+
     // 添加自动重试机制 保险起见 只针对GET请求
-    // const retryRequest = new AxiosRetry();
-    // const { isOpenRetry } = config.requestOptions.retryRequest;
-    // config.method?.toUpperCase() === RequestEnum.GET &&
-    //   isOpenRetry &&
-    //   // @ts-ignore
-    //   retryRequest.retry(axiosInstance, error);
-    // return Promise.reject(error);
+    const retryRequest = new AxiosRetry();
+    const { isOpenRetry } = config.requestOptions.retryRequest;
+    config.method?.toUpperCase() === RequestEnum.GET &&
+      isOpenRetry &&
+      // @ts-ignore
+      retryRequest.retry(axiosInstance, error);
+    return Promise.reject(error);
   },
 };
 
 function createAxios(opt?: Partial<CreateAxiosOptions>) {
   return new VAxios(
+    // 深度合并
     deepMerge(
       {
         // See https://developer.mozilla.org/en-US/docs/Web/HTTP/Authentication#authentication_schemes

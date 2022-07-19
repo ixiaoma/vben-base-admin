@@ -371,7 +371,7 @@
 
       .ant-form {
         padding: 12px 10px 6px;
-        border-bottom: 1px solid #DDDDDD;
+        border-bottom: 1px solid #dddddd;
         background-color: @component-background;
         border-radius: 2px;
       }
