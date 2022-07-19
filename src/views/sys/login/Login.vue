@@ -84,7 +84,7 @@
           if (unref(getLoginState) === LoginStateEnum.SMS_CODE) {
             //验证码登录
             MOBILEREF.value!.formData.showNc = false;
-            MOBILEREF.value!.sonFun()();
+            MOBILEREF.value!.sendCodeApi();
           } else {
             // 账号登录
             LOGINREF.value!.formData.showNc = false;
@@ -175,16 +175,30 @@
     }
     newRef.loading = false;
   }
+  // 发送验证码
+  function sendSmsCodeWithNvc(params: any, nvcVal: any): void {
+    params.showNc = false;
+    params.ncTimer = +new Date();
+    USERSTORE.sendSmsCode({ phone: params.mobile, acsData: nvcVal }).then((res: any) => {
+      if (ncCodeFun(res, params, 'nc')) {
+        checkStatus(2, t('sys.login.sendSmsCodeSuccess'), 'message', 'success');
+      }
+    });
+  }
 
   // 无痕验证 校验
-  function handleLogin(ajaxFun: Function, params: any) {
+  function handleLogin(ajaxFun: Function, params: any, isSms: Boolean) {
     (window as any).nvc &&
       (window as any).nvc.getNVCValAsync(async (nvcVal) => {
         // 获取人机信息串
         // 将以下getNVCVal()函数的值，跟随业务请求一起上传，由后端请求AnalyzeNvc接口并返回200，400，600或者800。
         // 正式上线前务必将该服务端接口，更改为您自己的业务服务端接口
         try {
-          await getLoginData(ajaxFun, params, nvcVal);
+          if (isSms) {
+            await sendSmsCodeWithNvc(params, nvcVal);
+          } else {
+            await getLoginData(ajaxFun, params, nvcVal);
+          }
         } catch (error) {
           checkStatus(1, (error as unknown as Error).message || t('sys.api.networkExceptionMsg'));
         }

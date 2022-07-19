@@ -21,6 +21,7 @@
         class="fix-auto-fill"
         v-model:value="formData.sms"
         :placeholder="t('sys.login.smsCode')"
+        :sendCodeApi="sendCodeApi"
       />
     </a-form-item>
     <a-form-item v-show="formData.showNc">
@@ -59,6 +60,8 @@
   const loading = ref(false);
   const PARENT_LOGIN: any = inject('handleLogin');
   const countdownRef = ref<null | any>(CountdownInput);
+  const parentHandleLogin: any = inject('handleLogin');
+  const checkStatus: any = inject('$checkStatus');
 
   const { t } = useI18n();
   const { validForm } = useFormValid(formRef);
@@ -79,12 +82,21 @@
       type: 'SMS_CODE',
     });
   }
+  function sendCodeApi() {
+    if (!formData.mobile) {
+      checkStatus(1, t('sys.login.mobilePlaceholder'), 'message', 'warning');
+      return;
+    }
+    parentHandleLogin(null, formData, true);
+    return true;
+  }
   defineExpose({
     formData,
     handleLogin,
     formRef,
     loading,
     sonFun,
+    sendCodeApi,
   });
 </script>
 <style lang="scss" scoped>
