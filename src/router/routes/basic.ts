@@ -10,7 +10,7 @@ import {
 // 404 on a page
 export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
   path: '/:path(.*)*',
-  resName: PAGE_NOT_FOUND_NAME,
+  name: PAGE_NOT_FOUND_NAME,
   component: LAYOUT,
   meta: {
     title: 'ErrorPage',
@@ -20,7 +20,7 @@ export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
   children: [
     {
       path: '/:path(.*)*',
-      resName: PAGE_NOT_FOUND_NAME,
+      name: PAGE_NOT_FOUND_NAME,
       component: EXCEPTION_COMPONENT,
       meta: {
         title: 'ErrorPage',
@@ -34,7 +34,7 @@ export const PAGE_NOT_FOUND_ROUTE: AppRouteRecordRaw = {
 export const REDIRECT_ROUTE: AppRouteRecordRaw = {
   path: '/redirect',
   component: LAYOUT,
-  resName: 'RedirectTo',
+  name: 'RedirectTo',
   meta: {
     title: REDIRECT_NAME,
     hideBreadcrumb: true,
@@ -54,7 +54,7 @@ export const REDIRECT_ROUTE: AppRouteRecordRaw = {
 };
 export const SELF_SETTING: AppRouteRecordRaw = {
   path: '/self',
-  resName: 'SelfSetting',
+  name: 'SelfSetting',
   component: LAYOUT,
   redirect: '/self/setting',
   meta: {
@@ -63,7 +63,7 @@ export const SELF_SETTING: AppRouteRecordRaw = {
   children: [
     {
       path: '/self/setting',
-      resName: 'AccountSettingPage',
+      name: 'AccountSettingPage',
       component: () => import('/@/views/sys/setting/index.vue'),
       meta: {
         title: '个人中心',
@@ -73,7 +73,7 @@ export const SELF_SETTING: AppRouteRecordRaw = {
 };
 export const CASE_DETAIL: AppRouteRecordRaw = {
   path: '/case',
-  resName: 'CaseDetail',
+  name: 'CaseDetail',
   component: LAYOUT,
   redirect: '/case/detail',
   meta: {
@@ -82,7 +82,7 @@ export const CASE_DETAIL: AppRouteRecordRaw = {
   children: [
     {
       path: '/case/detail',
-      resName: 'CaseDetailPage',
+      name: 'CaseDetailPage',
       component: () => import('/@/views/manage/case-detail/index.vue'),
       meta: {
         title: '案件详情',

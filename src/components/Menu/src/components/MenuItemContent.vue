@@ -21,7 +21,7 @@
     props: contentProps,
     setup(props) {
       const { prefixCls } = useDesign('basic-menu-item-content');
-      const getI18nName = computed(() => t(props.item?.resName));
+      const getI18nName = computed(() => t(props.item?.name));
       const getIcon = computed(() => props.item?.icon);
       console.log(getIcon);
       return {

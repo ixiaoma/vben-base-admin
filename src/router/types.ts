@@ -9,29 +9,29 @@ export type Component<T = any> =
 
 // @ts-ignore
 export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'meta'> {
-  path: string;
-  description?: string;
-  icon?: string;
-  id?: string;
-  orders?: string | number;
-  resCode?: string;
-  resName?: string;
-  resType?: string;
-  upResCode?: string | number;
-  tnt?: string;
-  children?: AppRouteRecordRaw[];
-  meta: RouteMeta;
-  component?: Component | string;
-  components?: Component;
-  props?: Recordable;
-  fullPath?: string;
-  // name: string;
+  // path: string;
+  // description?: string;
+  // icon?: string;
+  // id?: string;
+  // orders?: string | number;
+  // resCode?: string;
+  // name?: string;
+  // resType?: string;
+  // upResCode?: string | number;
+  // tnt?: string;
+  // children?: AppRouteRecordRaw[];
   // meta: RouteMeta;
   // component?: Component | string;
   // components?: Component;
-  // children?: AppRouteRecordRaw[];
   // props?: Recordable;
   // fullPath?: string;
+  name: string;
+  meta: RouteMeta;
+  component?: Component | string;
+  components?: Component;
+  children?: AppRouteRecordRaw[];
+  props?: Recordable;
+  fullPath?: string;
 }
 
 export interface MenuTag {
@@ -48,7 +48,7 @@ export interface Menu {
   id: string;
   orders: string | number;
   resCode: string;
-  resName: string;
+  name: string;
   resType: string;
   upResCode: string | number;
   tnt: string;
