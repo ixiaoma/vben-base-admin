@@ -33,7 +33,7 @@ const transform: AxiosTransform = {
   transformResponseHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
     const { t } = useI18n();
     const { isTransformResponse, isReturnNativeResponse } = options;
-    
+
     // 是否返回原生响应头 比如：需要获取响应头时使用该属性
     if (isReturnNativeResponse) {
       return res;
@@ -57,14 +57,13 @@ const transform: AxiosTransform = {
 
     // errorMessageMode=‘modal’的时候会显示modal错误弹窗，而不是消息提示，用于一些比较重要的错误
     // errorMessageMode='none' 一般是调用时明确表示不希望自动弹出错误提示
-    if(options.errorMessageMode === 'none'){
-      
-    }else if (options.errorMessageMode === 'modal') {
+    if (options.errorMessageMode === 'none') {
+    } else if (options.errorMessageMode === 'modal') {
       createErrorModal({ title: t('sys.api.errorTip'), content: errorMessage });
     } else {
       createMessage.error(errorMessage);
     }
-    
+
     throw new Error(errorMessage || t('sys.api.apiRequestFailed'));
   },
 
@@ -153,7 +152,7 @@ const transform: AxiosTransform = {
     let errMessage = '';
     const userStore = useUserStoreWithOut();
     try {
-      if(error?.response?.status){
+      if (error?.response?.status) {
         switch (error?.response?.status) {
           case 400:
             errMessage = `${msg}`;

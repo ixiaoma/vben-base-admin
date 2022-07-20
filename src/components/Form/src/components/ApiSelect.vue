@@ -60,7 +60,7 @@
       valueField: propTypes.string.def('value'),
       immediate: propTypes.bool.def(true),
       alwaysLoad: propTypes.bool.def(false),
-      showSearch: propTypes.bool.def(true)
+      showSearch: propTypes.bool.def(true),
     },
     emits: ['options-change', 'change'],
     setup(props, { emit }) {

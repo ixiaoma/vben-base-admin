@@ -18,7 +18,7 @@ export const useEnumStore = defineStore({
   getters: {
     getGlobalEnum(): EnumInfo {
       return this.globalEnum || getAuthCache(ENUM_KEY) || null;
-    }
+    },
   },
   actions: {
     setGlobalEnum(globalEnum: EnumInfo | null) {
@@ -33,9 +33,9 @@ export const useEnumStore = defineStore({
      */
     async getEnumListAction(): Promise<EnumInfo | null> {
       const globalEnum = await enumApi();
-      this.setGlobalEnum(globalEnum)
+      this.setGlobalEnum(globalEnum);
       return globalEnum;
-    }
+    },
   },
 });
 

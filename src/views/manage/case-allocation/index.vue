@@ -13,13 +13,13 @@
             {
               label: '详情',
               onClick: handleDetail.bind(null, record),
-            }
+            },
           ]"
         />
       </template>
     </template>
   </BasicTable>
-  <AssignModal @register="registerModal" @success="submitSuccess"/>
+  <AssignModal @register="registerModal" @success="submitSuccess" />
 </template>
 <script lang="ts" setup name="CaseAllocation">
   import { computed, ref } from 'vue';
@@ -31,10 +31,10 @@
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { getBasicColumns, getFormConfig } from './allocation.data';
   import { getCaseAllocationList } from '/@/api/manage/caseallocation';
-  
-  const emumStore = useEnumStore()
+
+  const emumStore = useEnumStore();
   const enumInfo = computed(() => emumStore.getEnumData);
-  console.log(enumInfo)
+  console.log(enumInfo);
   const router = useRouter();
   const checkedKeys = ref<Array<string | number>>([]); //当前列表选中的key
 
@@ -51,16 +51,16 @@
     actionColumn: {
       width: 120,
       title: '操作',
-      dataIndex: 'action'
-    }
+      dataIndex: 'action',
+    },
   });
 
   //获取form表单数据
   function handleAssign() {
-    if(!isSelect(checkedKeys.value)){
-      return
+    if (!isSelect(checkedKeys.value)) {
+      return;
     }
-    openModal(true)
+    openModal(true);
     console.log('查询区域数据', getForm().getFieldsValue());
   }
   //列表复选框勾选
@@ -74,12 +74,12 @@
       name: 'CaseDetail',
       query: {
         id,
-        mediateNo
-      }
+        mediateNo,
+      },
     });
   }
   //弹框emit的方法
-  function submitSuccess(data){
+  function submitSuccess(data) {
     console.log('submit', data);
   }
 </script>

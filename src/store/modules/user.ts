@@ -117,7 +117,7 @@ export const useUserStore = defineStore({
         goHome && (await router.replace(userInfo?.homePath || PageEnum.BASE_HOME));
       }
       const enumStore = useEnumStore();
-      enumStore.getEnumListAction()
+      enumStore.getEnumListAction();
       return userInfo;
     },
     async getUserInfoAction(): Promise<UserInfo | null> {

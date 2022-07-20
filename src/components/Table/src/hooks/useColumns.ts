@@ -59,11 +59,11 @@ function handleIndexColumn(
     } else if (!showIndexColumn && indIndex !== -1) {
       columns.splice(indIndex, 1);
     }
-    if(column.enumCode){
-      const chooseEnum = getEnum(column.enumCode)
+    if (column.enumCode) {
+      const chooseEnum = getEnum(column.enumCode);
       column.customRender = ({ record }) => {
-        return chooseEnum[record[column.dataIndex]]?.label
-      }
+        return chooseEnum[record[column.dataIndex]]?.label;
+      };
     }
   });
 
@@ -245,7 +245,7 @@ export function useColumns(
     const { ignoreIndex, ignoreAction, sort } = opt || {};
     let columns = toRaw(unref(getColumnsRef));
     // console.log(columns);
-    
+
     if (ignoreIndex) {
       columns = columns.filter((item) => item.flag !== INDEX_COLUMN_FLAG);
     }

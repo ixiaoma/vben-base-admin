@@ -35,11 +35,12 @@ export function getBasicColumns(): BasicColumn[] {
     {
       title: '调解状态',
       dataIndex: 'mediationStatus',
+      enumCode: 'MediationStatus',
     },
     {
       title: '协议状态',
       dataIndex: 'agrStatus',
-      enumCode: 'AgrStatusEnum'
+      enumCode: 'AgrStatusEnum', //对应枚举code
     },
     {
       title: '还款状态',
@@ -243,11 +244,11 @@ export function getFormConfig(): Partial<FormProps> {
         componentProps: {
           api: getOrgTree,
           resultField: 'list',
-          fieldNames:{
+          fieldNames: {
             label: 'name',
             value: 'code',
-            children: 'children'
-          }
+            children: 'children',
+          },
         },
         colProps: {
           span: 6,

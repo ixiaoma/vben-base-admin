@@ -10,22 +10,22 @@ export function isSelect(list: Array<string | number>, isSingle: Boolean = false
     message.warning('只能选择一条数据进行操作');
     return true;
   }
-  return true
+  return true;
 }
 
-export function getEnum(enumCode?: string, backList: boolean = false, codeValue?: string, ) {
+export function getEnum(enumCode?: string, backList = false, codeValue?: string) {
   const enumStore = useEnumStore();
-  const globalEnum = enumStore.getGlobalEnum
-  if(codeValue && enumCode){
-    const chooseEnum = globalEnum[enumCode]
-    return chooseEnum[codeValue]?.label
+  const globalEnum = enumStore.getGlobalEnum;
+  if (codeValue && enumCode) {
+    const chooseEnum = globalEnum[enumCode];
+    return chooseEnum[codeValue]?.label;
   }
-  if(enumCode){
-    if(backList){
-      const EnumList = Object.values(globalEnum[enumCode])
-      return EnumList
+  if (enumCode) {
+    if (backList) {
+      const EnumList = Object.values(globalEnum[enumCode]);
+      return EnumList;
     }
-    return globalEnum[enumCode]
+    return globalEnum[enumCode];
   }
-  return globalEnum
+  return globalEnum;
 }

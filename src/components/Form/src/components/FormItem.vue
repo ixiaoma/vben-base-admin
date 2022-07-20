@@ -225,7 +225,7 @@
           field,
           changeEvent = 'change',
           valueField,
-          optionEnumCode
+          optionEnumCode,
         } = props.schema;
 
         const isCheck = component && ['Switch', 'Checkbox'].includes(component);
@@ -260,11 +260,11 @@
           propsData.placeholder =
             unref(getComponentsProps)?.placeholder || createPlaceholderMessage(component);
         }
-        if(component === 'Select' && component) {
-          if(optionEnumCode){
-            propsData.options = getEnum(optionEnumCode, true)
+        if (component === 'Select' && component) {
+          if (optionEnumCode) {
+            propsData.options = getEnum(optionEnumCode, true);
           }
-          propsData.showSearch = true
+          propsData.showSearch = true;
           propsData.filterOption = (input: string, option: any) => {
             return option.label.includes(input);
           };
@@ -275,7 +275,7 @@
         const bindValue: Recordable = {
           [valueField || (isCheck ? 'checked' : 'value')]: props.formModel[field],
         };
-        
+
         const compAttr: Recordable = {
           ...propsData,
           ...on,

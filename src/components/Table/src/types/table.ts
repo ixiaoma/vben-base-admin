@@ -336,7 +336,7 @@ export interface BasicTableProps<T = any> {
    * 枚举code:
    *
    */
-   enumCode?: string | null | undefined
+  enumCode?: string | null | undefined;
 
   /**
    * Set props on per header row

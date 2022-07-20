@@ -15,12 +15,10 @@ enum Api {
  * @description: user login api
  */
 export function loginApi(params: LoginParams) {
-  return defHttp.post<LoginResultModel>(
-    {
-      url: Api.Login,
-      params,
-    }
-  );
+  return defHttp.post<LoginResultModel>({
+    url: Api.Login,
+    params,
+  });
 }
 
 /**

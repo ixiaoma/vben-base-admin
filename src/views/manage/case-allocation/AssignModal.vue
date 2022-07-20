@@ -1,5 +1,11 @@
 <template>
-  <BasicModal v-bind="$attrs" title="案件分配" width="700px" @ok="handleSubmit" @register="register">
+  <BasicModal
+    v-bind="$attrs"
+    title="案件分配"
+    width="700px"
+    @ok="handleSubmit"
+    @register="register"
+  >
     <p class="h-20" v-for="index in 20" :key="index">根据屏幕高度自适应</p>
     <!-- 自定义页脚
     <template #footer>
@@ -9,15 +15,15 @@
   </BasicModal>
 </template>
 <script lang="ts" setup name="AllocationModal">
-  import { BasicModal, useModalInner } from '/@/components/Modal'
+  import { BasicModal, useModalInner } from '/@/components/Modal';
 
   const [register, { closeModal }] = useModalInner();
 
   //声明emit
   // const emit = defineEmits(['success']);
-  const emit = defineEmits<{ 
-    (e: 'success', value: any): void
-  }>()
+  const emit = defineEmits<{
+    (e: 'success', value: any): void;
+  }>();
 
   //props声明
   // const props = defineProps({
@@ -29,7 +35,7 @@
   // }>()
 
   function handleSubmit() {
-    emit('success', {a: 3})
+    emit('success', { a: 3 });
     closeModal();
   }
 </script>
