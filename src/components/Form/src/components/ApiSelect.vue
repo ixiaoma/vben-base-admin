@@ -4,6 +4,8 @@
     v-bind="$attrs"
     @change="handleChange"
     :options="getOptions"
+    :show-search="showSearch"
+    :filter-option="filterOption"
     v-model:value="state"
   >
     <template #[item]="data" v-for="item in Object.keys($slots)">
@@ -58,6 +60,7 @@
       valueField: propTypes.string.def('value'),
       immediate: propTypes.bool.def(true),
       alwaysLoad: propTypes.bool.def(false),
+      showSearch: propTypes.bool.def(true)
     },
     emits: ['options-change', 'change'],
     setup(props, { emit }) {
@@ -98,6 +101,10 @@
         },
         { deep: true },
       );
+
+      const filterOption = (input: string, option: any) => {
+        return option.label.includes(input);
+      };
 
       async function fetch() {
         const api = props.api;
@@ -141,7 +148,7 @@
         emitData.value = args;
       }
 
-      return { state, attrs, getOptions, loading, t, handleFetch, handleChange };
+      return { state, attrs, getOptions, loading, filterOption, t, handleFetch, handleChange };
     },
   });
 </script>

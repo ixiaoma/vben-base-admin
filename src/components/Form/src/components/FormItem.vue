@@ -14,6 +14,7 @@
   import { upperFirst, cloneDeep } from 'lodash-es';
   import { useItemLabelWidth } from '../hooks/useLabelWidth';
   import { useI18n } from '/@/hooks/web/useI18n';
+  import { getEnum } from '/@/utils/commonUtil';
 
   export default defineComponent({
     name: 'BasicFormItem',
@@ -224,6 +225,7 @@
           field,
           changeEvent = 'change',
           valueField,
+          optionEnumCode
         } = props.schema;
 
         const isCheck = component && ['Switch', 'Checkbox'].includes(component);
@@ -258,19 +260,27 @@
           propsData.placeholder =
             unref(getComponentsProps)?.placeholder || createPlaceholderMessage(component);
         }
+        if(component === 'Select' && component) {
+          if(optionEnumCode){
+            propsData.options = getEnum(optionEnumCode, true)
+          }
+          propsData.showSearch = true
+          propsData.filterOption = (input: string, option: any) => {
+            return option.label.includes(input);
+          };
+        }
         propsData.codeField = field;
         propsData.formValues = unref(getValues);
 
         const bindValue: Recordable = {
           [valueField || (isCheck ? 'checked' : 'value')]: props.formModel[field],
         };
-
+        
         const compAttr: Recordable = {
           ...propsData,
           ...on,
           ...bindValue,
         };
-
         if (!renderComponentContent) {
           return <Comp {...compAttr} />;
         }

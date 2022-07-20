@@ -173,9 +173,21 @@ export function getFormConfig(): Partial<FormProps> {
         },
       },
       {
-        field: 'receiveCardId',
+        field: 'receivePhone',
         component: 'Input',
-        label: '身份证',
+        label: '手机号',
+        colProps: {
+          span: 6,
+        },
+      },
+      {
+        field: 'reason',
+        label: '案由',
+        component: 'Select',
+        optionEnumCode: 'CaseReasonEnum',
+        // componentProps: {
+        //   options: getEnum('CaseReasonEnum', true)
+        // },
         colProps: {
           span: 6,
         },

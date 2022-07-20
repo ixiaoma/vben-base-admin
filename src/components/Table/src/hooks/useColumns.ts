@@ -9,7 +9,6 @@ import { isArray, isBoolean, isFunction, isMap, isString } from '/@/utils/is';
 import { cloneDeep, isEqual } from 'lodash-es';
 import { formatToDate } from '/@/utils/dateUtil';
 import { ACTION_COLUMN_FLAG, DEFAULT_ALIGN, INDEX_COLUMN_FLAG, PAGE_SIZE } from '../const';
-// import { useEnumStore } from '/@/store/modules/enum';   
 import { getEnum } from '/@/utils/commonUtil';
 
 function handleItem(item: BasicColumn, ellipsis: boolean) {
