@@ -1,5 +1,5 @@
 import type { RouteRecordRaw, RouteMeta } from 'vue-router';
-import { RoleEnum } from '/@/enums/roleEnum';
+// import { RoleEnum } from '/@/enums/roleEnum';
 import { defineComponent } from 'vue';
 
 export type Component<T = any> =
@@ -9,13 +9,29 @@ export type Component<T = any> =
 
 // @ts-ignore
 export interface AppRouteRecordRaw extends Omit<RouteRecordRaw, 'meta'> {
-  name: string;
+  path: string;
+  description?: string;
+  icon?: string;
+  id?: string;
+  orders?: string | number;
+  resCode?: string;
+  resName?: string;
+  resType?: string;
+  upResCode?: string | number;
+  tnt?: string;
+  children?: AppRouteRecordRaw[];
   meta: RouteMeta;
   component?: Component | string;
   components?: Component;
-  children?: AppRouteRecordRaw[];
   props?: Recordable;
   fullPath?: string;
+  // name: string;
+  // meta: RouteMeta;
+  // component?: Component | string;
+  // components?: Component;
+  // children?: AppRouteRecordRaw[];
+  // props?: Recordable;
+  // fullPath?: string;
 }
 
 export interface MenuTag {
@@ -25,28 +41,42 @@ export interface MenuTag {
 }
 
 export interface Menu {
-  name: string;
-
-  icon?: string;
-
+  [x: string]: any;
   path: string;
+  description: string;
+  icon: string;
+  id: string;
+  orders: string | number;
+  resCode: string;
+  resName: string;
+  resType: string;
+  upResCode: string | number;
+  tnt: string;
+  children?: Menu[];
+  meta: Partial<RouteMeta>;
+
+  // name: string;
+
+  // icon?: string;
+
+  // path: string;
 
   // path contains param, auto assignment.
-  paramPath?: string;
+  // paramPath?: string;
 
-  disabled?: boolean;
+  // disabled?: boolean;
 
-  children?: Menu[];
+  // children?: Menu[];
 
-  orderNo?: number;
+  // orderNo?: number;
 
-  roles?: RoleEnum[];
+  // roles?: RoleEnum[];
 
-  meta?: Partial<RouteMeta>;
+  // meta?: Partial<RouteMeta>;
 
-  tag?: MenuTag;
+  // tag?: MenuTag;
 
-  hideMenu?: boolean;
+  // hideMenu?: boolean;
 }
 
 export interface MenuModule {

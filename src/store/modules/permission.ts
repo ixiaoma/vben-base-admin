@@ -18,11 +18,11 @@ import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 
 import { filter } from '/@/utils/helper/treeHelper';
 
-import { getMenuList } from '/@/api/sys/menu';
+// import { getMenuList } from '/@/api/sys/menu';
 import { getPermCode } from '/@/api/sys/user';
 
 import { useMessage } from '/@/hooks/web/useMessage';
-import { PageEnum } from '/@/enums/pageEnum';
+// import { PageEnum } from '/@/enums/pageEnum';
 
 interface PermissionState {
   // Permission code list
@@ -121,33 +121,32 @@ export const usePermissionStore = defineStore({
       /**
        * @description 根据设置的首页path，修正routes中的affix标记（固定首页）
        * */
-      const patchHomeAffix = (routes: AppRouteRecordRaw[]) => {
-        if (!routes || routes.length === 0) return;
-        let homePath: string = userStore.getUserInfo.homePath || PageEnum.BASE_HOME;
-        function patcher(routes: AppRouteRecordRaw[], parentPath = '') {
-          if (parentPath) parentPath = parentPath + '/';
-          routes.forEach((route: AppRouteRecordRaw) => {
-            const { path, children, redirect } = route;
-            const currentPath = path.startsWith('/') ? path : parentPath + path;
-            if (currentPath === homePath) {
-              if (redirect) {
-                homePath = route.redirect! as string;
-              } else {
-                route.meta = Object.assign({}, route.meta, { affix: true });
-                throw new Error('end');
-              }
-            }
-            children && children.length > 0 && patcher(children, currentPath);
-          });
-        }
-        try {
-          patcher(routes);
-        } catch (e) {
-          // 已处理完毕跳出循环
-        }
-        return;
-      };
-
+      // const patchHomeAffix = (routes: AppRouteRecordRaw[]) => {
+      //   if (!routes || routes.length === 0) return;
+      //   let homePath: string = userStore.getUserInfo.homePath || PageEnum.BASE_HOME;
+      //   function patcher(routes: AppRouteRecordRaw[], parentPath = '') {
+      //     if (parentPath) parentPath = parentPath + '/';
+      //     routes.forEach((route: AppRouteRecordRaw) => {
+      //       const { path, children, redirect } = route;
+      //       const currentPath = path.startsWith('/') ? path : parentPath + path;
+      //       if (currentPath === homePath) {
+      //         if (redirect) {
+      //           homePath = route.redirect! as string;
+      //         } else {
+      //           route.meta = Object.assign({}, route.meta, { affix: true });
+      //           throw new Error('end');
+      //         }
+      //       }
+      //       children && children.length > 0 && patcher(children, currentPath);
+      //     });
+      //   }
+      //   try {
+      //     patcher(routes);
+      //   } catch (e) {
+      //     // 已处理完毕跳出循环
+      //   }
+      //   return;
+      // };
       switch (permissionMode) {
         case PermissionModeEnum.ROLE:
           routes = filter(asyncRoutes, routeFilter);
@@ -159,7 +158,7 @@ export const usePermissionStore = defineStore({
         case PermissionModeEnum.ROUTE_MAPPING:
           routes = filter(asyncRoutes, routeFilter);
           routes = routes.filter(routeFilter);
-          const menuList = transformRouteToMenu(routes, true);
+          const menuList: any = transformRouteToMenu(routes, true);
           routes = filter(routes, routeRemoveIgnoreFilter);
           routes = routes.filter(routeRemoveIgnoreFilter);
           menuList.sort((a, b) => {
@@ -184,8 +183,8 @@ export const usePermissionStore = defineStore({
           // this function may only need to be executed once, and the actual project can be put at the right time by itself
           let routeList: AppRouteRecordRaw[] = [];
           try {
-            this.changePermissionCode();
-            routeList = (await getMenuList()) as AppRouteRecordRaw[];
+            // this.changePermissionCode();
+            routeList = (await userStore.getMenu()) as AppRouteRecordRaw[];
           } catch (error) {
             console.error(error);
           }
@@ -194,7 +193,7 @@ export const usePermissionStore = defineStore({
           routeList = transformObjToRoute(routeList);
 
           //  Background routing to menu structure
-          const backMenuList = transformRouteToMenu(routeList);
+          const backMenuList: any = transformRouteToMenu(routeList);
           this.setBackMenuList(backMenuList);
 
           // remove meta.ignoreRoute item
@@ -203,9 +202,10 @@ export const usePermissionStore = defineStore({
 
           routeList = flatMultiLevelRoutes(routeList);
           routes = [PAGE_NOT_FOUND_ROUTE, ...routeList];
+          // routes = routeList;
           break;
       }
-      patchHomeAffix(routes);
+      // patchHomeAffix(routes);
       return routes;
     },
   },

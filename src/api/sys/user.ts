@@ -12,13 +12,13 @@ enum Api {
   Login = '/api/smartf-authx/authx/login',
   Logout = '/api/smartf-authx/authx/logout',
   GetUserInfo = '/api/smartf-authx/authx/getLoginUser',
+  SendSmsCode = '/api/smartf-authx/authx/sendSmsCode',
   GetPermCode = '/getPermCode',
   TestRetry = '/testRetry',
-  SendSmsCode = '/api/smartf-authx/authx/sendSmsCode',
 }
 
 /**
- * @description: user login api
+ * @description: 发送验证码
  */
 export function sendSmsCodeApi(params: SendSmsCodeParams, mode: ErrorMessageMode = 'modal') {
   return defHttp.post(
@@ -64,7 +64,7 @@ export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') 
 }
 
 /**
- * @description: getUserInfo
+ * @description: getUserInfo 获取用户信息
  */
 export function getUserInfo() {
   return defHttp.post<GetUserInfoModel>({ url: Api.GetUserInfo });
@@ -74,6 +74,7 @@ export function getPermCode() {
   return defHttp.get<string[]>({ url: Api.GetPermCode });
 }
 
+// 登出
 export function doLogout() {
   return defHttp.post({ url: Api.Logout });
 }

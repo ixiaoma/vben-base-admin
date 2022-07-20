@@ -69,8 +69,8 @@
   import { LoginStateEnum, useLoginState, useFormRules, useFormValid } from './useLogin';
 
   const formData = reactive({
-    account: '15226597178',
-    password: '7654321',
+    account: 'wangerg',
+    password: '1234567',
     showNc: false,
     ndTimer: null,
   });

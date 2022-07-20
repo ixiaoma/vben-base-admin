@@ -65,25 +65,26 @@ function dynamicImport(
 // Turn background objects into routing objects
 export function transformObjToRoute<T = AppRouteModule>(routeList: AppRouteModule[]): T[] {
   routeList.forEach((route) => {
-    const component = route.component as string;
+    const component = route.path as string;
     if (component) {
       if (component.toUpperCase() === 'LAYOUT') {
         route.component = LayoutMap.get(component.toUpperCase());
       } else {
         route.children = [cloneDeep(route)];
         route.component = LAYOUT;
-        route.name = `${route.name}Parent`;
-        route.path = '';
+        route.resName = `${route.resName}Parent`;
+        route.path = route.path;
         const meta = route.meta || {};
         meta.single = true;
         meta.affix = false;
         route.meta = meta;
       }
     } else {
-      warn('请正确配置路由：' + route?.name + '的component属性');
+      warn('请正确配置路由：' + route?.resName + '的component属性');
     }
     route.children && asyncImportRoute(route.children);
   });
+  console.log(routeList);
   return routeList as unknown as T[];
 }
 

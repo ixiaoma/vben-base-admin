@@ -187,7 +187,6 @@
         const { disabled } = props;
         if (disabled || unref(getCollapse)) return;
         const opened = state.opened;
-
         if (unref(getAccordion)) {
           const { uidList } = getParentList();
           rootMenuEmitter.emit('on-update-opened', {

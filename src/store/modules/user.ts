@@ -13,6 +13,8 @@ import {
   LoginByPhoneParams,
 } from '/@/api/sys/model/userModel';
 import { getUserInfo, loginApi, sendSmsCodeApi, loginByPhoneApi, doLogout } from '/@/api/sys/user';
+import { getMenuList } from '/@/api/sys/menu';
+import { getMenuListResultModel, getMenuParamsModel } from '/@/api/sys/model/menuModel';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
@@ -203,6 +205,15 @@ export const useUserStore = defineStore({
           await this.logout(true);
         },
       });
+    },
+    // 获取菜单
+    async getMenu(
+      param?: getMenuParamsModel & {
+        mode?: ErrorMessageMode;
+      },
+    ): Promise<getMenuListResultModel | null> {
+      const params = param || { type: 'MENU' };
+      return await getMenuList(params);
     },
   },
 });
