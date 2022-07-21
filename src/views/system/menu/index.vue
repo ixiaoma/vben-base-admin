@@ -2,7 +2,7 @@
   <div>
     <BasicTable @register="registerTable" @fetch-success="onFetchSuccess">
       <template #toolbar>
-        <a-button type="primary" @click="handleCreate"> 新增菜单 </a-button>
+        <a-button type="primary" @click="handleCreate"> 添加 </a-button>
       </template>
       <template #action="{ record }">
         <TableAction
@@ -28,9 +28,8 @@
 </template>
 <script lang="ts">
   import { defineComponent, nextTick } from 'vue';
-
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { getMenuList } from '/@/api/demo/system';
+  import { getMenuList } from '/@/api/sys/menu';
 
   import { useDrawer } from '/@/components/Drawer';
   import MenuDrawer from './MenuDrawer.vue';
@@ -42,7 +41,7 @@
     components: { BasicTable, MenuDrawer, TableAction },
     setup() {
       const [registerDrawer, { openDrawer }] = useDrawer();
-      const [registerTable, { reload, expandAll }] = useTable({
+      const [registerTable, { reload, expandAll, collapseAll }] = useTable({
         title: '菜单列表',
         api: getMenuList,
         columns,
@@ -53,13 +52,13 @@
         isTreeTable: true,
         pagination: false,
         striped: false,
-        useSearchForm: true,
+        useSearchForm: false,
         showTableSetting: true,
-        bordered: true,
+        bordered: false,
         showIndexColumn: false,
         canResize: false,
         actionColumn: {
-          width: 80,
+          width: 180,
           title: '操作',
           dataIndex: 'action',
           slots: { customRender: 'action' },
@@ -72,7 +71,9 @@
           isUpdate: false,
         });
       }
-
+      /**
+       * @description: 编辑更新
+       */
       function handleEdit(record: Recordable) {
         openDrawer(true, {
           record,
@@ -87,10 +88,13 @@
       function handleSuccess() {
         reload();
       }
-
+      /**
+       * @description: 默认展开 收起
+       */
       function onFetchSuccess() {
-        // 演示默认展开所有表项
-        nextTick(expandAll);
+        nextTick(collapseAll); // 收起
+        return;
+        nextTick(expandAll); //展开
       }
 
       return {

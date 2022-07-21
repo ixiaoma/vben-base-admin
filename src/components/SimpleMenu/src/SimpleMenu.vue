@@ -128,7 +128,6 @@
       }
 
       async function handleSelect(key: string) {
-        console.log(key, 458, isUrl(key));
         if (isUrl(key)) {
           openWindow(key);
           return;

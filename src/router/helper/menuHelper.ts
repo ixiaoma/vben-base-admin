@@ -19,6 +19,7 @@ function joinParentPath(menus: Menu[], parentPath = '') {
     // This allows you to leverage the component nesting without having to use a nested URL.
     if (!(menu.path.startsWith('/') || isUrl(menu.path))) {
       // path doesn't start with /, nor is it a url, join parent path
+      // menu.path = `${parentPath}/${menu.path}`;
       menu.path = `${parentPath}/${menu.path}`;
     }
     if (menu?.children?.length) {
@@ -52,15 +53,16 @@ export function transformRouteToMenu(routeModList: AppRouteModule[], routerMappi
       routeList.push(item);
     }
   });
-  const list = treeMap(routeList, {
+  const list: any = treeMap(routeList, {
     conversion: (node: AppRouteRecordRaw) => {
-      // const { meta: { title, hideMenu = false } = {} } = node;
+      const { meta: { title, hideMenu = false } = {} } = node;
       return {
         ...(node.meta || {}),
         meta: node.meta,
-        name: node.name,
-        // hideMenu,
+        name: title,
+        hideMenu,
         path: node.path,
+        // compnent: node.path,
         ...(node.redirect ? { redirect: node.redirect } : {}),
       };
     },

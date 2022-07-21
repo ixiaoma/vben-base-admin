@@ -2,7 +2,8 @@ import type { AppRouteRecordRaw, Menu } from '/@/router/types';
 
 import { defineStore } from 'pinia';
 import { store } from '/@/store';
-import { useI18n } from '/@/hooks/web/useI18n';
+// import { useI18n } from '/@/hooks/web/useI18n';
+import { useMenuStore } from './menu';
 import { useUserStore } from './user';
 import { useAppStoreWithOut } from './app';
 import { toRaw } from 'vue';
@@ -21,8 +22,9 @@ import { filter } from '/@/utils/helper/treeHelper';
 // import { getMenuList } from '/@/api/sys/menu';
 import { getPermCode } from '/@/api/sys/user';
 
-import { useMessage } from '/@/hooks/web/useMessage';
+// import { useMessage } from '/@/hooks/web/useMessage';
 import { PageEnum } from '/@/enums/pageEnum';
+import { cloneDeep } from 'lodash-es';
 
 interface PermissionState {
   // Permission code list
@@ -97,8 +99,9 @@ export const usePermissionStore = defineStore({
       this.setPermCodeList(codeList);
     },
     async buildRoutesAction(): Promise<AppRouteRecordRaw[]> {
-      const { t } = useI18n();
+      // const { t } = useI18n();
       const userStore = useUserStore();
+      const menuStore = useMenuStore();
       const appStore = useAppStoreWithOut();
 
       let routes: AppRouteRecordRaw[] = [];
@@ -172,21 +175,40 @@ export const usePermissionStore = defineStore({
 
         //  If you are sure that you do not need to do background dynamic permissions, please comment the entire judgment below
         case PermissionModeEnum.BACK:
-          const { createMessage } = useMessage();
+          // const { createMessage } = useMessage();
 
-          createMessage.loading({
-            content: t('sys.app.menuLoading'),
-            duration: 1,
-          });
+          // createMessage.loading({
+          //   content: t('sys.app.menuLoading'),
+          //   duration: 1,
+          // });
 
           // !Simulate to obtain permission codes from the background,
           // this function may only need to be executed once, and the actual project can be put at the right time by itself
           let routeList: AppRouteRecordRaw[] = [];
           try {
             // this.changePermissionCode();
-            const RESULT = JSON.stringify(await userStore.getMenu());
-            const menuList = JSON.parse(RESULT.replaceAll('resName', 'name'));
-            routeList = menuList as AppRouteRecordRaw[];
+            const list: any = (await menuStore.getMenu()) as AppRouteRecordRaw[];
+            function listEdit(arr) {
+              for (let i = 0; i < arr.length; i++) {
+                if (arr[i].path == '/admin/menu/index') {
+                  arr[i].path = '/system/menu/index';
+                }
+                const meta = {
+                  title: arr[i].resName,
+                  path: arr[i].path,
+                };
+                arr[i].name = meta.title;
+                arr[i].meta = meta;
+                if (arr[i].children && arr[i].children.length > 0) {
+                  arr[i].component = arr[i].component || 'LAYOUT';
+                  listEdit(arr[i].children);
+                } else {
+                  arr[i].component = arr[i].component || meta.path;
+                }
+              }
+              return arr;
+            }
+            routeList = listEdit(cloneDeep(list));
           } catch (error) {
             console.error(error);
           }
@@ -204,7 +226,6 @@ export const usePermissionStore = defineStore({
 
           routeList = flatMultiLevelRoutes(routeList);
           routes = [PAGE_NOT_FOUND_ROUTE, ...routeList];
-          // routes = routeList;
           break;
       }
       patchHomeAffix(routes);
