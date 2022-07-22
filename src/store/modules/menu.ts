@@ -30,6 +30,7 @@ export const useMenuStore = defineStore({
      */
     async addMenu(
       params: addMenuParamsModel & {
+        isReturnNativeResponse?: boolean;
         mode?: ErrorMessageMode;
       },
     ): Promise<any> {
@@ -41,6 +42,7 @@ export const useMenuStore = defineStore({
      */
     async updateMenu(
       params: updateMenuParamsModel & {
+        isReturnNativeResponse?: boolean;
         mode?: ErrorMessageMode;
       },
     ): Promise<any> {
@@ -52,6 +54,7 @@ export const useMenuStore = defineStore({
      */
     async delMenu(
       params: delMenuParamsModel & {
+        isReturnNativeResponse?: boolean;
         mode?: ErrorMessageMode;
       },
     ): Promise<any> {

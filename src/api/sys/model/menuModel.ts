@@ -1,6 +1,7 @@
 // import { S } from 'mockjs';
 import type { RouteMeta } from 'vue-router';
 export interface RouteItem {
+  label: any;
   meta: RouteMeta;
   name?: string;
   alias?: string | string[];

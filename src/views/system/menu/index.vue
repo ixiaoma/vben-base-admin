@@ -8,16 +8,24 @@
         <TableAction
           :actions="[
             {
-              icon: 'clarity:note-edit-line',
+              label: '新增',
+              // icon: 'clarity:note-edit-line',
+              onClick: handleAdd.bind(null, record),
+            },
+            {
+              label: '编辑',
+              // icon: 'clarity:note-edit-line',
               onClick: handleEdit.bind(null, record),
             },
             {
-              icon: 'ant-design:delete-outlined',
+              label: '删除',
+              // icon: 'ant-design:delete-outlined',
               color: 'error',
-              popConfirm: {
-                title: '是否确认删除',
-                confirm: handleDelete.bind(null, record),
-              },
+              onClick: handleDelete.bind(null, record),
+              // popConfirm: {
+              //   title: '是否确认删除',
+              //   confirm: handleDelete.bind(null, record),
+              // },
             },
           ]"
         />
@@ -27,12 +35,14 @@
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, nextTick } from 'vue';
+  import { defineComponent, nextTick, inject } from 'vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
+  import { useI18n } from '/@/hooks/web/useI18n';
   import { getMenuList } from '/@/api/sys/menu';
-
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { useDrawer } from '/@/components/Drawer';
   import MenuDrawer from './MenuDrawer.vue';
+  import { useMenuStore } from '/@/store/modules/menu';
 
   import { columns, searchFormSchema } from './menu.data';
 
@@ -40,6 +50,10 @@
     name: 'MenuManagement',
     components: { BasicTable, MenuDrawer, TableAction },
     setup() {
+      const { createConfirm } = useMessage();
+      const menuStroe = useMenuStore();
+      const { t } = useI18n();
+      const checkStatus: any = inject('$checkStatus');
       const [registerDrawer, { openDrawer }] = useDrawer();
       const [registerTable, { reload, expandAll, collapseAll }] = useTable({
         title: '菜单列表',
@@ -66,9 +80,22 @@
         },
       });
 
+      /**
+       * @description: 添加
+       */
       function handleCreate() {
         openDrawer(true, {
           isUpdate: false,
+        });
+      }
+      /**
+       * @description: 行内新增
+       */
+      function handleAdd(record: Recordable) {
+        openDrawer(true, {
+          record,
+          isUpdate: false,
+          isRowAdd: true,
         });
       }
       /**
@@ -80,9 +107,26 @@
           isUpdate: true,
         });
       }
-
+      /**
+       * @description: 删除
+       */
       function handleDelete(record: Recordable) {
-        console.log(record);
+        createConfirm({
+          iconType: 'warning',
+          content: t('sys.api.delWarningMsg'),
+          onOk: async function () {
+            const result: any = await menuStroe.delMenu({ id: record.id });
+            if (result.data.success) {
+              checkStatus(result.data.errorCode, t('sys.api.saveSuccessMsg'), 'message', 'success');
+              handleSuccess();
+            } else {
+              checkStatus(
+                result.data.errorCode,
+                result.data.errorMessage || t('sys.api.saveFailedMsg'),
+              );
+            }
+          },
+        });
       }
 
       function handleSuccess() {
@@ -102,6 +146,7 @@
         registerDrawer,
         handleCreate,
         handleEdit,
+        handleAdd,
         handleDelete,
         handleSuccess,
         onFetchSuccess,

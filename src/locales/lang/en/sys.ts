@@ -23,6 +23,14 @@ export default {
     errMsg503: 'The service is unavailable, the server is temporarily overloaded or maintained!',
     errMsg504: 'Network timeout!',
     errMsg505: 'The http version does not support the request!',
+
+    saveSuccessMsg: 'Saved successful!',
+    updateSuccessMsg: 'Update successful!',
+    delSuccessMsg: 'Successfully deleted!',
+    saveFailedMsg: 'Save failed, please try again later!',
+    updateFailedMsg: 'Update failed, please try again later!',
+    delFailedMsg: 'Deletion failed, please try again later!',
+    delWarningMsg: 'Are you sure you want to delete the selected item?',
   },
   app: {
     logoutTip: 'Reminder',
