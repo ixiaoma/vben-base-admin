@@ -1,4 +1,5 @@
 import { defHttp } from '/@/utils/http/axios';
+import { ErrorMessageMode } from '/#/axios';
 import {
   getMenuListResultModel,
   MenuParamsModel,
@@ -29,20 +30,38 @@ export const getMenuList = (params: MenuParamsModel) => {
  * @description:新增菜单
  */
 
-export const addMenuList = (params: addMenuParamsModel) => {
-  return defHttp.post<getMenuListResultModel>({ url: Api.addMenuList, params });
+export const addMenuList = (params: addMenuParamsModel, mode: ErrorMessageMode = 'modal') => {
+  return defHttp.post<getMenuListResultModel>(
+    { url: Api.addMenuList, params },
+    {
+      isReturnNativeResponse: true,
+      errorMessageMode: mode,
+    },
+  );
 };
 /**
  * @description:更新菜单
  */
 
-export const updateMenuList = (params: updateMenuParamsModel) => {
-  return defHttp.post<getMenuListResultModel>({ url: Api.updateMenuList, params });
+export const updateMenuList = (params: updateMenuParamsModel, mode: ErrorMessageMode = 'modal') => {
+  return defHttp.post<getMenuListResultModel>(
+    { url: Api.updateMenuList, params },
+    {
+      isReturnNativeResponse: true,
+      errorMessageMode: mode,
+    },
+  );
 };
 /**
  * @description:删除菜单
  */
 
-export const delMenuList = (params: delMenuParamsModel) => {
-  return defHttp.post<getMenuListResultModel>({ url: Api.delMenuList, params });
+export const delMenuList = (params: delMenuParamsModel, mode: ErrorMessageMode = 'modal') => {
+  return defHttp.post<getMenuListResultModel>(
+    { url: Api.delMenuList, params },
+    {
+      isReturnNativeResponse: true,
+      errorMessageMode: mode,
+    },
+  );
 };
