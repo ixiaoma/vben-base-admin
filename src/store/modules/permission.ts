@@ -20,11 +20,13 @@ import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 import { filter } from '/@/utils/helper/treeHelper';
 
 // import { getMenuList } from '/@/api/sys/menu';
-import { getPermCode } from '/@/api/sys/user';
+// import { getPermCode } from '/@/api/sys/user';
 
 // import { useMessage } from '/@/hooks/web/useMessage';
 import { PageEnum } from '/@/enums/pageEnum';
 import { cloneDeep } from 'lodash-es';
+import { getAuthCache } from '/@/utils/auth';
+import { ROLES_KEY } from '/@/enums/cacheEnum';
 
 interface PermissionState {
   // Permission code list
@@ -95,8 +97,8 @@ export const usePermissionStore = defineStore({
       this.lastBuildMenuTime = 0;
     },
     async changePermissionCode() {
-      const codeList = await getPermCode();
-      this.setPermCodeList(codeList);
+      // const codeList = await getPermCode();
+      this.setPermCodeList(getAuthCache(ROLES_KEY));
     },
     async buildRoutesAction(): Promise<AppRouteRecordRaw[]> {
       // const { t } = useI18n();
@@ -186,13 +188,10 @@ export const usePermissionStore = defineStore({
           // this function may only need to be executed once, and the actual project can be put at the right time by itself
           let routeList: AppRouteRecordRaw[] = [];
           try {
-            // this.changePermissionCode();
+            this.changePermissionCode();
             const list: any = (await menuStore.getMenu()) as AppRouteRecordRaw[];
             function listEdit(arr) {
               for (let i = 0; i < arr.length; i++) {
-                if (arr[i].path == '/admin/menu/index') {
-                  arr[i].path = '/system/menu/index';
-                }
                 const meta = {
                   title: arr[i].resName,
                   path: arr[i].path,

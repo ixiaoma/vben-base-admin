@@ -43,6 +43,7 @@
   import { useDrawer } from '/@/components/Drawer';
   import MenuDrawer from './MenuDrawer.vue';
   import { useMenuStore } from '/@/store/modules/menu';
+  import { usePermission } from '/@/hooks/web/usePermission';
 
   import { columns, searchFormSchema } from './menu.data';
 
@@ -50,6 +51,8 @@
     name: 'MenuManagement',
     components: { BasicTable, MenuDrawer, TableAction },
     setup() {
+      const { hasPermission } = usePermission();
+      console.log(hasPermission(['ADMIN']));
       const { createConfirm } = useMessage();
       const menuStroe = useMenuStore();
       const { t } = useI18n();

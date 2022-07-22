@@ -21,7 +21,7 @@ import { useEnumStore } from '/@/store/modules/enum';
 import { RouteRecordRaw } from 'vue-router';
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 
-import { isArray } from '/@/utils/is';
+// import { isArray } from '/@/utils/is';
 import { h } from 'vue';
 
 interface UserState {
@@ -161,14 +161,16 @@ export const useUserStore = defineStore({
     },
     async getUserInfoAction(): Promise<UserInfo | null> {
       const userInfo = await getUserInfo();
-      const { roles = [] } = userInfo;
-      if (isArray(roles)) {
-        const roleList = roles.map((item) => item.value) as RoleEnum[];
-        this.setRoleList(roleList);
-      } else {
-        userInfo.roles = [];
-        this.setRoleList([]);
-      }
+      console.log(userInfo);
+      const { roleResCodeList = [] } = userInfo;
+      this.setRoleList(roleResCodeList);
+      // if (isArray(roleResCodeList)) {
+      //   const roleList = roleResCodeList.map((item) => item.value) as RoleEnum[];
+      //   this.setRoleList(roleList);
+      // } else {
+      //   userInfo.roleResCodeList = [];
+      //   this.setRoleList([]);
+      // }
       this.setUserInfo(userInfo);
       return userInfo;
     },

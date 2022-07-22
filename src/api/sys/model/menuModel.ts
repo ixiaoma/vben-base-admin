@@ -3,6 +3,7 @@ import type { RouteMeta } from 'vue-router';
 export interface RouteItem {
   label: any;
   meta: RouteMeta;
+  path: string;
   name?: string;
   alias?: string | string[];
   redirect?: string;

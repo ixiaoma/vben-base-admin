@@ -26,7 +26,7 @@
     setup(_, { emit }) {
       const { t } = useI18n();
       const isUpdate = ref(true);
-      const isRowAdd = ref(true);
+      const isRowAdd = ref(false);
       const menuStroe = useMenuStore();
       const isButton = (type: string) => type === 'BUTTON';
       const checkStatus: any = inject('$checkStatus');
@@ -41,6 +41,7 @@
         resetFields();
         setDrawerProps({ confirmLoading: false });
         isUpdate.value = !!data?.isUpdate;
+        isRowAdd.value = !!data?.isRowAdd;
         rowData = data.record;
         let obj = {
           upResCode: '0',
@@ -55,8 +56,8 @@
           if (unref(isRowAdd)) {
             obj.upResCode = data.record.resCode;
             obj.resType = data.record.resType;
+            data.record = obj;
           }
-          data.record = obj;
         }
         setFormDefaultValue(data.record);
         // if (unref(isUpdate)) {
