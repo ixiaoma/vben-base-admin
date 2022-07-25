@@ -187,12 +187,6 @@ export const usePermissionStore = defineStore({
           // !Simulate to obtain permission codes from the background,
           // this function may only need to be executed once, and the actual project can be put at the right time by itself
           let routeList: AppRouteRecordRaw[] = [];
-          // const pathPrifxList = [
-          //   { prifx: 'system', current: 'menu', name: '系统管理-菜单管理' },
-          //   { prifx: 'system', current: 'role', name: '系统管理-角色管理' },
-          //   { prifx: 'system', current: 'dept', toPath: 'org', name: '系统管理-组织管理' },
-          //   { prifx: 'system', current: 'user', name: '系统管理-用户管理' },
-          // ];
           try {
             this.changePermissionCode();
             // routeList = (await getMockMenuList()) as AppRouteRecordRaw[];
@@ -201,7 +195,8 @@ export const usePermissionStore = defineStore({
               for (let i = 0; i < arr.length; i++) {
                 pathPrifxList.forEach((ele) => {
                   if (arr[i].path.indexOf(ele.current) != -1) {
-                    arr[i].path = `/${ele.prifx}/${ele.toPath || ele.current}/index`;
+                    arr[i].component = `/${ele.prifx}/${ele.toPath || ele.current}/index`;
+                    arr[i].path = `${ele.toPath || ele.current}`;
                   }
                 });
                 const meta = {
