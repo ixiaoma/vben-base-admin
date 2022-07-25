@@ -7,7 +7,7 @@ const system: AppRouteModule = {
   path: '/system',
   name: 'System',
   component: LAYOUT,
-  redirect: '/system/account',
+  redirect: '/system/user/index',
   meta: {
     orderNo: 2000,
     icon: 'ion:settings-outline',
@@ -15,13 +15,13 @@ const system: AppRouteModule = {
   },
   children: [
     {
-      path: 'account',
+      path: 'user',
       name: 'AccountManagement',
       meta: {
-        title: t('routes.basic.system.account'),
+        title: t('routes.basic.system.user'),
         ignoreKeepAlive: false,
       },
-      component: () => import('/@/views/system/account/index.vue'),
+      component: () => import('/@/views/system/user/index.vue'),
     },
     {
       path: 'account_detail/:id',
@@ -31,9 +31,9 @@ const system: AppRouteModule = {
         title: t('routes.basic.system.account_detail'),
         ignoreKeepAlive: true,
         showMenu: false,
-        currentActiveMenu: '/system/account',
+        currentActiveMenu: '/system/user/index',
       },
-      component: () => import('/@/views/system/account/AccountDetail.vue'),
+      component: () => import('/@/views/system/user/AccountDetail.vue'),
     },
     {
       path: 'role',
@@ -55,13 +55,13 @@ const system: AppRouteModule = {
       component: () => import('/@/views/system/menu/index.vue'),
     },
     {
-      path: 'dept',
+      path: 'org',
       name: 'DeptManagement',
       meta: {
-        title: t('routes.basic.system.dept'),
+        title: t('routes.basic.system.org'),
         ignoreKeepAlive: true,
       },
-      component: () => import('/@/views/system/dept/index.vue'),
+      component: () => import('/@/views/system/org/index.vue'),
     },
     // {
     //   path: 'changePassword',

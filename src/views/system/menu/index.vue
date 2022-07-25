@@ -38,7 +38,7 @@
   import { defineComponent, nextTick, inject } from 'vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { useI18n } from '/@/hooks/web/useI18n';
-  import { getMenuList } from '/@/api/sys/menu';
+  import { getMenuList } from '/@/api/system/menu';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useDrawer } from '/@/components/Drawer';
   import MenuDrawer from './MenuDrawer.vue';

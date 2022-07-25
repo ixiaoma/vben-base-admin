@@ -19,14 +19,14 @@ import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 
 import { filter } from '/@/utils/helper/treeHelper';
 
-// import { getMenuList } from '/@/api/sys/menu';
-// import { getPermCode } from '/@/api/sys/user';
-
+// import { getMockMenuList } from '/@/api/system/menu';
+// import { getPermCode } from '/@/api/system/user';
 // import { useMessage } from '/@/hooks/web/useMessage';
 import { PageEnum } from '/@/enums/pageEnum';
 import { cloneDeep } from 'lodash-es';
 import { getAuthCache } from '/@/utils/auth';
 import { ROLES_KEY } from '/@/enums/cacheEnum';
+import { pathPrifxList } from './../../../mock/sys/menu';
 
 interface PermissionState {
   // Permission code list
@@ -187,11 +187,23 @@ export const usePermissionStore = defineStore({
           // !Simulate to obtain permission codes from the background,
           // this function may only need to be executed once, and the actual project can be put at the right time by itself
           let routeList: AppRouteRecordRaw[] = [];
+          // const pathPrifxList = [
+          //   { prifx: 'system', current: 'menu', name: '系统管理-菜单管理' },
+          //   { prifx: 'system', current: 'role', name: '系统管理-角色管理' },
+          //   { prifx: 'system', current: 'dept', toPath: 'org', name: '系统管理-组织管理' },
+          //   { prifx: 'system', current: 'user', name: '系统管理-用户管理' },
+          // ];
           try {
             this.changePermissionCode();
+            // routeList = (await getMockMenuList()) as AppRouteRecordRaw[];
             const list: any = (await menuStore.getMenu()) as AppRouteRecordRaw[];
             function listEdit(arr) {
               for (let i = 0; i < arr.length; i++) {
+                pathPrifxList.forEach((ele) => {
+                  if (arr[i].path.indexOf(ele.current) != -1) {
+                    arr[i].path = `/${ele.prifx}/${ele.toPath || ele.current}/index`;
+                  }
+                });
                 const meta = {
                   title: arr[i].resName,
                   path: arr[i].path,
@@ -211,7 +223,6 @@ export const usePermissionStore = defineStore({
           } catch (error) {
             console.error(error);
           }
-
           // Dynamically introduce components
           routeList = transformObjToRoute(routeList);
 

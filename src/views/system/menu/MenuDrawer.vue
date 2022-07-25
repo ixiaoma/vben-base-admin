@@ -16,7 +16,7 @@
   import { formSchema } from './menu.data';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { useI18n } from '/@/hooks/web/useI18n';
-  //  import { getMenuList } from '/@/api/sys/menu';
+  //  import { getMenuList } from '/@/api/system/menu';
   import { useMenuStore } from '/@/store/modules/menu';
 
   export default defineComponent({

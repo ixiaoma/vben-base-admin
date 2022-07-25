@@ -2,6 +2,12 @@ import { resultSuccess, resultError, getRequestToken, requestParams } from '../_
 import { MockMethod } from 'vite-plugin-mock';
 import { createFakeUserList } from './user';
 
+export const pathPrifxList = [
+  { prifx: 'system', current: 'menu', name: '系统管理-菜单管理' },
+  { prifx: 'system', current: 'role', name: '系统管理-角色管理' },
+  { prifx: 'system', current: 'dept', toPath: 'org', name: '系统管理-组织管理' },
+  { prifx: 'system', current: 'user', name: '系统管理-用户管理' },
+];
 // single
 const dashboardRoute = {
   path: '/dashboard',
