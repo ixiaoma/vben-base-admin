@@ -2,7 +2,9 @@
   <div>
     <BasicTable @register="registerTable" @fetch-success="onFetchSuccess">
       <template #toolbar>
-        <a-button type="primary" @click="handleCreate"> 添加 </a-button>
+        <a-button type="primary" @click="handleCreate" v-show="handlePrimission('add')">
+          添加
+        </a-button>
       </template>
       <template #action="{ record }">
         <TableAction
@@ -11,21 +13,20 @@
               label: '新增',
               // icon: 'clarity:note-edit-line',
               onClick: handleAdd.bind(null, record),
+              ifShow: handlePrimission('add', record),
             },
             {
               label: '编辑',
               // icon: 'clarity:note-edit-line',
               onClick: handleEdit.bind(null, record),
+              ifShow: handlePrimission('edit', record),
             },
             {
               label: '删除',
               // icon: 'ant-design:delete-outlined',
               color: 'error',
               onClick: handleDelete.bind(null, record),
-              // popConfirm: {
-              //   title: '是否确认删除',
-              //   confirm: handleDelete.bind(null, record),
-              // },
+              ifShow: handlePrimission('del', record),
             },
           ]"
         />
@@ -52,7 +53,6 @@
     components: { BasicTable, MenuDrawer, TableAction },
     setup() {
       const { hasPermission } = usePermission();
-      console.log(hasPermission(['ADMIN']));
       const { createConfirm } = useMessage();
       const menuStroe = useMenuStore();
       const { t } = useI18n();
@@ -82,7 +82,23 @@
           fixed: undefined,
         },
       });
-
+      /**
+       * @description: 按钮权限控制
+       */
+      function handlePrimission(type: any, record?: any) {
+        if (type === 'del') {
+          let delCode = ['SYS_MANAGE', 'SYS_MENU'];
+          if (!delCode.includes(record.resCode) && hasPermission(['SYS_MENU_DEL'])) {
+            return true;
+          } else {
+            return false;
+          }
+        } else if (type === 'add') {
+          return hasPermission(['SYS_MENU_ADD']);
+        } else if (type === 'edit') {
+          return hasPermission(['SYS_MENU_EDIT']);
+        }
+      }
       /**
        * @description: 添加
        */
@@ -153,6 +169,8 @@
         handleDelete,
         handleSuccess,
         onFetchSuccess,
+        hasPermission,
+        handlePrimission,
       };
     },
   });
