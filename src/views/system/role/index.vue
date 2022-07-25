@@ -30,8 +30,9 @@
   import { defineComponent } from 'vue';
 
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { getRoleListByPage } from '/@/api/demo/system';
-
+  // import { getRoleListByPage } from '/@/api/demo/system';
+  import { getRoleList } from '/@/api/system/role';
+  import { useRoleStore } from '/@/store/modules/role';
   import { useDrawer } from '/@/components/Drawer';
   import RoleDrawer from './RoleDrawer.vue';
 
@@ -41,10 +42,12 @@
     name: 'RoleManagement',
     components: { BasicTable, RoleDrawer, TableAction },
     setup() {
+      const roleStroe = useRoleStore();
+      console.log(roleStroe);
       const [registerDrawer, { openDrawer }] = useDrawer();
       const [registerTable, { reload }] = useTable({
         title: '角色列表',
-        api: getRoleListByPage,
+        api: getRoleList,
         columns,
         formConfig: {
           labelWidth: 120,
@@ -52,7 +55,7 @@
         },
         useSearchForm: true,
         showTableSetting: true,
-        bordered: true,
+        bordered: false,
         showIndexColumn: false,
         actionColumn: {
           width: 80,

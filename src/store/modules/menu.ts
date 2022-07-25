@@ -6,8 +6,8 @@ import {
   delMenuParamsModel,
   updateMenuParamsModel,
   addMenuParamsModel,
-} from '/@/api/sys/model/menuModel';
-import { getMenuList, addMenuList, updateMenuList, delMenuList } from '/@/api/sys/menu';
+} from '/@/api/system/model/menuModel';
+import { getMenuList, addMenuList, updateMenuList, delMenuList } from '/@/api/system/menu';
 
 export const useMenuStore = defineStore({
   id: 'system-menu',
