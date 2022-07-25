@@ -45,7 +45,7 @@ export const columns: BasicColumn[] = [
 
 // const isDir = (type: string) => type === '0';
 // const isMenu = (type: string) => type === 'MENU';
-const isButton = (type: string) => type === 'BUTTON';
+export const isButton = (type: string) => type === 'BUTTON';
 
 export const searchFormSchema: FormSchema[] = [
   {
@@ -73,13 +73,19 @@ export const formSchema: FormSchema[] = [
     field: 'resType',
     label: '菜单类型',
     component: 'RadioButtonGroup',
-    // defaultValue: 'MENU',
-    componentProps: {
-      options: [
-        // { label: '目录', value: '0' },
-        { label: '菜单', value: 'MENU' },
-        { label: '按钮', value: 'BUTTON' },
-      ],
+    componentProps: ({ formModel, formActionType }) => {
+      return {
+        options: [
+          { label: '菜单', value: 'MENU' },
+          { label: '按钮', value: 'BUTTON' },
+        ],
+        oninput: (): void => {
+          formActionType.updateSchema({
+            field: 'path',
+            label: formModel.resType === 'MENU' ? '权限标识' : '路由地址',
+          });
+        },
+      };
     },
     colProps: { lg: 24, md: 24 },
   },

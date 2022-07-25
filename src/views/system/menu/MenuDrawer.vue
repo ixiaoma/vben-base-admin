@@ -18,6 +18,7 @@
   import { useI18n } from '/@/hooks/web/useI18n';
   //  import { getMenuList } from '/@/api/system/menu';
   import { useMenuStore } from '/@/store/modules/menu';
+  import { isButton } from './menu.data';
 
   export default defineComponent({
     name: 'MenuDrawer',
@@ -25,10 +26,9 @@
     emits: ['success', 'register'],
     setup(_, { emit }) {
       const { t } = useI18n();
-      const isUpdate = ref(true);
+      const isUpdate = ref(false);
       const isRowAdd = ref(false);
       const menuStroe = useMenuStore();
-      const isButton = (type: string) => type === 'BUTTON';
       const checkStatus: any = inject('$checkStatus');
       const [registerForm, { resetFields, setFieldsValue, updateSchema, validate }] = useForm({
         labelWidth: 100,
@@ -59,11 +59,8 @@
             data.record = obj;
           }
         }
-        setFormDefaultValue(data.record);
         // if (unref(isUpdate)) {
-        setFieldsValue({
-          ...data.record,
-        });
+        setFieldsValue({ ...data.record });
         // }
         // const treeData = await getMenuList({});
         const menuData = await menuStroe.getMenu({});
@@ -75,22 +72,15 @@
             children: menuData,
           },
         ];
-        updateSchema({
-          field: 'upResCode',
-          componentProps: { treeData },
-        });
+        updateSchema([
+          { field: 'upResCode', componentProps: { treeData } },
+          { field: 'resCode', componentProps: { disabled: unref(isUpdate) } },
+          { field: 'path', label: isButton(data.record?.resType) ? '权限标识' : '路由地址' },
+        ]);
       });
+
       const getTitle = computed(() => (!unref(isUpdate) ? '新增菜单' : '编辑菜单'));
-      /**
-       * @description: formSchema 动态切换
-       */
-      function setFormDefaultValue(value: any) {
-        formSchema.forEach((ele) => {
-          if (ele.field === 'path') {
-            ele.label = isButton(value.resType) ? '权限标识' : '路由地址';
-          }
-        });
-      }
+
       /**
        * @description: 确定提交
        */
