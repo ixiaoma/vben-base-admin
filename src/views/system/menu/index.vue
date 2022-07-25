@@ -87,12 +87,9 @@
        */
       function handlePrimission(type: any, record?: any) {
         if (type === 'del') {
-          let delCode = ['SYS_MANAGE', 'SYS_MENU'];
-          if (!delCode.includes(record.resCode) && hasPermission(['SYS_MENU_DEL'])) {
-            return true;
-          } else {
-            return false;
-          }
+          return (
+            !['SYS_MANAGE', 'SYS_MENU'].includes(record.resCode) && hasPermission(['SYS_MENU_DEL'])
+          );
         } else if (type === 'add') {
           return hasPermission(['SYS_MENU_ADD']);
         } else if (type === 'edit') {
