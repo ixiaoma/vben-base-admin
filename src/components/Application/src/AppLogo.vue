@@ -1,9 +1,9 @@
 <template>
   <div class="anticon" :class="getAppLogoClass" @click="goHome">
     <img src="../../../assets/images/logo.png" />
-    <div class="ml-2 truncate md:opacity-100" :class="getTitleClass" v-if="showTitle">
+    <!-- <div class="ml-2 truncate md:opacity-100" :class="getTitleClass" v-if="showTitle">
       {{ title }}
-    </div>
+    </div> -->
   </div>
 </template>
 <script lang="ts" setup>

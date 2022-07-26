@@ -1,5 +1,7 @@
 import { message } from 'ant-design-vue';
 import { useEnumStore } from '/@/store/modules/enum';
+import { getApiEnum } from '/@/api/common/enum';
+import { Persistent } from '/@/utils/cache/persistent';
 //判断列表是否选中
 export function isSelect(list: Array<string | number>, isSingle: Boolean = false): boolean {
   if (!list.length) {
@@ -12,8 +14,11 @@ export function isSelect(list: Array<string | number>, isSingle: Boolean = false
   }
   return true;
 }
-
+//获取全量枚举中的数据
 export function getEnum(enumCode?: string, backList = false, codeValue?: string) {
+  if(enumCode == 'ProductNameEnum'){
+    return []
+  }
   const enumStore = useEnumStore();
   const globalEnum = enumStore.getGlobalEnum;
   if (codeValue && enumCode) {
@@ -28,4 +33,21 @@ export function getEnum(enumCode?: string, backList = false, codeValue?: string)
     return globalEnum[enumCode];
   }
   return globalEnum;
+}
+//获取单个枚举
+export function getApiEnumList(code: string) {
+  if (!code) {
+    return;
+  }
+  return new Promise((resolve) => {
+    const data: any = Persistent.getSession(code);
+    if (data) {
+      resolve(data);
+      return;
+    }
+    getApiEnum(code).then((res) => {
+      Persistent.setSession(code, { list: res }, true);
+      resolve({ list: res });
+    });
+  });
 }

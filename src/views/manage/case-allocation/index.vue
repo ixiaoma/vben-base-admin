@@ -1,7 +1,12 @@
 <template>
   <BasicTable
     @register="registerTable"
-    :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys, onChange: onSelectChange }"
+    :rowSelection="{
+      type: 'checkbox',
+      fixed: 'left',
+      selectedRowKeys: checkedKeys,
+      onChange: onSelectChange,
+    }"
   >
     <template #toolbar>
       <a-button type="primary" @click="handleAssign">案件分配</a-button>
@@ -22,19 +27,15 @@
   <AssignModal @register="registerModal" @success="submitSuccess" />
 </template>
 <script lang="ts" setup name="CaseAllocation">
-  import { computed, ref } from 'vue';
+  import { ref } from 'vue';
   import { useRouter } from 'vue-router';
   import { isSelect } from '/@/utils/commonUtil';
   import AssignModal from './AssignModal.vue';
   import { useModal } from '/@/components/Modal';
-  import { useEnumStore } from '/@/store/modules/enum';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { getBasicColumns, getFormConfig } from './allocation.data';
   import { getCaseAllocationList } from '/@/api/manage/caseallocation';
 
-  const emumStore = useEnumStore();
-  const enumInfo = computed(() => emumStore.getEnumData);
-  console.log(enumInfo);
   const router = useRouter();
   const checkedKeys = ref<Array<string | number>>([]); //当前列表选中的key
 
@@ -54,7 +55,6 @@
       dataIndex: 'action',
     },
   });
-
   //获取form表单数据
   function handleAssign() {
     if (!isSelect(checkedKeys.value)) {

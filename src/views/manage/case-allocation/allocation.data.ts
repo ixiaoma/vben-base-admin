@@ -1,6 +1,7 @@
 import { FormProps } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
-import { getOrgList, getOrgTree } from '/@/api/sys/org';
+import { getOrgList } from '/@/api/sys/org';
+import { getApiEnumList } from '/@/utils/commonUtil';
 
 export function getBasicColumns(): BasicColumn[] {
   return [
@@ -174,6 +175,14 @@ export function getFormConfig(): Partial<FormProps> {
         },
       },
       {
+        field: 'receiveCardId',
+        component: 'Input',
+        label: '身份证号',
+        colProps: {
+          span: 6,
+        },
+      },
+      {
         field: 'receivePhone',
         component: 'Input',
         label: '手机号',
@@ -194,64 +203,75 @@ export function getFormConfig(): Partial<FormProps> {
         },
       },
       {
-        field: 'cascader',
-        component: 'Cascader',
-        label: 'Cascader示例',
+        field: 'prodName',
+        label: '借款产品',
+        component: 'Select',
+        // optionEnumCode: 'ProductNameEnum',
+        colProps: {
+          span: 6,
+        },
+      },
+      // {
+      //   field: 'prodName',
+      //   component: 'ApiSelect',
+      //   label: '借款产品',
+      //   colProps: {
+      //     span: 6,
+      //   },
+      //   componentProps: {
+      //     api: () => getApiEnumList('GetProdNameEnum'),
+      //     immediate: false,
+      //     onChange: (e) => {
+      //       console.log('selected:', e);
+      //     },
+      //     // atfer request callback
+      //     onOptionsChange: (options) => {
+      //       console.log('get options', options.length, options);
+      //     },
+      //   },
+      // },
+      {
+        field: 'targetAmtRangeCode',
+        component: 'ApiSelect',
+        label: '标的金额',
         colProps: {
           span: 6,
         },
         componentProps: {
-          options: [
-            {
-              value: 'zhejiang',
-              label: 'Zhejiang',
-              children: [
-                {
-                  value: 'hangzhou',
-                  label: 'Hangzhou',
-                  children: [
-                    {
-                      value: 'xihu',
-                      label: 'West Lake',
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              value: 'jiangsu',
-              label: 'Jiangsu',
-              children: [
-                {
-                  value: 'nanjing',
-                  label: 'Nanjing',
-                  children: [
-                    {
-                      value: 'zhonghuamen',
-                      label: 'Zhong Hua Men',
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
+          api: () => getApiEnumList('GetMoneyEnum'),
+          resultField: 'list',
+          labelField: 'rangeDisplay',
+          valueField: 'rangeCode',
+          immediate: false,
+          onChange: (e) => {
+            console.log('selected:', e);
+          },
+          // atfer request callback
+          onOptionsChange: (options) => {
+            console.log('get options', options.length, options);
+          },
         },
       },
       {
-        field: 'apiTreeSelect',
-        component: 'ApiTreeSelect',
-        label: '远程下拉树',
-        componentProps: {
-          api: getOrgTree,
-          resultField: 'list',
-          fieldNames: {
-            label: 'name',
-            value: 'code',
-            children: 'children',
-          },
-        },
+        field: 'ovdDaysRangeCode',
+        component: 'ApiSelect',
+        label: '逾期天数',
         colProps: {
           span: 6,
+        },
+        componentProps: {
+          api: () => getApiEnumList('GetOvdDayEnum'),
+          resultField: 'list',
+          labelField: 'rangeDisplay',
+          valueField: 'rangeCode',
+          immediate: false,
+          onChange: (e) => {
+            console.log('selected:', e);
+          },
+          // atfer request callback
+          onOptionsChange: (options) => {
+            console.log('get options', options.length, options);
+          },
         },
       },
     ],
