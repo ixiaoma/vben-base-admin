@@ -29,7 +29,7 @@
   import { useI18n } from '/@/hooks/web/useI18n';
 
   export default defineComponent({
-    name: 'RoleDrawer',
+    name: 'RoleModal',
     components: { BasicModal, BasicForm, BasicTree },
     emits: ['success', 'register'],
     setup(_, { emit }) {
@@ -48,6 +48,9 @@
         showActionButtonGroup: false,
       });
 
+      /**
+       * @description: 弹框默认数据处理
+       */
       const [register, { setModalProps, closeModal }] = useModalInner(async (data) => {
         resetFields();
         setModalProps({ confirmLoading: false });
@@ -55,6 +58,7 @@
         isUpdate.value = !!data?.isUpdate;
         isPrimision.value = !!data?.isPrimision;
         if (unref(isPrimision)) {
+          // 已有权限数据获取 处理
           const result = await roleStore.getListRoleResourceFun({
             roleCode: data?.record?.roleCode,
           });
@@ -63,6 +67,7 @@
           }
           treeData.value = data?.menuList;
         } else if (unref(isUpdate)) {
+          // 编辑默认值处理
           setFieldsValue({
             ...data.record,
           });
@@ -87,6 +92,7 @@
           let result: any;
           setModalProps({ confirmLoading: true });
           if (unref(isPrimision)) {
+            // 权限更新
             result = await roleStore.updateBindResourceFun({
               resource: checkedCodes?.value,
               roleCode: rowData?.value?.roleCode,

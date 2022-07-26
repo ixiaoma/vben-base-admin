@@ -108,7 +108,7 @@
         return result;
       }
       /**
-       * @description: 分配权限
+       * @description: 获取菜单按钮列表
        */
       async function getMenuList() {
         menuList = await menuStroe.getMenu({});
