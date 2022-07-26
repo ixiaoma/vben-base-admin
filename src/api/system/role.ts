@@ -5,7 +5,7 @@ import {
   RoleResourceParamsModel,
   BindResourceParamsModel,
   delRoleParamsModel,
-  updateRoleParamsModel,
+  UpdateRoleParamsModel,
   addRoleParamsModel,
   RoleResourceResultModel,
 } from './model/roleModel';
@@ -44,7 +44,7 @@ export const addRoleList = (params: addRoleParamsModel, mode: ErrorMessageMode =
  * @description:更新角色
  */
 
-export const updateRoleList = (params: updateRoleParamsModel, mode: ErrorMessageMode = 'modal') => {
+export const updateRoleList = (params: UpdateRoleParamsModel, mode: ErrorMessageMode = 'modal') => {
   return defHttp.post<null>(
     { url: Api.updateRoleList, params },
     {
@@ -106,7 +106,7 @@ export const getListRoleResource = (
   return defHttp.post<RoleResourceResultModel>(
     { url: Api.getListRoleResource, params },
     {
-      isReturnNativeResponse: true,
+      isReturnNativeResponse: false,
       errorMessageMode: mode,
     },
   );

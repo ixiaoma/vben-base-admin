@@ -86,15 +86,23 @@
        * @description: 按钮权限控制
        */
       function handlePrimission(type: any, record?: any) {
-        if (type === 'del') {
-          return (
-            !['SYS_MANAGE', 'SYS_MENU'].includes(record.resCode) && hasPermission(['SYS_MENU_DEL'])
-          );
-        } else if (type === 'add') {
-          return hasPermission(['SYS_MENU_ADD']);
-        } else if (type === 'edit') {
-          return hasPermission(['SYS_MENU_EDIT']);
+        let result = false;
+        switch (type) {
+          case 'del':
+            result =
+              !['SYS_MANAGE', 'SYS_MENU'].includes(record.resCode) &&
+              hasPermission(['SYS_MENU_DEL']);
+            break;
+          case 'edit':
+            result = hasPermission(['SYS_MENU_EDIT']);
+            break;
+          case 'add':
+            result = hasPermission(['SYS_MENU_ADD']);
+            break;
+          default:
+            result = false;
         }
+        return result;
       }
       /**
        * @description: 添加
@@ -133,18 +141,20 @@
           onOk: async function () {
             const result: any = await menuStroe.delMenu({ id: record.id });
             if (result.data.success) {
-              checkStatus(result.data.errorCode, t('sys.api.saveSuccessMsg'), 'message', 'success');
+              checkStatus(result.data.errorCode, t('sys.api.delSuccessMsg'), 'message', 'success');
               handleSuccess();
             } else {
               checkStatus(
                 result.data.errorCode,
-                result.data.errorMessage || t('sys.api.saveFailedMsg'),
+                result.data.errorMessage || t('sys.api.delFailedMsg'),
               );
             }
           },
         });
       }
-
+      /**
+       * @description: 刷新页面
+       */
       function handleSuccess() {
         reload();
       }

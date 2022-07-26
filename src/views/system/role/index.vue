@@ -2,49 +2,67 @@
   <div>
     <BasicTable @register="registerTable">
       <template #toolbar>
-        <a-button type="primary" @click="handleCreate"> 新增角色 </a-button>
+        <a-button type="primary" @click="handleCreate" v-show="handlePrimission('add')">
+          添加
+        </a-button>
       </template>
       <template #action="{ record }">
         <TableAction
           :actions="[
             {
-              icon: 'clarity:note-edit-line',
+              label: '编辑',
+              // icon: 'clarity:note-edit-line',
               onClick: handleEdit.bind(null, record),
+              ifShow: handlePrimission('edit', record),
             },
             {
-              icon: 'ant-design:delete-outlined',
+              label: '分配权限',
+              // icon: 'clarity:note-edit-line',
+              onClick: handlePrimisionBtn.bind(null, record),
+              ifShow: handlePrimission('primission', record),
+            },
+            {
+              label: '删除',
+              // icon: 'ant-design:delete-outlined',
               color: 'error',
-              popConfirm: {
-                title: '是否确认删除',
-                confirm: handleDelete.bind(null, record),
-              },
+              onClick: handleDelete.bind(null, record),
+              ifShow: handlePrimission('del', record),
             },
           ]"
         />
       </template>
     </BasicTable>
-    <RoleDrawer @register="registerDrawer" @success="handleSuccess" />
+    <!-- <RoleDrawer @register="registerDrawer" @success="handleSuccess" /> -->
+    <RoleModal @register="register" @success="handleSuccess" />
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent } from 'vue';
-
+  import { defineComponent, inject } from 'vue';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  // import { getRoleListByPage } from '/@/api/demo/system';
   import { getRoleList } from '/@/api/system/role';
   import { useRoleStore } from '/@/store/modules/role';
-  import { useDrawer } from '/@/components/Drawer';
-  import RoleDrawer from './RoleDrawer.vue';
-
+  import { useMenuStore } from '/@/store/modules/menu';
+  import { useModal } from '/@/components/Modal';
+  // import RoleDrawer from './RoleDrawer.vue';
+  import RoleModal from './RoleModal.vue';
+  import { usePermission } from '/@/hooks/web/usePermission';
+  import { useMessage } from '/@/hooks/web/useMessage';
   import { columns, searchFormSchema } from './role.data';
+  import { useI18n } from '/@/hooks/web/useI18n';
 
   export default defineComponent({
     name: 'RoleManagement',
-    components: { BasicTable, RoleDrawer, TableAction },
+    components: { BasicTable, TableAction, RoleModal },
     setup() {
+      const { hasPermission } = usePermission();
       const roleStroe = useRoleStore();
-      console.log(roleStroe);
-      const [registerDrawer, { openDrawer }] = useDrawer();
+      const menuStroe = useMenuStore();
+      const { createConfirm } = useMessage();
+      const checkStatus: any = inject('$checkStatus');
+      const { t } = useI18n();
+      let menuList: any;
+      getMenuList();
+      const [register, { openModal }] = useModal();
       const [registerTable, { reload }] = useTable({
         title: '角色列表',
         api: getRoleList,
@@ -58,7 +76,7 @@
         bordered: false,
         showIndexColumn: false,
         actionColumn: {
-          width: 80,
+          width: 180,
           title: '操作',
           dataIndex: 'action',
           slots: { customRender: 'action' },
@@ -66,34 +84,97 @@
         },
       });
 
-      function handleCreate() {
-        openDrawer(true, {
-          isUpdate: false,
+      /**
+       * @description: 按钮权限控制
+       */
+      function handlePrimission(type: any, record?: any) {
+        let result = false;
+        switch (type) {
+          case 'del':
+            result = !['ADMIN'].includes(record.resCode) && hasPermission(['MAN_ROLE_DELETE']);
+            break;
+          case 'edit':
+            result = hasPermission(['MAN_ROLE_EDIT']);
+            break;
+          case 'add':
+            result = hasPermission(['MAN_ROLE_ADD']);
+            break;
+          case 'primission':
+            result = hasPermission(['MAN_ROLE_ASSIGNPERMISSION']);
+            break;
+          default:
+            result = false;
+        }
+        return result;
+      }
+      /**
+       * @description: 分配权限
+       */
+      async function getMenuList() {
+        menuList = await menuStroe.getMenu({});
+      }
+      /**
+       * @description: 分配权限
+       */
+      function handlePrimisionBtn(record) {
+        openModal(true, {
+          record,
+          menuList,
+          isPrimision: true,
         });
       }
-
+      /**
+       * @description: 添加角色
+       */
+      function handleCreate() {
+        openModal(true);
+      }
+      /**
+       * @description: 编辑角色
+       */
       function handleEdit(record: Recordable) {
-        openDrawer(true, {
+        openModal(true, {
           record,
           isUpdate: true,
         });
       }
-
+      /**
+       * @description: 删除角色
+       */
       function handleDelete(record: Recordable) {
-        console.log(record);
+        createConfirm({
+          iconType: 'warning',
+          content: t('sys.api.delWarningMsg'),
+          onOk: async function () {
+            const result: any = await roleStroe.delRoleFun({ id: record.id });
+            if (result.data.success) {
+              checkStatus(result.data.errorCode, t('sys.api.delSuccessMsg'), 'message', 'success');
+              handleSuccess();
+            } else {
+              checkStatus(
+                result.data.errorCode,
+                result.data.errorMessage || t('sys.api.delFailedMsg'),
+              );
+            }
+          },
+        });
       }
-
+      /**
+       * @description: 刷新页面
+       */
       function handleSuccess() {
         reload();
       }
 
       return {
         registerTable,
-        registerDrawer,
+        register,
         handleCreate,
         handleEdit,
         handleDelete,
         handleSuccess,
+        handlePrimission,
+        handlePrimisionBtn,
       };
     },
   });

@@ -19,8 +19,8 @@ export type RoleResourceParamsModel = {
   tnt?: string;
 };
 
-export type updateRoleParamsModel = delRoleParamsModel & addRoleParamsModel;
+export type UpdateRoleParamsModel = delRoleParamsModel & addRoleParamsModel;
 
 export type BindResourceParamsModel = RoleResourceParamsModel & { resource: Array<any> };
 
-export type RoleResourceResultModel = updateRoleParamsModel;
+export type RoleResourceResultModel = UpdateRoleParamsModel;

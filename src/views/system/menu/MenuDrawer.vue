@@ -13,12 +13,11 @@
 <script lang="ts">
   import { defineComponent, ref, computed, unref, inject } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
-  import { formSchema } from './menu.data';
+  import { formSchema, isButton } from './menu.data';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { useI18n } from '/@/hooks/web/useI18n';
   //  import { getMenuList } from '/@/api/system/menu';
   import { useMenuStore } from '/@/store/modules/menu';
-  import { isButton } from './menu.data';
 
   export default defineComponent({
     name: 'MenuDrawer',

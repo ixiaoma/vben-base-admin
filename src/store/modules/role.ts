@@ -5,7 +5,7 @@ import {
   RoleResourceParamsModel,
   BindResourceParamsModel,
   delRoleParamsModel,
-  updateRoleParamsModel,
+  UpdateRoleParamsModel,
   addRoleParamsModel,
   RoleResourceResultModel,
 } from '/@/api/system/model/roleModel';
@@ -50,7 +50,7 @@ export const useRoleStore = defineStore({
      * @description:更新角色
      */
     async updateRoleFun(
-      params: updateRoleParamsModel & {
+      params: UpdateRoleParamsModel & {
         isReturnNativeResponse?: boolean;
         mode?: ErrorMessageMode;
       },
