@@ -17,7 +17,6 @@
             },
             {
               label: '分配权限',
-              // icon: 'clarity:note-edit-line',
               onClick: handlePrimisionBtn.bind(null, record),
               ifShow: handlePrimission('primission', record),
             },
@@ -120,6 +119,7 @@
         openModal(true, {
           record,
           menuList,
+          isUpdate: false,
           isPrimision: true,
         });
       }
@@ -127,7 +127,7 @@
        * @description: 添加角色
        */
       function handleCreate() {
-        openModal(true);
+        openModal(true, { isUpdate: false });
       }
       /**
        * @description: 编辑角色

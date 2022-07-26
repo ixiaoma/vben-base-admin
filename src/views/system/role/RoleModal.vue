@@ -20,7 +20,7 @@
   </BasicModal>
 </template>
 <script lang="ts">
-  import { defineComponent, ref, computed, unref, inject } from 'vue';
+  import { defineComponent, ref, computed, unref, inject, nextTick } from 'vue';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { formSchema } from './role.data';
   import { BasicModal, useModalInner } from '/@/components/Modal';
@@ -57,21 +57,22 @@
         rowData.value = data.record;
         isUpdate.value = !!data?.isUpdate;
         isPrimision.value = !!data?.isPrimision;
-        if (unref(isPrimision)) {
-          // 已有权限数据获取 处理
-          const result = await roleStore.getListRoleResourceFun({
-            roleCode: data?.record?.roleCode,
-          });
-          if (result) {
-            selectedKeys.value = result.map((ele) => ele.resCode);
+        nextTick(async () => {
+          if (unref(isUpdate)) {
+            // 编辑默认值处理
+            setFieldsValue({
+              ...data.record,
+            });
           }
-          treeData.value = data?.menuList;
-        } else if (unref(isUpdate)) {
-          // 编辑默认值处理
-          setFieldsValue({
-            ...data.record,
-          });
-        }
+          if (unref(isPrimision)) {
+            // 已有权限数据获取 处理
+            const result = await roleStore.getListRoleResourceFun({
+              roleCode: data?.record?.roleCode,
+            });
+            result && (selectedKeys.value = result.map((ele) => ele.resCode));
+            treeData.value = data?.menuList;
+          }
+        });
       });
 
       const getTitle = computed(() =>
