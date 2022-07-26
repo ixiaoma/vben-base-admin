@@ -1,43 +1,45 @@
-import { type PermissionType } from '@/core/permission/modules/types';
-import { type LocaleType } from '@/locales/config';
-import { type RouteMeta as VRouteMeta } from 'vue-router';
-
-declare global {
-  type Title18n = {
-    [p in LocaleType]: string;
-  };
-}
+export {};
 
 declare module 'vue-router' {
-  interface RouteMeta extends VRouteMeta {
-    /** 标题 */
-    title: string | Title18n;
-    /** 当前路由是否需要权限验证 */
-    isAuth?: boolean;
-    /** 当前路由权限 */
-    perms?: PermissionType[];
-    /** 是否需要缓存 */
-    keepAlive?: boolean;
-    /** 当前路由namePath 祖先name集合 */
-    namePath?: string[];
-    /** 当前路由所在的完整路径 */
-    fullPath?: string;
-    /** 是否固定在标签栏 */
+  interface RouteMeta extends Record<string | number | symbol, unknown> {
+    orderNo?: number;
+    // title
+    title: string;
+    // dynamic router level.
+    dynamicLevel?: number;
+    // dynamic router real route path (For performance).
+    realPath?: string;
+    // Whether to ignore permissions
+    ignoreAuth?: boolean;
+    // role info
+    roles?: RoleEnum[];
+    // Whether not to cache
+    ignoreKeepAlive?: boolean;
+    // Is it fixed on tab
     affix?: boolean;
-    /** 菜单图标 */
+    // icon on tab
     icon?: string;
-    /** 当前页面切换动画 */
+    frameSrc?: string;
+    // current page transition
     transitionName?: string;
-    /** 不在菜单中显示 */
-    hideInMenu?: boolean;
-    /** 不在面包屑导航中显示 */
-    hideInBreadcrumb?: boolean;
-    /** 不在tab标签页中显示 */
-    hideInTabs?: boolean;
-    /** 设置当前路由高亮的菜单项，值为route fullPath或route name,一般用于详情页 */
-    activeMenu?: string;
-    /** 菜单排序号 */
-    orderNum?: number;
+    // Whether the route has been dynamically added
+    hideBreadcrumb?: boolean;
+    // Hide submenu
+    hideChildrenInMenu?: boolean;
+    // Carrying parameters
+    carryParam?: boolean;
+    // Used internally to mark single-level menus
+    single?: boolean;
+    // Currently active menu
+    currentActiveMenu?: string;
+    // Never show in tab
+    hideTab?: boolean;
+    // Never show in menu
+    hideMenu?: boolean;
     isLink?: boolean;
+    // only build for Menu
+    ignoreRoute?: boolean;
+    // Hide path for children
+    hidePathForChildren?: boolean;
   }
 }

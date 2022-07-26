@@ -1,7 +1,7 @@
 export enum RoleEnum {
-  // 管理员
-  ADMIN = 'admin',
+  // super admin
+  SUPER = 'super',
 
-  // 普通用户
-  NORMAL = 'normal',
+  // tester
+  TEST = 'test',
 }

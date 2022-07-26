@@ -1,29 +1,21 @@
 <template>
   <ConfigProvider :locale="getAntdLocale">
-    <router-view v-slot="{ Component }">
-      <component :is="Component" />
-    </router-view>
-    <!-- <LockScreen /> -->
+    <AppProvider>
+      <RouterView />
+    </AppProvider>
   </ConfigProvider>
 </template>
 
-<script setup lang="ts">
-  import { watchEffect } from 'vue';
+<script lang="ts" setup>
   import { ConfigProvider } from 'ant-design-vue';
-  // import { LockScreen } from '@/components/basic/LockScreen';
-  import { useRoute } from 'vue-router';
-  import { useLocale } from '@/locales/useLocale';
-  import { transformI18n } from './hooks/useI18n';
+  import { AppProvider } from '/@/components/Application';
+  import { useTitle } from '/@/hooks/web/useTitle';
+  import { useLocale } from '/@/locales/useLocale';
 
-  const route = useRoute();
+  import 'dayjs/locale/zh-cn';
+  // support Multi-language
   const { getAntdLocale } = useLocale();
 
-  watchEffect(() => {
-    if (route.meta?.title) {
-      // 翻译网页标题
-      document.title = transformI18n(route.meta.title);
-    }
-  });
+  // Listening to page changes and dynamically changing site titles
+  useTitle();
 </script>
-
-<style lang="less"></style>

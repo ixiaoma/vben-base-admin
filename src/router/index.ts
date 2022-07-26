@@ -1,51 +1,37 @@
-import 'nprogress/css/nprogress.css'; // 进度条样式
-import { type App } from 'vue';
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
+import type { RouteRecordRaw } from 'vue-router';
+import type { App } from 'vue';
 
-import { createRouterGuards } from './router-guards';
+import { createRouter, createWebHashHistory } from 'vue-router';
+import { basicRoutes } from './routes';
 
-import staticModules from './staticModules/';
-import outsideLayout from './outsideLayout';
-import { whiteNameList } from './constant';
+// 白名单应该包含基本静态路由
+const WHITE_NAME_LIST: string[] = [];
+const getRouteNames = (array: any[]) =>
+  array.forEach((item) => {
+    WHITE_NAME_LIST.push(item.name);
+    getRouteNames(item.children || []);
+  });
+getRouteNames(basicRoutes);
 
-export const routes: Array<RouteRecordRaw> = [
-  {
-    path: '/',
-    name: 'Layout',
-    redirect: '/dashboard/welcome',
-    component: () => import(/* webpackChunkName: "layout" */ '@/layout/index.vue'),
-    meta: {
-      title: '首页',
-    },
-    children: [...staticModules],
-  },
-  // Layout之外的路由
-  ...outsideLayout,
-];
-
+// app router
 export const router = createRouter({
-  // process.env.BASE_URL
-  history: createWebHashHistory(''),
-  routes,
+  history: createWebHashHistory(import.meta.env.VITE_PUBLIC_PATH),
+  routes: basicRoutes as unknown as RouteRecordRaw[],
+  strict: true,
+  scrollBehavior: () => ({ left: 0, top: 0 }),
 });
 
 // reset router
 export function resetRouter() {
   router.getRoutes().forEach((route) => {
     const { name } = route;
-    if (name && !whiteNameList.some((n) => n === name)) {
+    if (name && !WHITE_NAME_LIST.includes(name as string)) {
       router.hasRoute(name) && router.removeRoute(name);
     }
   });
 }
 
-export async function setupRouter(app: App) {
-  // 创建路由守卫
-  createRouterGuards(router, whiteNameList);
-
+// config router
+export function setupRouter(app: App<Element>) {
   app.use(router);
-
-  // 路由准备就绪后挂载APP实例
-  await router.isReady();
 }
-export default router;

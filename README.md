@@ -1,51 +1,57 @@
-# vue3-antd-admin
+## 特性
 
-基于 vue-cli5.x / vite2.x + vue3.x + antd-design-vue3.x + typescript4.x 的后台管理系统模板
+- **最新技术栈**：使用 Vue3/vite2 等前端前沿技术开发
+- **TypeScript**: 应用程序级 JavaScript 的语言
+- **主题**：可配置的主题
+- **国际化**：内置完善的国际化方案
+- **Mock 数据** 内置 Mock 数据方案
+- **权限** 内置完善的动态路由权限生成方案
+- **组件** 二次封装了多个常用的组件
+
+## 文档
+
+[文档地址](https://vvbin.cn/doc-next/)
+
+## 准备
+
+- [node](http://nodejs.org/) 和 [git](https://git-scm.com/) -项目开发环境
+- [Vite](https://vitejs.dev/) - 熟悉 vite 特性
+- [Vue3](https://v3.vuejs.org/) - 熟悉 Vue 基础语法
+- [TypeScript](https://www.typescriptlang.org/) - 熟悉`TypeScript`基本语法
+- [Es6+](http://es6.ruanyifeng.com/) - 熟悉 es6 基本语法
+- [Vue-Router-Next](https://next.router.vuejs.org/) - 熟悉 vue-router 基本使用
+- [Ant-Design-Vue](https://2x.antdv.com/docs/vue/introduce-cn/) - ui 基本使用
+- [Mock.js](https://github.com/nuysoft/Mock) - mockjs 基本语法
 
 ## 安装使用
 
 - 获取项目代码
 
-```bash
-git clone 
-```
+- 包管理器: 全局安装`pnpm`
 
-- 安装依赖
-
-```bash
-cd vue3-antd-admin
-
-yarn install
+pnpm install
 
 ```
 
 - 运行
 
 ```bash
-yarn serve
+pnpm serve
 ```
 
 - 打包
 
 ```bash
-yarn build
+pnpm build
 ```
 
-## vscode 配置
+**Pull Request:**
 
-安装项目根目录.vscode 推荐的插件，再安装 Volar，并禁用 Vetur，重启 vscode 即可。
-
-> 使用了 Vue3.x 全家桶、ant-design-vue3.x 和 typescript4.x，实践 vue3.x 的新特性以及玩法，不得不说 vue3.x 的 Composition API 相比于 vue2.x 的 Options API 灵活很多，让我们可以灵活地组合组件逻辑，我们可以很轻松的使用 hooks 的形式去代替以前 mixins 等的写法。更多 hooks 可以参考[vueuse](https://vueuse.org/functions.html)
-
-## 代码规范
-
-- /src/components -- 公共组件文件名称大驼峰 (SearchTable)
-
-- 除公共组件之外文件夹名或组件名称统一使用小写字母或者小写字母与‘-’组合（module-file）
-
-- src/api | /src/hooks | /src/router | /src/store | /src/utils -- 系统方法使用小驼峰 (useHooks)
-
-- 元素名称统一用小写字母'-'组合 <a-form> <search-table>
+1. Fork 代码!
+2. 创建自己的分支: `git checkout -b feat/xxxx`
+3. 提交你的修改: `git commit -am 'feat(function): add xxxxx'`
+4. 推送您的分支: `git push origin feat/xxxx`
+5. 提交`pull request`
 
 ## Git 贡献提交规范
 
@@ -64,3 +70,13 @@ yarn build
   - `ci` 持续集成
   - `types` 类型定义文件更改
   - `wip` 开发中
+
+## 浏览器支持
+
+本地开发推荐使用`Chrome 80+` 浏览器
+
+支持现代浏览器, 不支持 IE
+
+| [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt=" Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>IE | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt=" Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Safari |
+| :-: | :-: | :-: | :-: | :-: |
+| not support | last 2 versions | last 2 versions | last 2 versions | last 2 versions |

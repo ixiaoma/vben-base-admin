@@ -1,0 +1,6 @@
+.nc-container {
+  margin-top: -15px;
+  :deep(.nc_wrapper) {
+    width: 100% !important;
+  }
+}

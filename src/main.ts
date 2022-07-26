@@ -1,47 +1,59 @@
-// import './publicPath'
-import { createApp } from 'vue';
+import 'virtual:windi-base.css';
+import 'virtual:windi-components.css';
+import '/@/design/index.less';
+import 'virtual:windi-utilities.css';
+// Register icon sprite
+import 'virtual:svg-icons-register';
 import App from './App.vue';
-import { setupRouter } from './router';
-import { setupStore } from '@/store';
-import { setupI18n } from '@/locales';
-import {
-  setupAntd,
-  setupAssets,
-  setupDirectives,
-  setupGlobalMethods,
-  setupCustomComponents,
-} from '@/plugins';
-if (process.env.NODE_ENV === 'production') {
-  const { mockXHR } = require('./mock');
-  mockXHR();
-}
+import { createApp } from 'vue';
+import { initAppConfigStore } from '/@/logics/initAppConfig';
+import { setupErrorHandle } from '/@/logics/error-handle';
+import { router, setupRouter } from '/@/router';
+import { setupRouterGuard } from '/@/router/guard';
+import { setupStore } from '/@/store';
+import { setupGlobDirectives } from '/@/directives';
+import { setupI18n } from '/@/locales/setupI18n';
+import { registerGlobComp } from '/@/components/registerGlobComp';
+import { checkStatus } from '/@/utils/http/axios/checkStatus';
+import { getCache, setCache, clearCache } from '/@/utils/auth';
 
-const app = createApp(App);
+async function bootstrap() {
+  const app = createApp(App);
 
-function setupPlugins() {
-  // 注册全局常用的ant-design-vue组件
-  setupAntd(app);
-  // 引入静态资源
-  setupAssets();
-  // 注册全局自定义组件,如：<svg-icon />
-  setupCustomComponents(app);
-  // 注册全局自定义指令，如：v-permission权限指令
-  setupDirectives(app);
-  // 注册全局方法，如：app.config.globalProperties.$message = message
-  setupGlobalMethods(app);
-}
-async function setupApp() {
-  // 挂载vuex状态管理
+  app.provide('$checkStatus', checkStatus);
+  app.provide('$getCache', getCache);
+  app.provide('$setCaches', setCache);
+  app.provide('$clearCache', clearCache);
+
+  // Configure store
   setupStore(app);
+
+  // Initialize internal system configuration
+  initAppConfigStore();
+
+  // Register global components
+  registerGlobComp(app);
+
   // Multilingual configuration
   // Asynchronous case: language files may be obtained from the server side
   await setupI18n(app);
-  // 挂载路由
-  await setupRouter(app);
+
+  // Configure routing
+  setupRouter(app);
+
+  // router-guard
+  setupRouterGuard(router);
+
+  // Register global directive
+  setupGlobDirectives(app);
+
+  // Configure global error handling
+  setupErrorHandle(app);
+
+  // https://next.router.vuejs.org/api/#isready
+  // await router.isReady();
 
   app.mount('#app');
 }
 
-setupPlugins();
-
-setupApp();
+bootstrap();

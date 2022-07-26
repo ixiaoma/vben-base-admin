@@ -1,11 +1,10 @@
 /**
  * Multi-language related operations
  */
-import type { LocaleType } from './config';
-import type { Locale } from 'ant-design-vue/es/locale-provider';
+import type { LocaleType } from '/#/config';
 
-import { i18n } from './';
-import { useLocaleStoreWithOut } from '@/store/modules/locale';
+import { i18n } from './setupI18n';
+import { useLocaleStoreWithOut } from '/@/store/modules/locale';
 import { unref, computed } from 'vue';
 import { loadLocalePool, setHtmlPageLang } from './helper';
 
@@ -23,16 +22,17 @@ function setI18nLanguage(locale: LocaleType) {
   } else {
     (i18n.global.locale as any).value = locale;
   }
-  localeStore.setLocale(locale);
+  localeStore.setLocaleInfo({ locale });
   setHtmlPageLang(locale);
 }
 
 export function useLocale() {
   const localeStore = useLocaleStoreWithOut();
   const getLocale = computed(() => localeStore.getLocale);
+  const getShowLocalePicker = computed(() => localeStore.getShowPicker);
 
-  const getAntdLocale = computed<Locale>((): any => {
-    return i18n.global.getLocaleMessage<{ antdLocale: Locale }>(unref(getLocale)).antdLocale;
+  const getAntdLocale = computed((): any => {
+    return i18n.global.getLocaleMessage(unref(getLocale))?.antdLocale ?? {};
   });
 
   // Switching the language will change the locale of useI18n
@@ -62,6 +62,7 @@ export function useLocale() {
 
   return {
     getLocale,
+    getShowLocalePicker,
     changeLocale,
     getAntdLocale,
   };
