@@ -1,5 +1,5 @@
 import type { ValidationRule } from 'ant-design-vue/lib/form/Form';
-import type { RuleObject } from 'ant-design-vue/lib/form/interface';
+// import type { RuleObject } from 'ant-design-vue/lib/form/interface';
 import { ref, computed, unref, Ref } from 'vue';
 import { useI18n } from '/@/hooks/web/useI18n';
 
@@ -35,7 +35,7 @@ export function useFormValid<T extends Object = any>(formRef: Ref<any>) {
   return { validForm };
 }
 
-export function useFormRules(formData?: Recordable) {
+export function useFormRules(_formData?: Recordable) {
   const { t } = useI18n();
 
   const getAccountFormRule = computed(() => createRule(t('sys.login.accountPlaceholder')));
@@ -43,21 +43,21 @@ export function useFormRules(formData?: Recordable) {
   const getSmsFormRule = computed(() => createRule(t('sys.login.smsPlaceholder')));
   const getMobileFormRule = computed(() => createRule(t('sys.login.mobilePlaceholder')));
 
-  const validatePolicy = async (_: RuleObject, value: boolean) => {
-    return !value ? Promise.reject(t('sys.login.policyPlaceholder')) : Promise.resolve();
-  };
+  // const validatePolicy = async (_: RuleObject, value: boolean) => {
+  //   return !value ? Promise.reject(t('sys.login.policyPlaceholder')) : Promise.resolve();
+  // };
 
-  const validateConfirmPassword = (password: string) => {
-    return async (_: RuleObject, value: string) => {
-      if (!value) {
-        return Promise.reject(t('sys.login.passwordPlaceholder'));
-      }
-      if (value !== password) {
-        return Promise.reject(t('sys.login.diffPwd'));
-      }
-      return Promise.resolve();
-    };
-  };
+  // const validateConfirmPassword = (password: string) => {
+  //   return async (_: RuleObject, value: string) => {
+  //     if (!value) {
+  //       return Promise.reject(t('sys.login.passwordPlaceholder'));
+  //     }
+  //     if (value !== password) {
+  //       return Promise.reject(t('sys.login.diffPwd'));
+  //     }
+  //     return Promise.resolve();
+  //   };
+  // };
 
   const getFormRules = computed((): { [k: string]: ValidationRule | ValidationRule[] } => {
     const accountFormRule = unref(getAccountFormRule);

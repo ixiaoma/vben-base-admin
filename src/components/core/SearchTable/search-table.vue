@@ -294,6 +294,7 @@
 <style lang="less" scoped>
   .tool-bar {
     padding: 10px 0;
+
     :deep(.ant-btn) {
       background: #fff;
       color: @primary-color;
@@ -302,8 +303,10 @@
       font-size: 14px;
     }
   }
+
   :deep(.ant-table-wrapper) {
     padding: 0 6px 6px 6px;
+
     .ant-table {
       .ant-table-title {
         display: flex;
@@ -322,11 +325,13 @@
   .actions > * {
     margin-right: 10px;
   }
+
   :deep(.ant-table-cell) {
     font-size: 12px;
     height: 40px;
     color: #333;
   }
+
   :deep(.ant-table-thead) {
     .ant-table-cell {
       font-weight: 500;

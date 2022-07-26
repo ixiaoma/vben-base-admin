@@ -148,22 +148,27 @@
   .table-search {
     border-bottom: 1px solid #ddd;
   }
+
   .reset-btn {
     background-color: #eaeaea;
     border-color: #eaeaea;
   }
+
   .open-btn {
     color: @primary-color;
     display: inline-block;
     margin-top: 8px;
   }
+
   .search-submitButtons {
     display: block;
     margin-bottom: 24px;
     white-space: nowrap;
+
     .ant-btn {
       border-radius: 4px;
     }
+
     .ant-btn-primary {
       background-color: @primary-color;
     }
@@ -176,6 +181,7 @@
   :deep(.ant-form-item) {
     margin-right: 0;
     margin-bottom: 18px;
+
     &.operate-button {
       margin-bottom: 0;
       text-align: center;

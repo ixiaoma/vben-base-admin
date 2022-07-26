@@ -158,6 +158,7 @@
   .check-item {
     @apply flex justify-between;
   }
+
   .column-fixed {
     .fixed-right,
     .fixed-left {
