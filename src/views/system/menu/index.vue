@@ -139,7 +139,7 @@
           iconType: 'warning',
           content: t('sys.api.delWarningMsg'),
           onOk: async function () {
-            const result: any = await menuStroe.delMenu({ id: record.id });
+            const result: any = await menuStroe.delMenuFun({ id: record.id });
             if (result.data.success) {
               checkStatus(result.data.errorCode, t('sys.api.delSuccessMsg'), 'message', 'success');
               handleSuccess();

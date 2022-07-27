@@ -9,13 +9,13 @@
   import { onBeforeUnmount, onMounted, ref } from 'vue';
   import Login from './Login.vue';
   import { useDesign } from '/@/hooks/web/useDesign';
-  import { useUserStore } from '/@/store/modules/user';
+  import { userLoginStore } from '../../../store/modules/login';
   import { usePermissionStore } from '/@/store/modules/permission';
   import { useAppStore } from '/@/store/modules/app';
   import { PermissionModeEnum } from '/@/enums/appEnum';
 
   const { prefixCls } = useDesign('st-login');
-  const userStore = useUserStore();
+  const userStore = userLoginStore();
   const permissionStore = usePermissionStore();
   const appStore = useAppStore();
   const userId = ref<Nullable<number | string>>(0);

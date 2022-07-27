@@ -2,7 +2,7 @@ import type { RouteRecordRaw } from 'vue-router';
 
 import { useAppStore } from '/@/store/modules/app';
 import { usePermissionStore } from '/@/store/modules/permission';
-import { useUserStore } from '/@/store/modules/user';
+import { userLoginStore } from '../../store/modules/login';
 
 import { useTabs } from './useTabs';
 
@@ -19,7 +19,7 @@ import { useMultipleTabStore } from '/@/store/modules/multipleTab';
 
 // User permissions related operations
 export function usePermission() {
-  const userStore = useUserStore();
+  const userStore = userLoginStore();
   const appStore = useAppStore();
   const permissionStore = usePermissionStore();
   const { closeAll } = useTabs(router);

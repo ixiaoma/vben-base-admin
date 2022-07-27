@@ -7,7 +7,7 @@ import {
   updateMenuParamsModel,
   addMenuParamsModel,
 } from '/@/api/system/model/menuModel';
-import { getMenuList, addMenuList, updateMenuList, delMenuList } from '/@/api/system/menu';
+import { getMenuList, addMenu, updateMenu, delMenu } from '/@/api/system/menu';
 
 export const useMenuStore = defineStore({
   id: 'system-menu',
@@ -17,7 +17,7 @@ export const useMenuStore = defineStore({
     /**
      * @description:获取菜单列表
      */
-    async getMenu(
+    async getMenuFun(
       param?: MenuParamsModel & {
         mode?: ErrorMessageMode;
       },
@@ -28,38 +28,38 @@ export const useMenuStore = defineStore({
     /**
      * @description:新增菜单
      */
-    async addMenu(
+    async addMenuFun(
       params: addMenuParamsModel & {
         isReturnNativeResponse?: boolean;
         mode?: ErrorMessageMode;
       },
     ): Promise<any> {
       const param: any = params;
-      return await addMenuList(param);
+      return await addMenu(param);
     },
     /**
      * @description:更新菜单
      */
-    async updateMenu(
+    async updateMenuFun(
       params: updateMenuParamsModel & {
         isReturnNativeResponse?: boolean;
         mode?: ErrorMessageMode;
       },
     ): Promise<any> {
       const param: any = params;
-      return await updateMenuList(param);
+      return await updateMenu(param);
     },
     /**
      * @description:删除菜单
      */
-    async delMenu(
+    async delMenuFun(
       params: delMenuParamsModel & {
         isReturnNativeResponse?: boolean;
         mode?: ErrorMessageMode;
       },
     ): Promise<any> {
       const param: any = params;
-      return await delMenuList(param);
+      return await delMenu(param);
     },
   },
 });

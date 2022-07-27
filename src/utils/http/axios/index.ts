@@ -16,7 +16,7 @@ import { setObjToUrlParams, deepMerge } from '/@/utils';
 import { useErrorLogStoreWithOut } from '/@/store/modules/errorLog';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { joinTimestamp, formatRequestDate } from './helper';
-// import { useUserStoreWithOut } from '/@/store/modules/user';
+// import { userLoginStoreWithOut } from '/@/store/modules/user';
 import { AxiosRetry } from '/@/utils/http/axios/axiosRetry';
 import { getCache } from '/@/utils/auth';
 import { TNT_KEY } from '/@/enums/cacheEnum';
@@ -155,7 +155,7 @@ const transform: AxiosTransform = {
     // const msg: string = response?.data?.error?.message ?? '';
     const err: string = error?.toString?.() ?? '';
     let errMessage = '';
-    // const userStore = useUserStoreWithOut();
+    // const userStore = userLoginStoreWithOut();
     try {
       if (error?.response?.status) {
         // switch (error?.response?.status) {

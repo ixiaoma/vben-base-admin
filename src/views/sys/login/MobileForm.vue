@@ -46,7 +46,7 @@
   import { CountdownInput } from '/@/components/CountDown';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useLoginState, useFormRules, useFormValid, LoginStateEnum } from './useLogin';
-  import { useUserStore } from '/@/store/modules/user';
+  import { userLoginStore } from '../../../store/modules/login';
 
   const formData = reactive({
     mobile: '',
@@ -56,7 +56,7 @@
   });
 
   const formRef = ref();
-  const USERSTORE = useUserStore();
+  const USERSTORE = userLoginStore();
   const loading = ref(false);
   const PARENT_LOGIN: any = inject('handleLogin');
   const countdownRef = ref<null | any>(CountdownInput);

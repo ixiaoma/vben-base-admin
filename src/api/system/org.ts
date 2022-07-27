@@ -1,4 +1,7 @@
 import { defHttp } from '/@/utils/http/axios';
+import { ErrorMessageMode } from '/#/axios';
+
+import { OrgTreeParamsModel, OrgTreeResultModel } from './model/orgModel';
 
 enum Api {
   GetOrgList = '/api/smartf-authx/authxOrg/listPage',
@@ -9,6 +12,9 @@ export const getOrgList = (data) => {
   return defHttp.post({ url: Api.GetOrgList, data });
 };
 //机构数
-export const getOrgTree = (data) => {
-  return defHttp.post({ url: Api.GetOrgTree, data });
+export const getOrgTree = (data: OrgTreeParamsModel, mode: ErrorMessageMode = 'none') => {
+  return defHttp.post<OrgTreeResultModel>(
+    { url: Api.GetOrgTree, data },
+    { isReturnNativeResponse: false, errorMessageMode: mode },
+  );
 };

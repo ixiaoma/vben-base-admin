@@ -41,7 +41,7 @@
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDesign } from '/@/hooks/web/useDesign';
   import { LoginStateEnum, useLoginState } from './useLogin';
-  import { useUserStore } from '/@/store/modules/user';
+  import { userLoginStore } from '../../../store/modules/login';
   import { urlDisassembly, isProdMode, isDevMode } from '/@/utils/env';
   import { TNT_KEY } from '/@/enums/cacheEnum';
 
@@ -53,7 +53,7 @@
 
   const MOBILEREF = ref<InstanceType<typeof MobileForm>>();
   const LOGINREF = ref<InstanceType<typeof LoginForm>>();
-  const USERSTORE = useUserStore();
+  const USERSTORE = userLoginStore();
   const TNTID = urlDisassembly().tnt;
   const checkStatus: any = inject('$checkStatus');
   const setCaches: any = inject('$setCaches');

@@ -84,11 +84,11 @@
   import XiaomiCharge from './xiaomi-charge.vue';
   import { useBattery } from '@/hooks/useBattery';
   import { useLockscreenStore } from '@/store/modules/lockscreen';
-  import { useUserStore } from '@/store/modules/user';
+  import { userLoginStore } from '@/store/modules/user';
   import { LOGIN_NAME } from '@/router/constant';
 
   const lockscreenStore = useLockscreenStore();
-  const userStore = useUserStore();
+  const userStore = userLoginStore();
   // const isLock = computed(() => lockscreenStore.isLock);
   // 获取本地时间
   const { month, day, hour, minute, week } = useTime();

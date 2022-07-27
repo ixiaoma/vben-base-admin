@@ -63,7 +63,7 @@
 <script lang="ts" setup>
   import { reactive, ref, unref, computed, inject } from 'vue';
   import { useI18n } from '/@/hooks/web/useI18n';
-  import { useUserStore } from '/@/store/modules/user';
+  import { userLoginStore } from '../../../store/modules/login';
   // import { useEnumStore } from '/@/store/modules/enum';
 
   import { LoginStateEnum, useLoginState, useFormRules, useFormValid } from './useLogin';
@@ -78,7 +78,7 @@
   const formRef = ref();
   const loading = ref(false);
   const rememberMe = ref(false);
-  const USERSTORE = useUserStore();
+  const USERSTORE = userLoginStore();
   const PARENT_LOGIN: any = inject('handleLogin');
 
   const { t } = useI18n();

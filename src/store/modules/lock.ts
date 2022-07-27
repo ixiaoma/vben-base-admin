@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 
 import { LOCK_INFO_KEY } from '/@/enums/cacheEnum';
 import { Persistent } from '/@/utils/cache/persistent';
-import { useUserStore } from './user';
+import { userLoginStore } from './login';
 
 interface LockState {
   lockInfo: Nullable<LockInfo>;
@@ -31,7 +31,7 @@ export const useLockStore = defineStore({
     },
     // Unlock
     async unLock(password?: string) {
-      const userStore = useUserStore();
+      const userStore = userLoginStore();
       if (this.lockInfo?.pwd === password) {
         this.resetLockInfo();
         return true;

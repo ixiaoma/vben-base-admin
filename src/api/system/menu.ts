@@ -9,30 +9,26 @@ import {
 } from './model/menuModel';
 
 enum Api {
-  // GetMenuList = '/getMenuList',
-  getMenuList = '/api/smartf-authx/authxResource/getResTree', // 获取菜单列表
-  addMenuList = '/api/smartf-authx/authxResource/add', // 新增菜单
-  updateMenuList = '/api/smartf-authx/authxResource/updateById', // 更新菜单
-  delMenuList = '/api/smartf-authx/authxResource/deleteByIdLogical', // 删除菜单
+  GetMenuList = '/api/smartf-authx/authxResource/getResTree', // 获取菜单列表
+  AddMenu = '/api/smartf-authx/authxResource/add', // 新增菜单
+  UpdateMenu = '/api/smartf-authx/authxResource/updateById', // 更新菜单
+  DelMenu = '/api/smartf-authx/authxResource/deleteByIdLogical', // 删除菜单
 }
 
 /**
  * @description:获取菜单列表
  */
 
-// export const getMenuList = () => {
-//   return defHttp.get<getMenuListResultModel>({ url: Api.GetMenuList });
-// };
 export const getMenuList = (params: MenuParamsModel) => {
-  return defHttp.post<getMenuListResultModel>({ url: Api.getMenuList, params });
+  return defHttp.post<getMenuListResultModel>({ url: Api.GetMenuList, params });
 };
 /**
  * @description:新增菜单
  */
 
-export const addMenuList = (params: addMenuParamsModel, mode: ErrorMessageMode = 'modal') => {
+export const addMenu = (params: addMenuParamsModel, mode: ErrorMessageMode = 'modal') => {
   return defHttp.post<getMenuListResultModel>(
-    { url: Api.addMenuList, params },
+    { url: Api.AddMenu, params },
     {
       isReturnNativeResponse: true,
       errorMessageMode: mode,
@@ -43,9 +39,9 @@ export const addMenuList = (params: addMenuParamsModel, mode: ErrorMessageMode =
  * @description:更新菜单
  */
 
-export const updateMenuList = (params: updateMenuParamsModel, mode: ErrorMessageMode = 'modal') => {
+export const updateMenu = (params: updateMenuParamsModel, mode: ErrorMessageMode = 'modal') => {
   return defHttp.post<getMenuListResultModel>(
-    { url: Api.updateMenuList, params },
+    { url: Api.UpdateMenu, params },
     {
       isReturnNativeResponse: true,
       errorMessageMode: mode,
@@ -56,9 +52,9 @@ export const updateMenuList = (params: updateMenuParamsModel, mode: ErrorMessage
  * @description:删除菜单
  */
 
-export const delMenuList = (params: delMenuParamsModel, mode: ErrorMessageMode = 'modal') => {
+export const delMenu = (params: delMenuParamsModel, mode: ErrorMessageMode = 'modal') => {
   return defHttp.post<getMenuListResultModel>(
-    { url: Api.delMenuList, params },
+    { url: Api.DelMenu, params },
     {
       isReturnNativeResponse: true,
       errorMessageMode: mode,

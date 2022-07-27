@@ -1,7 +1,7 @@
 import type { ErrorMessageMode, ModeType } from '/#/axios';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { useI18n } from '/@/hooks/web/useI18n';
-import { useUserStoreWithOut } from '/@/store/modules/user';
+import { userLoginStoreWithOut } from '../../../store/modules/login';
 
 const { createMessage, notification, createModal } = useMessage();
 
@@ -13,7 +13,7 @@ export function checkStatus(
   description?: string,
 ): void {
   const { t } = useI18n();
-  const userStore = useUserStoreWithOut();
+  const userStore = userLoginStoreWithOut();
   let errMessage = '';
   switch (status) {
     case 400:

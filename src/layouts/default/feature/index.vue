@@ -5,7 +5,7 @@
   import { useRootSetting } from '/@/hooks/setting/useRootSetting';
   import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting';
   import { useDesign } from '/@/hooks/web/useDesign';
-  import { useUserStoreWithOut } from '/@/store/modules/user';
+  import { userLoginStoreWithOut } from '../../../store/modules/login';
 
   import { SettingButtonPositionEnum } from '/@/enums/appEnum';
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent';
@@ -22,7 +22,7 @@
     setup() {
       const { getUseOpenBackTop, getShowSettingButton, getSettingButtonPosition, getFullContent } =
         useRootSetting();
-      const userStore = useUserStoreWithOut();
+      const userStore = userLoginStoreWithOut();
       const { prefixCls } = useDesign('setting-drawer-feature');
       const { getShowHeader } = useHeaderSetting();
 
