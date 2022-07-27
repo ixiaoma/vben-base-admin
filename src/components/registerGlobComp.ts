@@ -1,7 +1,27 @@
 import type { App } from 'vue';
 import { Button } from './Button';
-import { Layout, Checkbox, Form, Input, Row, Col } from 'ant-design-vue';
+import {
+  Layout,
+  Checkbox,
+  Form,
+  Input,
+  Row,
+  Col,
+  Descriptions,
+  Card,
+  Popover,
+} from 'ant-design-vue';
 
 export function registerGlobComp(app: App) {
-  app.use(Input).use(Button).use(Layout).use(Checkbox).use(Form).use(Row).use(Col);
+  app
+    .use(Input)
+    .use(Button)
+    .use(Layout)
+    .use(Checkbox)
+    .use(Form)
+    .use(Row)
+    .use(Col)
+    .use(Descriptions)
+    .use(Card)
+    .use(Popover);
 }

@@ -1,30 +1,32 @@
 <template>
-  <BasicTable
-    @register="registerTable"
-    :rowSelection="{
-      type: 'checkbox',
-      fixed: 'left',
-      selectedRowKeys: checkedKeys,
-      onChange: onSelectChange,
-    }"
-  >
-    <template #toolbar>
-      <a-button type="primary" @click="handleAssign">案件分配</a-button>
-    </template>
-    <template #bodyCell="{ column, record }">
-      <template v-if="column.key === 'action'">
-        <TableAction
-          :actions="[
-            {
-              label: '详情',
-              onClick: handleDetail.bind(null, record),
-            },
-          ]"
-        />
+  <div class="case-allocation">
+    <BasicTable
+      @register="registerTable"
+      :rowSelection="{
+        type: 'checkbox',
+        fixed: 'left',
+        selectedRowKeys: checkedKeys,
+        onChange: onSelectChange,
+      }"
+    >
+      <template #toolbar>
+        <a-button type="primary" @click="handleAssign">案件分配</a-button>
       </template>
-    </template>
-  </BasicTable>
-  <AssignModal @register="registerModal" @success="submitSuccess" />
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'action'">
+          <TableAction
+            :actions="[
+              {
+                label: '详情',
+                onClick: handleDetail.bind(null, record),
+              },
+            ]"
+          />
+        </template>
+      </template>
+    </BasicTable>
+    <AssignModal @register="registerModal" @success="submitSuccess" />
+  </div>
 </template>
 <script lang="ts" setup name="CaseAllocation">
   import { ref } from 'vue';
@@ -46,7 +48,6 @@
     columns: getBasicColumns(), //表头字段配置
     useSearchForm: true, //是否展示搜索区域
     formConfig: getFormConfig(), //查询表单字段配置
-    tableSetting: { fullScreen: true },
     showIndexColumn: false, //是否展示序号列
     //rowKey: 'id', //如果返回数据的key为"id"可不写这行
     actionColumn: {
@@ -69,12 +70,12 @@
     checkedKeys.value = selectedRowKeys;
   }
   //跳转详情页
-  function handleDetail({ id, mediateNo }: ReadonlyRecordable) {
+  function handleDetail({ mediateNo, caseNo }: ReadonlyRecordable) {
     router.push({
       name: 'CaseDetail',
       query: {
-        id,
         mediateNo,
+        caseNo,
       },
     });
   }

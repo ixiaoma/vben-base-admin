@@ -1,14 +1,18 @@
 <template>
-  案件详情
-  {{ id }}
-  {{ mediateNo }}
-  //TODO
+  <div class="case-detail">
+    <a-row :gutter="20">
+      <a-col :span="16">
+        <BaseInfo />
+      </a-col>
+      <a-col :span="8" />
+    </a-row>
+  </div>
 </template>
 <script lang="ts" setup name="CaseDetail">
-  // import { ref } from 'vue';
-  import { useRoute } from 'vue-router';
-
-  const route = useRoute();
-
-  const { id, mediateNo } = route.query;
+  import BaseInfo from './BaseInfo.vue';
 </script>
+<style lang="less" scoped>
+  .case-detail {
+    padding: 20px;
+  }
+</style>
