@@ -6,11 +6,11 @@ import { useUserStoreWithOut } from '/@/store/modules/user';
 const { createMessage, notification, createModal } = useMessage();
 
 export function checkStatus(
-  status: number,
+  status: number | string | boolean,
   msg: string,
   errorMessageMode: ErrorMessageMode = 'message',
   type: ModeType = 'error',
-  description: string,
+  description?: string,
 ): void {
   const { t } = useI18n();
   const userStore = useUserStoreWithOut();
@@ -57,8 +57,11 @@ export function checkStatus(
     case 505:
       errMessage = t('sys.api.errMsg505');
       break;
-    default:
+    case false:
       errMessage = msg || t('sys.api.errorMessage');
+      break;
+    default:
+      errMessage = msg || t('sys.api.apiRequestFailed');
   }
 
   if (errMessage) {
