@@ -10,6 +10,7 @@ import { cloneDeep, isEqual } from 'lodash-es';
 import { formatToDate } from '/@/utils/dateUtil';
 import { ACTION_COLUMN_FLAG, DEFAULT_ALIGN, INDEX_COLUMN_FLAG, PAGE_SIZE } from '../const';
 import { getEnum } from '/@/utils/commonUtil';
+import { formatPhone } from '/@/utils/formatUtil'
 
 function handleItem(item: BasicColumn, ellipsis: boolean) {
   const { key, dataIndex, children } = item;
@@ -63,6 +64,7 @@ function handleIndexColumn(
         return chooseEnum[record[column.dataIndex]]?.label;
       };
     }
+    // if()
   });
 
   if (!pushIndexColumns) return;
@@ -310,7 +312,13 @@ export function formatCell(text: string, format: CellFormat, record: Recordable,
       if (!dateFormat) {
         return text;
       }
+      console.log(dateFormat);
+      
       return formatToDate(text, dateFormat);
+    }
+
+    if(format === 'phone'){
+      return formatPhone(text)
     }
 
     // Map

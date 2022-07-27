@@ -3,6 +3,7 @@
     <a-row :gutter="20">
       <a-col :span="16">
         <BaseInfo />
+        <ContactInfo/>
       </a-col>
       <a-col :span="8" />
     </a-row>
@@ -10,6 +11,7 @@
 </template>
 <script lang="ts" setup name="CaseDetail">
   import BaseInfo from './BaseInfo.vue';
+  import ContactInfo from './ContactInfo.vue'
 </script>
 <style lang="less" scoped>
   .case-detail {

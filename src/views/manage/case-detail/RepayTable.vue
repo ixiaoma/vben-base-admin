@@ -20,7 +20,8 @@
     columns: [
       {
         title: '还款时间',
-        dataIndex: 'date | repayDate',
+        dataIndex: 'repayDate',
+        format: 'date|YYYY-MM-DD',
       },
       {
         title: '还款流水号',
@@ -31,7 +32,7 @@
         dataIndex: 'repayAmt',
       },
     ], //表头字段配置
-    maxHeight: 260,
+    maxHeight: 200,
     searchInfo: {
       //额外的请求参数
       caseNo,

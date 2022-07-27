@@ -9,6 +9,8 @@ interface BaseInfo {
   optionEnumCode?: string;
 }
 
+import { BasicColumn } from '/@/components/Table/src/types/table';
+//基本信息字段
 export function getBaseInfoField(): Array<BaseInfo> {
   return [
     {
@@ -74,5 +76,75 @@ export function getBaseInfoField(): Array<BaseInfo> {
       field: 'chainStatus',
       optionEnumCode: 'ChainStatusEnum',
     },
+  ];
+}
+//联系信息--电话列表字段
+export function getPhoneColumns(): BasicColumn[] {
+  return [
+    {
+      title: '联系人',
+      dataIndex: 'contactName',
+    },
+    {
+      title: '关系',
+      dataIndex: 'relation',
+      enumCode: 'ContactRelationTypeEnum',
+    },
+    {
+      title: '电话号码',
+      dataIndex: 'phone',
+      format: 'phone'
+    },
+    {
+      title: '来源',
+      dataIndex: 'source',
+    },
+    {
+      title: '号码检测',
+      dataIndex: 'isValid',
+    },
+    {
+      title: '外呼状态',
+      dataIndex: 'outboundStatus',
+    },
+    {
+      title: '可联状态',
+      dataIndex: 'touchStatus',
+    },
+    {
+      title: '历史接通比例',
+      dataIndex: 'connectedTimes',//------
+    },
+    {
+      title: '最近接通时间',
+      dataIndex: 'latestTelTime',
+      format: 'date|YYYY-MM-DD',
+    },
+    {
+      title: '备注',
+      dataIndex: 'memo',
+    }
+  ];
+}
+//联系信息--地址列表字段
+export function getAddressColumns(): BasicColumn[] {
+  return [
+    {
+      title: '地址类型',
+      dataIndex: 'addressType',
+      enumCode: 'AddressTypeEnum',
+    },
+    {
+      title: '地址',
+      dataIndex: 'address',
+    },
+    {
+      title: '来源',
+      dataIndex: 'source',
+    },
+    {
+      title: '是否有效',
+      dataIndex: 'isValid',
+    }
   ];
 }

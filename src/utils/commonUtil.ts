@@ -45,7 +45,7 @@ export function getApiEnumList(code: string) {
     return;
   }
   return new Promise((resolve) => {
-    const data: any = Persistent.getSession(code);
+    const data = Persistent.getSession(code);
     if (data) {
       resolve(data);
       return;

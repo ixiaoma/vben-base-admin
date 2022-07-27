@@ -1,3 +1,18 @@
+// 手机号掩码
+export function formatPhone(val: string) {
+  if(!val){
+    return null
+  }
+  let pat = /(\d{3})\d*(\d{4})/;
+  return val ? val.replace(pat, "$1****$2") : '';
+}
+
+/**
+ *
+ * description: 金额转换
+ *
+ */
+
 const toDecimal2 = (x) => {
   var f = parseFloat(x);
   if (isNaN(f)) {

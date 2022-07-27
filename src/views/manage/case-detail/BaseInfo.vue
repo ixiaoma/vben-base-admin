@@ -33,7 +33,7 @@
 
   import { formatToDateTime } from '/@/utils/dateUtil';
   import { getEnum, chainVerify } from '/@/utils/commonUtil';
-  import { regFenToYuanToThousands } from '/@/utils/moneyUtil';
+  import { regFenToYuanToThousands } from '/@/utils/formatUtil';
 
   const route = useRoute();
   const { caseNo, mediateNo } = route.query;

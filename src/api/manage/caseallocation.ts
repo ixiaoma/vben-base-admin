@@ -5,6 +5,8 @@ enum Api {
   GetCaseAllocationList = '/api/mediation/caseMediation/listAssignedCase',
   GetCaseDetail = '/api/caseinfo/caseBase/getBaseInfo',
   GetRepayList = '/api/casecollect/repay/repayPage',
+  GetContactInfo = '/api/caseinfo/case/detail/getAccusedPhoneInfo',
+  GetAddressInfo = '/api/caseinfo/case/detail/getAccusedAddressInfo'
 }
 
 //案件分配列表
@@ -20,4 +22,14 @@ export const getCaseDetail = (params) => {
 //还款情况列表
 export const getRepayList = (data) => {
   return defHttp.post({ url: Api.GetRepayList, data });
+};
+
+//联系信息--电话列表
+export const getContactInfoList = (params) => {
+  return defHttp.get({ url: Api.GetContactInfo, params });
+};
+
+//联系信息--地址列表
+export const getAddressInfoList = (params) => {
+  return defHttp.get({ url: Api.GetAddressInfo, params });
 };
