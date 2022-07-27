@@ -11,7 +11,7 @@ export function getAllParentPath<T = Recordable>(treeData: T[], path: string) {
   return (menuList || []).map((item) => item.path);
 }
 
-function joinParentPath(menus: Menu[], parentPath = '') {
+export function joinParentPath(menus: Menu[], parentPath = '', isComponent = false) {
   for (let index = 0; index < menus.length; index++) {
     const menu = menus[index];
     // https://next.router.vuejs.org/guide/essentials/nested-routes.html
@@ -21,11 +21,17 @@ function joinParentPath(menus: Menu[], parentPath = '') {
       // path doesn't start with /, nor is it a url, join parent path
       // menu.path = `${parentPath}/${menu.path}`;
       menu.path = `${parentPath}/${menu.path}`;
+      isComponent && (menu.component = `${menu.path}/index`);
     }
     if (menu?.children?.length) {
-      joinParentPath(menu.children, menu.meta?.hidePathForChildren ? parentPath : menu.path);
+      joinParentPath(
+        menu.children,
+        menu.meta?.hidePathForChildren ? parentPath : menu.path,
+        isComponent,
+      );
     }
   }
+  return menus;
 }
 
 // Parsing the menu module

@@ -8,7 +8,7 @@ import { useUserStore } from './user';
 import { useAppStoreWithOut } from './app';
 import { toRaw } from 'vue';
 import { transformObjToRoute, flatMultiLevelRoutes } from '/@/router/helper/routeHelper';
-import { transformRouteToMenu } from '/@/router/helper/menuHelper';
+import { transformRouteToMenu, joinParentPath } from '/@/router/helper/menuHelper';
 
 import projectSetting from '/@/settings/projectSetting';
 
@@ -191,6 +191,7 @@ export const usePermissionStore = defineStore({
             this.changePermissionCode();
             // routeList = (await getMockMenuList()) as AppRouteRecordRaw[];
             const list: any = (await menuStore.getMenu()) as AppRouteRecordRaw[];
+            const newList = list || joinParentPath(list, '', true);
             function listEdit(arr) {
               for (let i = 0; i < arr.length; i++) {
                 pathPrifxList.forEach((ele) => {
@@ -214,7 +215,7 @@ export const usePermissionStore = defineStore({
               }
               return arr;
             }
-            routeList = listEdit(cloneDeep(list));
+            routeList = listEdit(cloneDeep(newList));
           } catch (error) {
             console.error(error);
           }
