@@ -1,6 +1,7 @@
 <template>
   <div class="anticon" :class="getAppLogoClass" @click="goHome">
-    <img src="../../../assets/images/logo.png" />
+    <!-- <img src="../../../assets/images/logo.png" /> -->
+    <img src="../../../assets/images/logo.svg" />
     <div class="ml-2 truncate md:opacity-100" :class="getTitleClass" v-if="showTitle">
       {{ title }}
     </div>
@@ -62,6 +63,11 @@
     padding-left: 7px;
     cursor: pointer;
     transition: all 0.2s ease;
+
+    img {
+      width: 45px;
+      height: 35px;
+    }
 
     &.light {
       border-bottom: 1px solid @border-color-base;
