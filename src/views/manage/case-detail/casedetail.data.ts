@@ -220,3 +220,23 @@ export function getActionColumns(): BasicColumn[] {
     }
   ];
 }
+
+export function getLitigantInfo() {
+  const commonList = [
+    {label: '手机号', field: 'litigantPhone'},
+    {label: '身份证号', field: 'litigantIdCard'},
+  ]
+  return {
+    'accuser': [ //原告
+      {label: '联系人姓名', field: 'litigantName'},
+      {label: '法定代表人', field: 'legalPersonName'},
+      {label: '联系人手机号', field: 'litigantPhone'},
+      {label: '企业信用代码', field: 'litigantIdCard'},
+    ],
+    'accused': [ //被告
+      ...commonList,
+      {label: '地址', field: 'address'},
+    ],
+    'default_list': commonList
+  }
+}

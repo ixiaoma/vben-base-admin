@@ -38,10 +38,10 @@
   import { getPhoneColumns, getAddressColumns } from './casedetail.data';
   import { getContactInfoList, getAddressInfoList } from '/@/api/manage/caseallocation';
 
-  const route = useRoute();
-  const { caseNo } = route.query;
-
   const mode = ref('phone')
+
+  const { query } = useRoute();
+  const { caseNo } = query
 
   const tableProps = computed(()=>{
     return {
@@ -54,6 +54,7 @@
       } : undefined
     }
   })
+
   //初始化列表数据
   const [registerTable, {setProps, reload}] = useTable({
     ...unref(tableProps),
@@ -64,6 +65,7 @@
     useSearchForm: false, //是否展示搜索区域
     showIndexColumn: false, //是否展示序号列
   });
+  
   //电话/地址列表切换
   function radioChange(){
     setProps(unref(tableProps))

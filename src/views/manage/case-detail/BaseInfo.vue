@@ -35,8 +35,8 @@
   import { getEnum, chainVerify } from '/@/utils/commonUtil';
   import { regFenToYuanToThousands } from '/@/utils/formatUtil';
 
-  const route = useRoute();
-  const { caseNo, mediateNo } = route.query;
+  const { query } = useRoute();
+  const { caseNo, mediateNo } = query;
 
   const baseInfoList = ref(getBaseInfoField());
 
@@ -54,7 +54,7 @@
           ele.value = formatToDateTime();
         } else {
           if (ele.optionEnumCode) {
-            ele.value = getEnum(ele.optionEnumCode, false, fieldValue);
+            ele.value = getEnum(ele.optionEnumCode, false, fieldValue || 'UN_CHAINED');
           } else {
             ele.value = fieldValue;
           }

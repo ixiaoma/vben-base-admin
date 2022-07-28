@@ -10,6 +10,8 @@ enum Api {
   GetWorkPlaceMediateRecord = '/api/mediation/workplace/getMediateRecordInfo',
   GetCaseMediateRecord = '/api/caseinfo/case/detail/getMediateRecordInfo',
   GetActionRecord = '/api/mediation/workplace/getAccusedActionRecordInfo',
+  GetWorkPlaceLitigantInfo = '/api/mediation/workplace/getLitigantInfo',
+  GetCaseLitigantInfo = '/api/caseinfo/case/detail/getLitigantInfo',
 }
 
 //案件分配列表
@@ -41,8 +43,19 @@ export const getAddressInfoList = (params) => {
 export const getWorkPlaceMediateRecord = (params) => {
   return defHttp.get({ url: Api.GetWorkPlaceMediateRecord, params });
 };
+export const getCaseMediateRecord = (params) => {
+  return defHttp.get({ url: Api.GetCaseMediateRecord, params });
+};
 
 //操作记录
 export const getActionRecord = (params) => {
   return defHttp.get({ url: Api.GetActionRecord, params });
+};
+
+//当事人列表
+export const getWorkPlaceLitigantInfo = (params) => {
+  return defHttp.get({ url: Api.GetWorkPlaceLitigantInfo, params });
+};
+export const getCaseLitigantInfo = (params) => {
+  return defHttp.get({ url: Api.GetCaseLitigantInfo, params });
 };

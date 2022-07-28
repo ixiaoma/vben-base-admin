@@ -12,8 +12,8 @@
   import { BasicTable, useTable } from '/@/components/Table';
   import { getRepayList } from '/@/api/manage/caseallocation';
 
-  const route = useRoute();
-  const { caseNo } = route.query;
+  const { query } = useRoute();
+  const { caseNo } = query;
 
   const [registerTable] = useTable({
     api: getRepayList,

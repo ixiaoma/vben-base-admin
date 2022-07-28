@@ -6,7 +6,9 @@
         <ContactInfo />
         <RecordInfo />
       </a-col>
-      <a-col :span="8" />
+      <a-col :span="8">
+        <LitigantInfo/>
+      </a-col>
     </a-row>
   </div>
 </template>
@@ -14,6 +16,7 @@
   import BaseInfo from './BaseInfo.vue';
   import ContactInfo from './ContactInfo.vue'
   import RecordInfo from './RecordInfo.vue'
+  import LitigantInfo from './LitigantInfo.vue'
 </script>
 <style lang="less" scoped>
   .case-detail {

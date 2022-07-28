@@ -32,8 +32,8 @@
   import { getMeditorColumns, getActionColumns } from './casedetail.data';
   import { getWorkPlaceMediateRecord, getActionRecord } from '/@/api/manage/caseallocation';
 
-  const route = useRoute();
-  const { caseNo } = route.query;
+  const { query } = useRoute();
+  const { caseNo } = query;
 
   const mode = ref('meditorRecord')
 
