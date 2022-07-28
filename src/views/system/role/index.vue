@@ -70,6 +70,9 @@
           labelWidth: 120,
           schemas: searchFormSchema,
         },
+        //  handleSearchInfoFn(info) {
+        //   return info;
+        // },
         useSearchForm: true,
         showTableSetting: true,
         bordered: false,

@@ -1,49 +1,59 @@
 import { getAllRoleList, isAccountExist } from '/@/api/demo/system';
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
+import { formatToDateTime } from '/@/utils/dateUtil';
 
 export const columns: BasicColumn[] = [
   {
-    title: '用户名',
+    title: '用户账号',
     dataIndex: 'account',
     width: 120,
   },
   {
-    title: '昵称',
-    dataIndex: 'nickname',
+    title: '用户姓名',
+    dataIndex: 'name',
     width: 120,
   },
   {
-    title: '邮箱',
-    dataIndex: 'email',
+    title: '手机号',
+    dataIndex: 'phone',
     width: 120,
-  },
-  {
-    title: '创建时间',
-    dataIndex: 'createTime',
-    width: 180,
   },
   {
     title: '角色',
-    dataIndex: 'role',
+    dataIndex: 'roleNames',
     width: 200,
   },
   {
-    title: '备注',
-    dataIndex: 'remark',
+    title: '状态',
+    dataIndex: 'lockState',
+  },
+  {
+    title: '创建时间',
+    dataIndex: 'gmtCreate',
+    width: 180,
+    customRender: ({ record }) => {
+      return formatToDateTime(record.gmtCreate);
+    },
   },
 ];
 
 export const searchFormSchema: FormSchema[] = [
   {
     field: 'account',
-    label: '用户名',
+    label: '用户账号',
     component: 'Input',
     colProps: { span: 8 },
   },
   {
-    field: 'nickname',
-    label: '昵称',
+    field: 'name',
+    label: '用户姓名',
+    component: 'Input',
+    colProps: { span: 8 },
+  },
+  {
+    field: 'phone',
+    label: '手机号',
     component: 'Input',
     colProps: { span: 8 },
   },

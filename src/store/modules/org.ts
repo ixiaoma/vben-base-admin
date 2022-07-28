@@ -12,14 +12,14 @@ import {
 } from '/@/api/system/org';
 
 export const useOrgStore = defineStore({
-  id: 'system-User',
+  id: 'system-org',
   state: () => ({}),
   getters: {},
   actions: {
     /**
      * @description:获取组织机构树
      */
-    async getUserFun(
+    async getOrgTreeFun(
       param?: OrgTreeParamsModel & {
         mode?: ErrorMessageMode;
       },
