@@ -23,18 +23,18 @@ const system: AppRouteModule = {
       },
       component: () => import('/@/views/system/user/index.vue'),
     },
-    {
-      path: 'account_detail/:id',
-      name: 'AccountDetail',
-      meta: {
-        hideMenu: true,
-        title: t('routes.basic.system.account_detail'),
-        ignoreKeepAlive: true,
-        showMenu: false,
-        currentActiveMenu: '/system/user/index',
-      },
-      component: () => import('/@/views/system/user/AccountDetail.vue'),
-    },
+    // {
+    //   path: 'account_detail/:id',
+    //   name: 'AccountDetail',
+    //   meta: {
+    //     hideMenu: true,
+    //     title: t('routes.basic.system.account_detail'),
+    //     ignoreKeepAlive: true,
+    //     showMenu: false,
+    //     currentActiveMenu: '/system/user/index',
+    //   },
+    //   component: () => import('/@/views/system/user/AccountDetail.vue'),
+    // },
     {
       path: 'role',
       name: 'RoleManagement',

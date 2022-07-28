@@ -1,7 +1,7 @@
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
-import { h } from 'vue';
-// import { Tag } from 'ant-design-vue';
+// import { h } from 'vue';
+import { vueHFn } from '/@/utils/tableInnerHandle';
 import { Icon } from '/@/components/Icon';
 
 export const columns: BasicColumn[] = [
@@ -16,7 +16,7 @@ export const columns: BasicColumn[] = [
     dataIndex: 'icon',
     width: 80,
     customRender: ({ record }) => {
-      return h(Icon, { icon: record.icon });
+      return vueHFn({ elCss: { icon: record.icon }, el: Icon });
     },
   },
   {
@@ -35,10 +35,8 @@ export const columns: BasicColumn[] = [
     customRender: ({ record }) => {
       const status = record.resType;
       const enable = status === 'MENU';
-      // const color = enable ? 'green' : 'red';
       const text = enable ? '菜单' : '按钮';
-      return text;
-      // return h(Tag, { color: color }, () => text);
+      return vueHFn({ data: text });
     },
   },
 ];

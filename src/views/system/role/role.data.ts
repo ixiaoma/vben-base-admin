@@ -1,6 +1,7 @@
 import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
 import { formatToDateTime } from '/@/utils/dateUtil';
+import { vueHFn } from '/@/utils/tableInnerHandle';
 
 export const columns: BasicColumn[] = [
   {
@@ -21,7 +22,7 @@ export const columns: BasicColumn[] = [
     title: '创建时间',
     dataIndex: 'gmtCreate',
     customRender: ({ record }) => {
-      return formatToDateTime(record.gmtCreate);
+      return vueHFn({ data: formatToDateTime(record.gmtCreate) });
     },
     width: 180,
   },

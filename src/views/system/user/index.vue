@@ -11,7 +11,7 @@
         <TableAction
           :actions="[
             {
-              tooltip: '编辑',
+              label: '编辑',
               onClick: handleEdit.bind(null, record),
               ifShow: handlePrimission('edit', record),
             },
@@ -25,7 +25,7 @@
         />
       </template>
     </BasicTable>
-    <AccountModal @register="registerModal" @success="handleSuccess" />
+    <UserModal @register="registerModal" @success="handleSuccess" />
   </PageWrapper>
 </template>
 <script lang="ts">
@@ -34,21 +34,21 @@
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
   import { getUserList, getAdminUserList } from '/@/api/system/user';
   import { PageWrapper } from '/@/components/Page';
-  import OrgTree from './../org/orgTree.vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useMessage } from '/@/hooks/web/useMessage';
   import { useUserStore } from '/@/store/modules/user';
   import { usePermission } from '/@/hooks/web/usePermission';
 
   import { useModal } from '/@/components/Modal';
-  import AccountModal from './AccountModal.vue';
+  import OrgTree from '/@/views/system/org/OrgTree.vue';
+  import UserModal from './UserModal.vue';
 
-  import { columns, searchFormSchema } from './account.data';
+  import { columns, searchFormSchema } from './user.data';
   // import { useGo } from '/@/hooks/web/usePage';
 
   export default defineComponent({
     name: 'AccountManagement',
-    components: { BasicTable, PageWrapper, OrgTree, AccountModal, TableAction },
+    components: { BasicTable, PageWrapper, OrgTree, UserModal, TableAction },
     setup() {
       // const go = useGo();
       const { t } = useI18n();
@@ -97,12 +97,14 @@
           //租户超级管理员 接口请求 参数处理
           params.api = getAdminUserList;
           params.orgCode = selectedTreeData?.value?.orgCode ?? selectedTreeData?.value?.code;
+          delete params.groupCode;
         } else {
           // 普通用户 接口请求 参数处理
           params.api = getUserList;
           if (selectedTreeData?.value?.code === 'REGISTER_USER') {
             // 注册用户 参数处理
             params.orgCode = 'default';
+            delete params.groupCode;
             isReload && reload(params);
           } else {
             // 普通用户 参数处理
@@ -135,15 +137,21 @@
         }
         return result;
       }
+      /**
+       * @description: 新增用户
+       */
       function handleCreate() {
         openModal(true, {
+          treeData: selectedTreeData,
           isUpdate: false,
         });
       }
-
+      /**
+       * @description: 修改用户
+       */
       function handleEdit(record: Recordable) {
-        console.log(record);
         openModal(true, {
+          treeData: selectedTreeData,
           record,
           isUpdate: true,
         });

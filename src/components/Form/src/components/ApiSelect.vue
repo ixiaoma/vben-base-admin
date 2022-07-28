@@ -71,7 +71,6 @@
       const { t } = useI18n();
       // Embedded in the form, just use the hook binding to perform form verification
       const [state] = useRuleFormItem(props, 'value', 'change', emitData);
-
       const multiple = computed(() => {
         const { mode } = props;
         return mode;
