@@ -68,6 +68,7 @@ export interface SorterResult {
 }
 
 export interface FetchParams {
+  api?: any;
   searchInfo?: Recordable;
   page?: number;
   sortInfo?: Recordable;
@@ -168,6 +169,8 @@ export interface BasicTableProps<T = any> {
   afterFetch?: Fn;
   // 查询条件请求之前处理
   handleSearchInfoFn?: Fn;
+  // 外部查询方法回调
+  callBackSearchFn?: Fn;
   // 请求接口配置
   fetchSetting?: Partial<FetchSetting>;
   // 立即请求接口

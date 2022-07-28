@@ -57,6 +57,10 @@ export const basicProps = {
     type: Function as PropType<Fn>,
     default: null,
   },
+  callBackSearchFn: {
+    type: Function as PropType<Fn>,
+    default: null,
+  },
   fetchSetting: {
     type: Object as PropType<FetchSetting>,
     default: () => {

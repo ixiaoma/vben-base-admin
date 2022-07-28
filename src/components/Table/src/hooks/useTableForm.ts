@@ -33,11 +33,12 @@ export function useTableForm(
     return key?.replace?.(/form\-/, '') ?? '';
   }
 
-  function handleSearchInfoChange(info: Recordable) {
+  function handleSearchInfoChange(info?: Recordable) {
     const { handleSearchInfoFn } = unref(propsRef);
     if (handleSearchInfoFn && isFunction(handleSearchInfoFn)) {
       info = handleSearchInfoFn(info) || info;
     }
+    if (info?.isSendRequest) return;
     fetch({ searchInfo: info, page: 1 });
   }
 
