@@ -1,5 +1,18 @@
 <template>
   <div class="case-allocation">
+    <a-dropdown :trigger="['click']">
+      <a class="ant-dropdown-link" @click.prevent>
+        Click me
+        <DownOutlined />
+      </a>
+      <template #overlay>
+        <a-menu>
+          <a-menu-item v-for="item in caseTypeList" :key="item.value">
+            {{item.label}}
+          </a-menu-item>
+        </a-menu>
+      </template>
+    </a-dropdown>
     <BasicTable
       @register="registerTable"
       :rowSelection="{
@@ -31,12 +44,29 @@
 <script lang="ts" setup name="CaseAllocation">
   import { ref } from 'vue';
   import { useRouter } from 'vue-router';
-  import { isSelect } from '/@/utils/commonUtil';
+
   import AssignModal from './AssignModal.vue';
+  import { DownOutlined } from '@ant-design/icons-vue'
+
   import { useModal } from '/@/components/Modal';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
+
+  import { isSelect } from '/@/utils/commonUtil';
   import { getBasicColumns, getFormConfig } from './allocation.data';
   import { getCaseAllocationList } from '/@/api/manage/caseallocation';
+
+  const caseTypeList =  [
+    {
+      value: 1009,
+      label: '要素式案件'
+    },{
+      value: 1001,
+      label: '通用案件'
+    },{
+      value: 1002,
+      label: '执前督促案件'
+    }
+  ]
 
   const router = useRouter();
   const checkedKeys = ref<Array<string | number>>([]); //当前列表选中的key

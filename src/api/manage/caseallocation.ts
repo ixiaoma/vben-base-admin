@@ -2,6 +2,7 @@ import { defHttp } from '/@/utils/http/axios';
 import { DemoListGetResultModel } from './model/caseAllocationModel';
 
 enum Api {
+  GetCaseBaseList = '/api/caseinfo/caseBase/listPage',
   GetCaseAllocationList = '/api/mediation/caseMediation/listAssignedCase',
   GetCaseDetail = '/api/caseinfo/caseBase/getBaseInfo',
   GetRepayList = '/api/casecollect/repay/repayPage',
@@ -13,18 +14,33 @@ enum Api {
   GetWorkPlaceLitigantInfo = '/api/mediation/workplace/getLitigantInfo',
   GetCaseLitigantInfo = '/api/caseinfo/case/detail/getLitigantInfo',
 }
+/**
+ *
+ * description:案件分配列表
+ *
+ */
 
-//案件分配列表
+//待分配
+export const getCaseBaseList = (data) => {
+  return defHttp.post<DemoListGetResultModel>({ url: Api.GetCaseBaseList, data });
+};
+//已分配列表
 export const getCaseAllocationList = (data) => {
   return defHttp.post<DemoListGetResultModel>({ url: Api.GetCaseAllocationList, data });
 };
 
-//案件详情
+/**
+ *
+ * description:案件详情
+ *
+ */
+
+//基本信息
 export const getCaseDetail = (params) => {
   return defHttp.get({ url: Api.GetCaseDetail, params });
 };
 
-//还款情况列表
+//基本信息---还款情况列表
 export const getRepayList = (data) => {
   return defHttp.post({ url: Api.GetRepayList, data });
 };

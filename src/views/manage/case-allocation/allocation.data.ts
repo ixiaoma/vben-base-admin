@@ -1,13 +1,17 @@
-import { FormProps } from '/@/components/Table';
-import { BasicColumn } from '/@/components/Table/src/types/table';
 import { getOrgList } from '/@/api/sys/org';
+
+import { StatusEnum } from '/@/enums/commonEnum';
 import { getApiEnumList } from '/@/utils/commonUtil';
 
-export function getBasicColumns(): BasicColumn[] {
+import { FormProps } from '/@/components/Table';
+import { BasicColumn } from '/@/components/Table/src/types/table';
+
+export function getBasicColumns(caseType = 1009): BasicColumn[] {
   return [
     {
       title: '调解号',
       dataIndex: 'mediateNo',
+      ifShow: caseType === 1009
     },
     {
       title: '原告',
@@ -64,10 +68,6 @@ export function getBasicColumns(): BasicColumn[] {
       dataIndex: 'batchNo',
     },
     {
-      title: '案件编号',
-      dataIndex: 'applyOrgCaseNo',
-    },
-    {
       title: '受理日期',
       dataIndex: 'acceptDate',
     },
@@ -84,20 +84,25 @@ export function getBasicColumns(): BasicColumn[] {
       dataIndex: 'reasonDisplayName',
     },
     {
-      title: '产品',
-      dataIndex: 'prodName',
-    },
-    {
       title: '利息(元)',
       dataIndex: 'interestAmount',
     },
     {
       title: '锁定状态',
       dataIndex: 'locked',
+      enumProp: StatusEnum
+    },
+    {
+      title: '案件编号',
+      dataIndex: 'applyOrgCaseNo',
+    },
+    {
+      title: '产品',
+      dataIndex: 'prodName',
     },
   ];
 }
-
+//show
 export function getFormConfig(): Partial<FormProps> {
   return {
     labelWidth: 100,
