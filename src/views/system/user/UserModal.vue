@@ -4,6 +4,17 @@
       <template #nameSignPicSlot="{ model, field }">
         <a-input v-model:value="model[field]" />
       </template>
+      <template #workPlaceSlot="{ model }">
+        <!-- <span>{{model}}</span> -->
+        <div class="user-place">
+          <a-select v-model:value="model.city">
+            <!-- <a-select-option v-for="item in addressList"  :key="item.value" :value="item.label">{{item.label}}</a-select-option> -->
+          </a-select>
+          <a-select v-model:value="model.province" />
+          <a-select v-model:value="model.district" />
+        </div>
+        <a-input v-model:value="model.detailAddress" />
+      </template>
     </BasicForm>
   </BasicModal>
 </template>
@@ -14,6 +25,7 @@
   import { accountFormSchema } from './user.data';
   import { useUserStore } from '/@/store/modules/user';
   import { useI18n } from '/@/hooks/web/useI18n';
+  // import {addressList} from '/@/utils/address'
 
   export default defineComponent({
     name: 'AccountModal',
@@ -111,3 +123,6 @@
     },
   });
 </script>
+<style lang="less" scoped>
+  @import '/@/styles/user.less';
+</style>
