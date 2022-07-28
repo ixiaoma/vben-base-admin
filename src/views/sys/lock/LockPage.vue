@@ -79,7 +79,7 @@
 <script lang="ts" setup>
   import { ref, computed } from 'vue';
   import { Input } from 'ant-design-vue';
-  import { useUserStore } from '/@/store/modules/user';
+  import { userLoginStore } from '../../../store/modules/login';
   import { useLockStore } from '/@/store/modules/lock';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useNow } from './useNow';
@@ -96,7 +96,7 @@
 
   const { prefixCls } = useDesign('lock-page');
   const lockStore = useLockStore();
-  const userStore = useUserStore();
+  const userStore = userLoginStore();
 
   const { hour, month, minute, meridiem, year, day, week } = useNow(true);
 

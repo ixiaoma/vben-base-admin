@@ -24,7 +24,7 @@
   import { useAppStore } from '/@/store/modules/app';
   import { usePermissionStore } from '/@/store/modules/permission';
   import { useMultipleTabStore } from '/@/store/modules/multipleTab';
-  import { useUserStore } from '/@/store/modules/user';
+  import { userLoginStore } from '../../../../store/modules/login';
 
   import { useDesign } from '/@/hooks/web/useDesign';
   import { useI18n } from '/@/hooks/web/useI18n';
@@ -44,7 +44,7 @@
       const { t } = useI18n();
       const { createSuccessModal, createMessage } = useMessage();
       const tabStore = useMultipleTabStore();
-      const userStore = useUserStore();
+      const userStore = userLoginStore();
       const appStore = useAppStore();
 
       function handleCopy() {

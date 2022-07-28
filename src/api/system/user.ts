@@ -1,93 +1,105 @@
 import { defHttp } from '/@/utils/http/axios';
 import {
-  LoginParams,
-  GetUserInfoModel,
-  SendSmsCodeParams,
-  LoginByPhoneParams,
+  GetUserListResultModel,
+  UserParamsModel,
+  DelUserParamsModel,
+  AddUserParamsModel,
+  UpdateUserParamsModel,
 } from './model/userModel';
 
 import { ErrorMessageMode } from '/#/axios';
 
 enum Api {
-  Login = '/api/smartf-authx/authx/login',
-  Logout = '/api/smartf-authx/authx/logout',
-  GetUserInfo = '/api/smartf-authx/authx/getLoginUser',
-  SendSmsCode = '/api/smartf-authx/authx/sendSmsCode',
-  GetPermCode = '/getPermCode',
-  TestRetry = '/testRetry',
+  GetUserList = '/api/smartf-authx/authxUser/listPage', // 获取用户列表
+  AddUser = '/api/smartf-authx/authxUser/add', // 新增用户
+  DelUser = '/api/smartf-authx/authxUser/deleteByIdLogical', // 删除用户
+  UpdateUser = '/api/smartf-authx/authxUser/updateById', // 修改用户
+  AddAdminUser = '/api/smartf-authx/authxUser/addAdmin', // 添加超级管理员用户
+  UpdateAdminUser = '/api/smartf-authx/authxUser/updateAdminById', // 修改超级管理员用户
+  GetAdminUserList = '/api/smartf-authx/authxUser/listAdminPage', // 查询超级管理员用户
+  UploadImg = '/api/smartf-authx/authxUser/upload', // 图片上传
+  DownLoadImg = '/api/smartf-authx/authxUser/download?ossPath=', // 图片下载
 }
 
 /**
- * @description: 发送验证码
+ * @description:获取用户列表
  */
-export function sendSmsCodeApi(params: SendSmsCodeParams, mode: ErrorMessageMode = 'modal') {
-  return defHttp.post(
-    {
-      url: Api.SendSmsCode,
-      params,
-    },
+
+export const getUserList = (params: UserParamsModel) => {
+  return defHttp.post<GetUserListResultModel>({ url: Api.GetUserList, params });
+};
+/**
+ * @description:新增用户
+ */
+
+export const addUser = (params: AddUserParamsModel, mode: ErrorMessageMode = 'modal') => {
+  return defHttp.post<GetUserListResultModel>(
+    { url: Api.AddUser, params },
     {
       isReturnNativeResponse: true,
       errorMessageMode: mode,
     },
   );
-}
+};
 /**
- * @description: 手机号登录
+ * @description:更新用户
  */
-export function loginByPhoneApi(params: LoginByPhoneParams, mode: ErrorMessageMode = 'modal') {
-  return defHttp.post(
-    {
-      url: Api.Login,
-      params,
-    },
+
+export const updateUser = (params: UpdateUserParamsModel, mode: ErrorMessageMode = 'modal') => {
+  return defHttp.post<GetUserListResultModel>(
+    { url: Api.UpdateUser, params },
     {
       isReturnNativeResponse: true,
       errorMessageMode: mode,
     },
   );
-}
+};
 /**
- * @description: 账号登录
+ * @description:删除用户
  */
-export function loginApi(params: LoginParams, mode: ErrorMessageMode = 'modal') {
-  return defHttp.post(
-    {
-      url: Api.Login,
-      params,
-    },
+
+export const delUser = (params: DelUserParamsModel, mode: ErrorMessageMode = 'modal') => {
+  return defHttp.post<GetUserListResultModel>(
+    { url: Api.DelUser, params },
     {
       isReturnNativeResponse: true,
       errorMessageMode: mode,
     },
   );
-}
-
+};
 /**
- * @description: getUserInfo 获取用户信息
+ * @description:获取超级管理员用户列表
  */
-export function getUserInfo() {
-  return defHttp.post<GetUserInfoModel>({ url: Api.GetUserInfo });
-}
 
-export function getPermCode() {
-  return defHttp.get<string[]>({ url: Api.GetPermCode });
-}
+export const getAdminUserList = (params: UserParamsModel) => {
+  return defHttp.post<GetUserListResultModel>({ url: Api.GetAdminUserList, params });
+};
+/**
+ * @description:新增超级管理员用户
+ */
 
-// 登出
-export function doLogout() {
-  return defHttp.post({ url: Api.Logout });
-}
-
-export function testRetry() {
-  return defHttp.get(
-    { url: Api.TestRetry },
+export const addAdminUser = (params: AddUserParamsModel, mode: ErrorMessageMode = 'modal') => {
+  return defHttp.post<GetUserListResultModel>(
+    { url: Api.AddAdminUser, params },
     {
-      retryRequest: {
-        isOpenRetry: true,
-        count: 5,
-        waitTime: 1000,
-      },
+      isReturnNativeResponse: true,
+      errorMessageMode: mode,
     },
   );
-}
+};
+/**
+ * @description:更新超级管理员用户
+ */
+
+export const updateAdminUser = (
+  params: UpdateUserParamsModel,
+  mode: ErrorMessageMode = 'modal',
+) => {
+  return defHttp.post<GetUserListResultModel>(
+    { url: Api.UpdateAdminUser, params },
+    {
+      isReturnNativeResponse: true,
+      errorMessageMode: mode,
+    },
+  );
+};

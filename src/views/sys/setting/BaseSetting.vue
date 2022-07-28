@@ -32,7 +32,7 @@
   import headerImg from '/@/assets/images/header.jpg';
   import { accountInfoApi } from '/@/api/demo/account';
   import { baseSetschemas } from './data';
-  import { useUserStore } from '/@/store/modules/user';
+  import { userLoginStore } from '../../../store/modules/login';
   import { uploadApi } from '/@/api/sys/upload';
 
   export default defineComponent({
@@ -43,7 +43,7 @@
     },
     setup() {
       const { createMessage } = useMessage();
-      const userStore = useUserStore();
+      const userStore = userLoginStore();
 
       const [register, { setFieldsValue }] = useForm({
         labelWidth: 120,

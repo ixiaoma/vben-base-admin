@@ -40,7 +40,7 @@
 
   import { defineComponent, computed } from 'vue';
 
-  import { useUserStore } from '/@/store/modules/user';
+  import { userLoginStore } from '../../../../../store/modules/login';
   import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { useDesign } from '/@/hooks/web/useDesign';
@@ -70,7 +70,7 @@
       const { prefixCls } = useDesign('header-user-dropdown');
       const { t } = useI18n();
       const { getShowDoc, getUseLockPage } = useHeaderSetting();
-      const userStore = useUserStore();
+      const userStore = userLoginStore();
 
       const getUserInfo = computed(() => {
         const { name = '', avatar, desc } = userStore.getUserInfo || {};

@@ -51,6 +51,8 @@ export interface Menu {
   tag?: MenuTag;
 
   hideMenu?: boolean;
+
+  component?: Component | string;
 }
 
 export interface MenuModule {

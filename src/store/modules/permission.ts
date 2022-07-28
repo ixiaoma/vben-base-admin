@@ -4,11 +4,11 @@ import { defineStore } from 'pinia';
 import { store } from '/@/store';
 // import { useI18n } from '/@/hooks/web/useI18n';
 import { useMenuStore } from './menu';
-import { useUserStore } from './user';
+import { userLoginStore } from './login';
 import { useAppStoreWithOut } from './app';
 import { toRaw } from 'vue';
 import { transformObjToRoute, flatMultiLevelRoutes } from '/@/router/helper/routeHelper';
-import { transformRouteToMenu } from '/@/router/helper/menuHelper';
+import { transformRouteToMenu, joinParentPath } from '/@/router/helper/menuHelper';
 
 import projectSetting from '/@/settings/projectSetting';
 
@@ -102,7 +102,7 @@ export const usePermissionStore = defineStore({
     },
     async buildRoutesAction(): Promise<AppRouteRecordRaw[]> {
       // const { t } = useI18n();
-      const userStore = useUserStore();
+      const userStore = userLoginStore();
       const menuStore = useMenuStore();
       const appStore = useAppStoreWithOut();
 
@@ -190,7 +190,8 @@ export const usePermissionStore = defineStore({
           try {
             this.changePermissionCode();
             // routeList = (await getMockMenuList()) as AppRouteRecordRaw[];
-            const list: any = (await menuStore.getMenu()) as AppRouteRecordRaw[];
+            const list: any = (await menuStore.getMenuFun()) as AppRouteRecordRaw[];
+            const newList = list || joinParentPath(list, '', true);
             function listEdit(arr) {
               for (let i = 0; i < arr.length; i++) {
                 pathPrifxList.forEach((ele) => {
@@ -214,7 +215,7 @@ export const usePermissionStore = defineStore({
               }
               return arr;
             }
-            routeList = listEdit(cloneDeep(list));
+            routeList = listEdit(cloneDeep(newList));
           } catch (error) {
             console.error(error);
           }

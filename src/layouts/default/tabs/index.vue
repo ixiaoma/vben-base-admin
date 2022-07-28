@@ -39,7 +39,7 @@
   import { useGo } from '/@/hooks/web/usePage';
 
   import { useMultipleTabStore } from '/@/store/modules/multipleTab';
-  import { useUserStore } from '/@/store/modules/user';
+  import { userLoginStore } from '../../../store/modules/login';
 
   import { initAffixTabs, useTabsDrag } from './useMultipleTabs';
   import { useDesign } from '/@/hooks/web/useDesign';
@@ -65,7 +65,7 @@
 
       useTabsDrag(affixTextList);
       const tabStore = useMultipleTabStore();
-      const userStore = useUserStore();
+      const userStore = userLoginStore();
       const router = useRouter();
 
       const { prefixCls } = useDesign('multiple-tabs');

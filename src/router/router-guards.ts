@@ -1,5 +1,5 @@
 import { isNavigationFailure, Router } from 'vue-router';
-import { useUserStore } from '@/store/modules/user';
+import { userLoginStore } from '@/store/modules/user';
 import { useKeepAliveStore } from '@/store/modules/keepAlive';
 import NProgress from 'nprogress'; // progress bar
 import { ACCESS_TOKEN_KEY } from '@/enums/cacheEnum';
@@ -12,7 +12,7 @@ const defaultRoutePath = '/dashboard/welcome';
 
 export function createRouterGuards(router: Router, whiteNameList: WhiteNameList) {
   router.beforeEach(async (to, from, next) => {
-    const userStore = useUserStore();
+    const userStore = userLoginStore();
     NProgress.start(); // start progress bar
     const token = Storage.get(ACCESS_TOKEN_KEY, null);
 

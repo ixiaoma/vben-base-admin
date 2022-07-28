@@ -3,7 +3,7 @@ import type { Router, RouteRecordRaw } from 'vue-router';
 import { usePermissionStoreWithOut } from '/@/store/modules/permission';
 
 import { PageEnum } from '/@/enums/pageEnum';
-import { useUserStoreWithOut } from '/@/store/modules/user';
+import { userLoginStoreWithOut } from '../../store/modules/login';
 
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic';
 
@@ -16,7 +16,7 @@ const ROOT_PATH = RootRoute.path;
 const whitePathList: PageEnum[] = [LOGIN_PATH];
 
 export function createPermissionGuard(router: Router) {
-  const userStore = useUserStoreWithOut();
+  const userStore = userLoginStoreWithOut();
   const permissionStore = usePermissionStoreWithOut();
   router.beforeEach(async (to, from, next) => {
     if (

@@ -62,7 +62,7 @@
         setFieldsValue({ ...data.record });
         // }
         // const treeData = await getMenuList({});
-        const menuData = await menuStroe.getMenu({});
+        const menuData = await menuStroe.getMenuFun({});
         const treeData = [
           {
             resName: '根菜单',
@@ -92,14 +92,14 @@
             if (unref(isUpdate)) {
               // 更新
               values.id = rowData.id;
-              result = await menuStroe.updateMenu(values);
+              result = await menuStroe.updateMenuFun(values);
             } else {
               // 行内新增
-              result = await menuStroe.addMenu(values);
+              result = await menuStroe.addMenuFun(values);
             }
           } else {
             // 全局新增
-            result = await menuStroe.addMenu(values);
+            result = await menuStroe.addMenuFun(values);
           }
           if (result.data.success) {
             checkStatus(result.data.errorCode, t('sys.api.saveSuccessMsg'), 'message', 'success');

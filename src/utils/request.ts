@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { message as $message } from 'ant-design-vue';
 import { ACCESS_TOKEN_KEY } from '@/enums/cacheEnum';
 import { Storage } from '@/utils/storage';
-import { useUserStore } from '@/store/modules/user';
+import { userLoginStore } from '@/store/modules/user';
 // import {ExclamationCircleOutlined} from '@ant-design/icons'
 
 export interface RequestOptions {
@@ -108,7 +108,7 @@ export const request = async <T = any>(
   try {
     const { successMsg, errorMsg, permCode, isMock, isGetDataDirectly = true } = options;
     // 如果当前是需要鉴权的接口 并且没有权限的话 则终止请求发起
-    if (permCode && !useUserStore().perms.includes(permCode)) {
+    if (permCode && !userLoginStore().perms.includes(permCode)) {
       return $message.error('你没有访问该接口的权限，请联系管理员！');
     }
     const fullUrl = `${(isMock ? baseMockUrl : baseApiUrl) + config.url}`;

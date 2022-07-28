@@ -6,7 +6,7 @@ import { clone } from 'lodash-es';
 import type { RequestOptions, Result } from '/#/axios';
 import type { AxiosTransform, CreateAxiosOptions } from './axiosTransform';
 import { VAxios } from './Axios';
-// import { checkStatus } from './checkStatus';
+import { checkStatus } from './checkStatus';
 import { useGlobSetting } from '/@/hooks/setting';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { RequestEnum, ContentTypeEnum } from '/@/enums/httpEnum';
@@ -16,8 +16,10 @@ import { setObjToUrlParams, deepMerge } from '/@/utils';
 import { useErrorLogStoreWithOut } from '/@/store/modules/errorLog';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { joinTimestamp, formatRequestDate } from './helper';
-// import { useUserStoreWithOut } from '/@/store/modules/user';
+// import { userLoginStoreWithOut } from '/@/store/modules/user';
 import { AxiosRetry } from '/@/utils/http/axios/axiosRetry';
+import { getCache } from '/@/utils/auth';
+import { TNT_KEY } from '/@/enums/cacheEnum';
 
 const globSetting = useGlobSetting();
 const urlPrefix = globSetting.urlPrefix;
@@ -33,7 +35,6 @@ const transform: AxiosTransform = {
   transformResponseHook: (res: AxiosResponse<Result>, options: RequestOptions) => {
     const { t } = useI18n();
     const { isTransformResponse, isReturnNativeResponse } = options;
-
     // 是否返回原生响应头 比如：需要获取响应头时使用该属性
     if (isReturnNativeResponse) {
       return res;
@@ -70,7 +71,7 @@ const transform: AxiosTransform = {
   // 请求之前处理config
   beforeRequestHook: (config, options) => {
     const { apiUrl, joinPrefix, joinParamsToUrl, formatDate, joinTime = true, urlPrefix } = options;
-
+    const tenantId = getCache(TNT_KEY);
     if (joinPrefix) {
       config.url = `${urlPrefix}${config.url}`;
     }
@@ -80,6 +81,8 @@ const transform: AxiosTransform = {
     }
     const params = config.params || {};
     const data = config.data || false;
+    params.tnt = tenantId;
+    data && (data.tnt = tenantId);
     formatDate && data && !isString(data) && formatRequestDate(data);
     if (config.method?.toUpperCase() === RequestEnum.GET) {
       if (!isString(params)) {
@@ -122,6 +125,8 @@ const transform: AxiosTransform = {
   requestInterceptors: (config, options) => {
     // 请求之前处理config
     const token = getToken();
+    const tenantId = getCache(TNT_KEY);
+    (config as Recordable).headers.tnt = tenantId;
     if (token && (config as Recordable)?.requestOptions?.withToken !== false) {
       // jwt token
       (config as Recordable).headers.Authorization = options.authenticationScheme
@@ -150,53 +155,54 @@ const transform: AxiosTransform = {
     // const msg: string = response?.data?.error?.message ?? '';
     const err: string = error?.toString?.() ?? '';
     let errMessage = '';
-    // const userStore = useUserStoreWithOut();
+    // const userStore = userLoginStoreWithOut();
     try {
       if (error?.response?.status) {
-        switch (error?.response?.status) {
-          case 400:
-            errMessage = `${message}`;
-            break;
-          // 401: Not logged in
-          // Jump to the login page if not logged in, and carry the path of the current page
-          // Return to the current page after successful login. This step needs to be operated on the login page.
-          case 401:
-            errMessage = t('sys.api.errMsg401');
-            // userStore.logout(true);smartf-authx/authx/getLoginUser
-            break;
-          case 403:
-            errMessage = t('sys.api.errMsg403');
-            break;
-          // 404请求不存在
-          case 404:
-            errMessage = t('sys.api.errMsg404');
-            break;
-          case 405:
-            errMessage = t('sys.api.errMsg405');
-            break;
-          case 408:
-            errMessage = t('sys.api.errMsg408');
-            break;
-          case 500:
-            errMessage = t('sys.api.errMsg500');
-            break;
-          case 501:
-            errMessage = t('sys.api.errMsg501');
-            break;
-          case 502:
-            errMessage = t('sys.api.errMsg502');
-            break;
-          case 503:
-            errMessage = t('sys.api.errMsg503');
-            break;
-          case 504:
-            errMessage = t('sys.api.errMsg504');
-            break;
-          case 505:
-            errMessage = t('sys.api.errMsg505');
-            break;
-          default:
-        }
+        // switch (error?.response?.status) {
+        //   case 400:
+        //     errMessage = `${message}`;
+        //     break;
+        //   // 401: Not logged in
+        //   // Jump to the login page if not logged in, and carry the path of the current page
+        //   // Return to the current page after successful login. This step needs to be operated on the login page.
+        //   case 401:
+        //     errMessage = t('sys.api.errMsg401');
+        //     // userStore.logout(true);smartf-authx/authx/getLoginUser
+        //     break;
+        //   case 403:
+        //     errMessage = t('sys.api.errMsg403');
+        //     break;
+        //   // 404请求不存在
+        //   case 404:
+        //     errMessage = t('sys.api.errMsg404');
+        //     break;
+        //   case 405:
+        //     errMessage = t('sys.api.errMsg405');
+        //     break;
+        //   case 408:
+        //     errMessage = t('sys.api.errMsg408');
+        //     break;
+        //   case 500:
+        //     errMessage = t('sys.api.errMsg500');
+        //     break;
+        //   case 501:
+        //     errMessage = t('sys.api.errMsg501');
+        //     break;
+        //   case 502:
+        //     errMessage = t('sys.api.errMsg502');
+        //     break;
+        //   case 503:
+        //     errMessage = t('sys.api.errMsg503');
+        //     break;
+        //   case 504:
+        //     errMessage = t('sys.api.errMsg504');
+        //     break;
+        //   case 505:
+        //     errMessage = t('sys.api.errMsg505');
+        //     break;
+        //   default:
+        // }
+        checkStatus(error?.response?.status, message, errorMessageMode);
       }
       if (code === 'ECONNABORTED' && message.indexOf('timeout') !== -1) {
         errMessage = t('sys.api.apiTimeoutMessage');
@@ -216,7 +222,6 @@ const transform: AxiosTransform = {
     } catch (error) {
       throw new Error(error as unknown as string);
     }
-    // checkStatus(error?.response?.status, msg, errorMessageMode);
 
     // 添加自动重试机制 保险起见 只针对GET请求
     const retryRequest = new AxiosRetry();

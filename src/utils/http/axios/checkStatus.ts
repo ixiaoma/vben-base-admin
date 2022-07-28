@@ -1,19 +1,19 @@
 import type { ErrorMessageMode, ModeType } from '/#/axios';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { useI18n } from '/@/hooks/web/useI18n';
-import { useUserStoreWithOut } from '/@/store/modules/user';
+import { userLoginStoreWithOut } from '../../../store/modules/login';
 
 const { createMessage, notification, createModal } = useMessage();
 
 export function checkStatus(
-  status: number,
+  status: number | string | boolean,
   msg: string,
   errorMessageMode: ErrorMessageMode = 'message',
   type: ModeType = 'error',
-  description: string,
+  description?: string,
 ): void {
   const { t } = useI18n();
-  const userStore = useUserStoreWithOut();
+  const userStore = userLoginStoreWithOut();
   let errMessage = '';
   switch (status) {
     case 400:
@@ -57,8 +57,11 @@ export function checkStatus(
     case 505:
       errMessage = t('sys.api.errMsg505');
       break;
-    default:
+    case false:
       errMessage = msg || t('sys.api.errorMessage');
+      break;
+    default:
+      errMessage = msg || t('sys.api.apiRequestFailed');
   }
 
   if (errMessage) {

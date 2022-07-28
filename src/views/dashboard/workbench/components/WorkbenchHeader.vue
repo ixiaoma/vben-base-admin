@@ -25,9 +25,9 @@
 <script lang="ts" setup>
   import { computed } from 'vue';
   import { Avatar } from 'ant-design-vue';
-  import { useUserStore } from '/@/store/modules/user';
+  import { userLoginStore } from '../../../../store/modules/login';
   import headerImg from '/@/assets/images/header.jpg';
 
-  const userStore = useUserStore();
+  const userStore = userLoginStore();
   const userinfo = computed(() => userStore.getUserInfo);
 </script>

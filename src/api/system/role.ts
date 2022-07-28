@@ -101,7 +101,7 @@ export const updateBindResource = (
 
 export const getListRoleResource = (
   params: RoleResourceParamsModel,
-  mode: ErrorMessageMode = 'modal',
+  mode: ErrorMessageMode = 'message',
 ) => {
   return defHttp.post<RoleResourceResultModel>(
     { url: Api.getListRoleResource, params },

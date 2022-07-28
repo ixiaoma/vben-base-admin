@@ -1,12 +1,14 @@
 <template>
   <div class="m-4 mr-0 overflow-hidden bg-white">
     <BasicTree
-      title="部门列表"
+      :key="timer"
+      title="组织列表"
       toolbar
       search
       :clickRowToExpand="false"
       :treeData="treeData"
-      :fieldNames="{ key: 'id', title: 'deptName' }"
+      :defaultExpandAll="true"
+      :fieldNames="{ key: 'code', title: 'name' }"
       @select="handleSelect"
     />
   </div>
@@ -15,7 +17,7 @@
   import { defineComponent, onMounted, ref } from 'vue';
 
   import { BasicTree, TreeItem } from '/@/components/Tree';
-  import { getDeptList } from '/@/api/demo/system';
+  import { useOrgStore } from '/@/store/modules/org';
 
   export default defineComponent({
     name: 'DeptTree',
@@ -24,19 +26,21 @@
     emits: ['select'],
     setup(_, { emit }) {
       const treeData = ref<TreeItem[]>([]);
-
+      const orgStore = useOrgStore();
+      const timer = ref<number>();
       async function fetch() {
-        treeData.value = (await getDeptList()) as unknown as TreeItem[];
+        treeData.value = (await orgStore.getOrgTreeFun()) as unknown as TreeItem[];
+        timer.value = +new Date();
       }
 
-      function handleSelect(keys) {
-        emit('select', keys[0]);
+      function handleSelect(keys, node) {
+        emit('select', node, keys[0]);
       }
 
       onMounted(() => {
         fetch();
       });
-      return { treeData, handleSelect };
+      return { treeData, handleSelect, timer };
     },
   });
 </script>

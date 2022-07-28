@@ -70,6 +70,9 @@
           labelWidth: 120,
           schemas: searchFormSchema,
         },
+        //  handleSearchInfoFn(info) {
+        //   return info;
+        // },
         useSearchForm: true,
         showTableSetting: true,
         bordered: false,
@@ -110,7 +113,7 @@
        * @description: 获取菜单按钮列表
        */
       async function getMenuList() {
-        menuList = await menuStroe.getMenu({});
+        menuList = await menuStroe.getMenuFun({});
       }
       /**
        * @description: 分配权限

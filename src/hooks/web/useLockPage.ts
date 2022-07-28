@@ -4,13 +4,13 @@ import { useThrottleFn } from '@vueuse/core';
 import { useAppStore } from '/@/store/modules/app';
 import { useLockStore } from '/@/store/modules/lock';
 
-import { useUserStore } from '/@/store/modules/user';
+import { userLoginStore } from '../../store/modules/login';
 import { useRootSetting } from '../setting/useRootSetting';
 
 export function useLockPage() {
   const { getLockTime } = useRootSetting();
   const lockStore = useLockStore();
-  const userStore = useUserStore();
+  const userStore = userLoginStore();
   const appStore = useAppStore();
 
   let timeId: TimeoutHandle;

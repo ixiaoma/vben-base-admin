@@ -55,6 +55,7 @@ export type UseFormReturnType = [RegisterFn, FormActionType];
 
 /** 表单 */
 export interface FormSchema<T = any> extends FormProps {
+  mode?: string;
   // Form value
   model?: any;
   // The width of all items in the entire form
