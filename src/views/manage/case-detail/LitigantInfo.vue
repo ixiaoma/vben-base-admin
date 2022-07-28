@@ -1,6 +1,7 @@
 <template>
   <a-card title="当事人">
-    <div class="list-item" v-for="(item, index) in litigantList" :key="index">
+    <a-empty :image="Empty.PRESENTED_IMAGE_SIMPLE" v-if="!litigantList?.length"/>
+    <div class="list-item" v-else v-for="(item, index) in litigantList" :key="index">
       <div class="item-header">
         <div class="row">
           <div>
@@ -34,6 +35,7 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { useRoute } from 'vue-router';
+  import { Empty } from 'ant-design-vue';
   import { UserOutlined } from '@ant-design/icons-vue';
 
   import { getEnum } from '/@/utils/commonUtil';
@@ -66,6 +68,7 @@
 </script>
 <style lang="less" scoped>
   .list-item{
+    margin-bottom: 16px;
     box-shadow: 0px 2px 4px 1px @weak-primay-color;
 
     .item-header{
@@ -90,6 +93,10 @@
 
     .item-content{
       padding: 16px 30px;
+
+      ::v-deep(.ant-descriptions-item-label),::v-deep(.ant-descriptions-item-content){
+        color: @weak-grey-color;
+      }
     }
   }
 </style>

@@ -12,6 +12,7 @@ import {
   Popover,
   Radio,
   Divider,
+  Empty
 } from 'ant-design-vue';
 
 export function registerGlobComp(app: App) {
@@ -27,5 +28,6 @@ export function registerGlobComp(app: App) {
     .use(Card)
     .use(Popover)
     .use(Radio)
-    .use(Divider);
+    .use(Divider)
+    .use(Empty);
 }
