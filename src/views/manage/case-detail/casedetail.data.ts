@@ -10,6 +10,9 @@ interface BaseInfo {
 }
 
 import { BasicColumn } from '/@/components/Table/src/types/table';
+
+import { ValidEnum } from '/@/enums/commonEnum';
+
 //基本信息字段
 export function getBaseInfoField(): Array<BaseInfo> {
   return [
@@ -102,6 +105,7 @@ export function getPhoneColumns(): BasicColumn[] {
     {
       title: '号码检测',
       dataIndex: 'isValid',
+      enumProp: ValidEnum
     },
     {
       title: '外呼状态',
@@ -113,7 +117,7 @@ export function getPhoneColumns(): BasicColumn[] {
     },
     {
       title: '历史接通比例',
-      dataIndex: 'connectedTimes',//------
+      dataIndex: 'connectedTimes',
     },
     {
       title: '最近接通时间',
@@ -145,6 +149,74 @@ export function getAddressColumns(): BasicColumn[] {
     {
       title: '是否有效',
       dataIndex: 'isValid',
+      enumProp: ValidEnum
+    }
+  ];
+}
+//记录信息--调解记录列表字段
+export function getMeditorColumns(): BasicColumn[] {
+  return [
+    {
+      title: '调解时间',
+      dataIndex: 'mediationTime',
+      format: 'date|YYYY-MM-DD',
+    },
+    {
+      title: '调解组织',
+      dataIndex: 'mediationGroup',
+    },
+    {
+      title: '调解员',
+      dataIndex: 'mediatior',
+    },
+    {
+      title: '行动类型',
+      dataIndex: 'actionType',
+      enumCode: 'MediationRecordType'
+    },
+    {
+      title: '联系号码',
+      dataIndex: 'contactPhone',
+      format: 'phone'
+    },
+    {
+      title: '联系结果',
+      dataIndex: 'contactResult',
+    },
+    {
+      title: '调解结果',
+      dataIndex: 'mediationResult',
+    },
+    {
+      title: '约定下次沟通时间',
+      dataIndex: 'nextMediationTime',
+      format: 'date|YYYY-MM-DD',
+    },
+    {
+      title: '标签',
+      dataIndex: 'mediationTag',
+    },
+    {
+      title: '备注',
+      dataIndex: 'memo',
+    }
+  ];
+}
+//记录信息--操作记录列表字段
+export function getActionColumns(): BasicColumn[] {
+  return [
+    {
+      title: '操作时间',
+      dataIndex: 'mediationTime',
+      format: 'date|YYYY-MM-DD',
+    },
+    {
+      title: '操作人',
+      dataIndex: 'operator',
+    },
+    {
+      title: '操作内容',
+      dataIndex: 'actionType',
     }
   ];
 }

@@ -3,7 +3,10 @@ export function formatPhone(val: string) {
   if(!val){
     return null
   }
-  let pat = /(\d{3})\d*(\d{4})/;
+  if(val.length != 11){
+    return val
+  }
+  const pat = /(\d{3})\d*(\d{4})/;
   return val ? val.replace(pat, "$1****$2") : '';
 }
 

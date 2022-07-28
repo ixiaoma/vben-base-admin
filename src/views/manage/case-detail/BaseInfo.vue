@@ -1,6 +1,6 @@
 <template>
-  <a-card>
-    <a-descriptions title="基本信息" :column="3" size="small">
+  <a-card title="基本信息">
+    <a-descriptions :column="3" size="small">
       <a-descriptions-item
         v-for="(item, index) in baseInfoList"
         :key="index"
@@ -65,20 +65,6 @@
   getBaseInfo();
 </script>
 <style lang="less" scoped>
-  ::v-deep(.ant-descriptions-title) {
-    position: relative;
-    padding-left: 12px;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 3px;
-      left: 0;
-      width: 4px;
-      height: 18px;
-      background-color: @allocation-color;
-    }
-  }
 
   ::v-deep(.ant-descriptions-item-label) {
     position: relative;

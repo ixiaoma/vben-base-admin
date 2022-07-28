@@ -64,7 +64,11 @@ function handleIndexColumn(
         return chooseEnum[record[column.dataIndex]]?.label;
       };
     }
-    // if()
+    if(column.enumProp){
+      column.customRender = ({ record }) => {
+        return column.enumProp[record[column.dataIndex]];
+      };
+    }
   });
 
   if (!pushIndexColumns) return;
@@ -312,7 +316,6 @@ export function formatCell(text: string, format: CellFormat, record: Recordable,
       if (!dateFormat) {
         return text;
       }
-      console.log(dateFormat);
       
       return formatToDate(text, dateFormat);
     }
