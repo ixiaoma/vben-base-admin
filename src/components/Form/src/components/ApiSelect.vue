@@ -3,6 +3,7 @@
     @dropdown-visible-change="handleFetch"
     v-bind="$attrs"
     @change="handleChange"
+    :mode="multiple"
     :options="getOptions"
     v-model:value="state"
   >
@@ -53,6 +54,7 @@
         default: () => ({}),
       },
       // support xxx.xxx.xx
+      mode: propTypes.string.def(''),
       resultField: propTypes.string.def(''),
       labelField: propTypes.string.def('label'),
       valueField: propTypes.string.def('value'),
@@ -67,10 +69,13 @@
       const emitData = ref<any[]>([]);
       const attrs = useAttrs();
       const { t } = useI18n();
-
       // Embedded in the form, just use the hook binding to perform form verification
       const [state] = useRuleFormItem(props, 'value', 'change', emitData);
 
+      const multiple = computed(() => {
+        const { mode } = props;
+        return mode;
+      });
       const getOptions = computed(() => {
         const { labelField, valueField, numberToString } = props;
 
@@ -141,7 +146,7 @@
         emitData.value = args;
       }
 
-      return { state, attrs, getOptions, loading, t, handleFetch, handleChange };
+      return { state, attrs, getOptions, loading, t, handleFetch, handleChange, multiple };
     },
   });
 </script>
