@@ -23,7 +23,6 @@ export const columns: BasicColumn[] = [
   {
     title: '角色',
     dataIndex: 'roleNames',
-    width: 200,
     customRender: ({ record }) => {
       let result = '';
       if (record?.roleNames) {
@@ -35,6 +34,7 @@ export const columns: BasicColumn[] = [
   {
     title: '状态',
     dataIndex: 'lockState',
+    width: 100,
     customRender: ({ record }) => {
       let result = '';
       switch (record.lockState) {
@@ -142,11 +142,11 @@ export const accountFormSchema: FormSchema[] = [
 
   {
     label: '角色',
-    field: 'roleNames',
+    field: 'roleCodes',
     component: 'ApiSelect',
+    mode: 'multiple',
     componentProps: {
       api: getRoleList,
-      mode: 'multiple',
       resultField: 'list',
       params: { current: 1, pageSize: 9999 },
       labelField: 'roleName',
