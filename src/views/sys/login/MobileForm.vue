@@ -99,6 +99,6 @@
     sendCodeApi,
   });
 </script>
-<style lang="scss" scoped>
-  @import '/@/styles/login.scss';
+<style lang="less" scoped>
+  @import './login.less';
 </style>

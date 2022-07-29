@@ -107,7 +107,7 @@
   });
 </script>
 <style lang="less" scoped>
-  @import '/@/styles/login.scss';
+  @import './login.less';
 
   .account-login {
     .btn-form {
