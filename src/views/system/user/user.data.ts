@@ -157,7 +157,7 @@ export const accountFormSchema: FormSchema[] = [
   {
     field: 'workPlace',
     label: '工作地点',
-    component: 'Input',
+    component: 'Select',
     required: true,
     slot: 'workPlaceSlot',
   },

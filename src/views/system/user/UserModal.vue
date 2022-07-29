@@ -4,17 +4,20 @@
       <template #nameSignPicSlot="{ model, field }">
         <a-input v-model:value="model[field]" />
       </template>
-      <template #workPlaceSlot="{ model }">
-        <!-- <span>{{model}}</span> -->
-        <div class="user-place">
-          <a-select v-model:value="model.city">
-            <!-- <a-select-option v-for="item in addressList"  :key="item.value" :value="item.label">{{item.label}}</a-select-option> -->
-          </a-select>
-          <a-select v-model:value="model.province" />
-          <a-select v-model:value="model.district" />
-        </div>
-        <a-input v-model:value="model.detailAddress" />
-      </template>
+      <!-- <template #workPlaceSlot="{ model }"> -->
+      <!-- <span>{{model}}</span> -->
+      <!-- <div class="user-place"> -->
+      <!-- <a-select
+           v-model:value="model.province"
+          :options="provinceList.map(item => ({ value: item.value }))"
+          > -->
+      <!-- <a-select-option v-for="item in provinceList"  :key="item.value" :value="item.label">{{item.label}}</a-select-option> -->
+      <!-- </a-select> -->
+      <!-- <a-select v-model:value="model.city" />
+          <a-select v-model:value="model.district" /> -->
+      <!-- </div> -->
+      <!-- <a-input v-model:value="model.detailAddress" /> -->
+      <!-- </template> -->
     </BasicForm>
   </BasicModal>
 </template>
@@ -25,7 +28,7 @@
   import { accountFormSchema } from './user.data';
   import { useUserStore } from '/@/store/modules/user';
   import { useI18n } from '/@/hooks/web/useI18n';
-  // import {addressList} from '/@/utils/address'
+  import { addressList } from '/@/utils/address';
 
   export default defineComponent({
     name: 'AccountModal',
@@ -37,7 +40,9 @@
       const checkStatus: any = inject('$checkStatus');
       const userStore = useUserStore();
       const rowData = ref<any>({});
-
+      const provinceList = ref<any>([]);
+      console.log(addressList);
+      provinceList.value = addressList;
       const [registerForm, { setFieldsValue, updateSchema, resetFields, validate }] = useForm({
         labelWidth: 100,
         schemas: accountFormSchema,
@@ -52,7 +57,6 @@
         resetFields();
         setModalProps({ confirmLoading: false });
         isUpdate.value = !!data?.isUpdate;
-        console.log(data.record);
         rowData.value = data.record;
         if (unref(isUpdate)) {
           setFieldsValue({
@@ -119,7 +123,7 @@
       //   }
       // }
 
-      return { registerModal, registerForm, getTitle, handleSubmit };
+      return { registerModal, registerForm, getTitle, handleSubmit, provinceList };
     },
   });
 </script>
