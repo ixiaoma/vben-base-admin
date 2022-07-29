@@ -1,40 +1,73 @@
 <template>
-  <BasicTable
-    @register="registerTable"
-    :rowSelection="{ type: 'checkbox', selectedRowKeys: checkedKeys, onChange: onSelectChange }"
-  >
-    <template #toolbar>
-      <a-button type="primary" @click="handleAssign">案件分配</a-button>
-    </template>
-    <template #bodyCell="{ column, record }">
-      <template v-if="column.key === 'action'">
-        <TableAction
-          :actions="[
-            {
-              label: '详情',
-              onClick: handleDetail.bind(null, record),
-            },
-          ]"
-        />
+  <div class="case-allocation">
+    <a-dropdown :trigger="['click']">
+      <a class="ant-dropdown-link" @click.prevent>
+        Click me
+        <DownOutlined />
+      </a>
+      <template #overlay>
+        <a-menu>
+          <a-menu-item v-for="item in caseTypeList" :key="item.value">
+            {{item.label}}
+          </a-menu-item>
+        </a-menu>
       </template>
-    </template>
-  </BasicTable>
-  <AssignModal @register="registerModal" @success="submitSuccess" />
+    </a-dropdown>
+    <BasicTable
+      @register="registerTable"
+      :rowSelection="{
+        type: 'checkbox',
+        fixed: 'left',
+        selectedRowKeys: checkedKeys,
+        onChange: onSelectChange,
+      }"
+    >
+      <template #toolbar>
+        <a-button type="primary" @click="handleAssign">案件分配</a-button>
+      </template>
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.key === 'action'">
+          <TableAction
+            :actions="[
+              {
+                label: '详情',
+                onClick: handleDetail.bind(null, record),
+              },
+            ]"
+          />
+        </template>
+      </template>
+    </BasicTable>
+    <AssignModal @register="registerModal" @success="submitSuccess" />
+  </div>
 </template>
 <script lang="ts" setup name="CaseAllocation">
-  import { computed, ref } from 'vue';
+  import { ref } from 'vue';
   import { useRouter } from 'vue-router';
-  import { isSelect } from '/@/utils/commonUtil';
+
   import AssignModal from './AssignModal.vue';
+  import { DownOutlined } from '@ant-design/icons-vue'
+
   import { useModal } from '/@/components/Modal';
-  import { useEnumStore } from '/@/store/modules/enum';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
+
+  import { isSelect } from '/@/utils/commonUtil';
   import { getBasicColumns, getFormConfig } from './allocation.data';
   import { getCaseAllocationList } from '/@/api/manage/caseallocation';
 
-  const emumStore = useEnumStore();
-  const enumInfo = computed(() => emumStore.getEnumData);
-  console.log(enumInfo);
+  const caseTypeList =  [
+    {
+      value: 1009,
+      label: '要素式案件'
+    },{
+      value: 1001,
+      label: '通用案件'
+    },{
+      value: 1002,
+      label: '执前督促案件'
+    }
+  ]
+
   const router = useRouter();
   const checkedKeys = ref<Array<string | number>>([]); //当前列表选中的key
 
@@ -45,7 +78,6 @@
     columns: getBasicColumns(), //表头字段配置
     useSearchForm: true, //是否展示搜索区域
     formConfig: getFormConfig(), //查询表单字段配置
-    tableSetting: { fullScreen: true },
     showIndexColumn: false, //是否展示序号列
     //rowKey: 'id', //如果返回数据的key为"id"可不写这行
     actionColumn: {
@@ -54,7 +86,6 @@
       dataIndex: 'action',
     },
   });
-
   //获取form表单数据
   function handleAssign() {
     if (!isSelect(checkedKeys.value)) {
@@ -69,12 +100,12 @@
     checkedKeys.value = selectedRowKeys;
   }
   //跳转详情页
-  function handleDetail({ id, mediateNo }: ReadonlyRecordable) {
+  function handleDetail({ mediateNo, caseNo }: ReadonlyRecordable) {
     router.push({
       name: 'CaseDetail',
       query: {
-        id,
         mediateNo,
+        caseNo,
       },
     });
   }
