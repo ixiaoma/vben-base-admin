@@ -6,6 +6,7 @@
     :options="getOptions"
     :show-search="showSearch"
     :filter-option="filterOption"
+    :mode="mode"
     v-model:value="state"
   >
     <template #[item]="data" v-for="item in Object.keys($slots)">
@@ -73,13 +74,9 @@
       const { t } = useI18n();
       // Embedded in the form, just use the hook binding to perform form verification
       const [state] = useRuleFormItem(props, 'value', 'change', emitData);
-      const multiple = computed(() => {
-        const { mode } = props;
-        return mode;
-      });
+
       const getOptions = computed(() => {
         const { labelField, valueField, numberToString } = props;
-
         return unref(options).reduce((prev, next: Recordable) => {
           if (next) {
             const value = next[valueField];
