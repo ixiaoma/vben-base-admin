@@ -12,7 +12,10 @@ import {
   Popover,
   Radio,
   Divider,
-  Empty
+  Dropdown,
+  Menu,
+  Tabs,
+  Empty,
 } from 'ant-design-vue';
 
 export function registerGlobComp(app: App) {
@@ -29,5 +32,8 @@ export function registerGlobComp(app: App) {
     .use(Popover)
     .use(Radio)
     .use(Divider)
+    .use(Dropdown)
+    .use(Menu)
+    .use(Tabs)
     .use(Empty);
 }

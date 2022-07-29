@@ -6,12 +6,12 @@ import { getApiEnumList } from '/@/utils/commonUtil';
 import { FormProps } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
 
-export function getBasicColumns(caseType = 1009): BasicColumn[] {
+export function getBasicColumns(allocationStatus = '1'): BasicColumn[] {
   return [
     {
       title: '调解号',
       dataIndex: 'mediateNo',
-      ifShow: caseType === 1009
+      ifShow: allocationStatus === '2',
     },
     {
       title: '原告',
@@ -36,32 +36,39 @@ export function getBasicColumns(caseType = 1009): BasicColumn[] {
     {
       title: '联系状态',
       dataIndex: 'contactStatus',
+      ifShow: allocationStatus === '2',
     },
     {
       title: '调解状态',
       dataIndex: 'mediationStatus',
       enumCode: 'MediationStatus',
+      ifShow: allocationStatus === '2',
     },
     {
       title: '协议状态',
       dataIndex: 'agrStatus',
       enumCode: 'AgrStatusEnum', //对应枚举code
+      ifShow: allocationStatus === '2',
     },
     {
       title: '还款状态',
       dataIndex: 'repayStatus',
+      ifShow: allocationStatus === '2',
     },
     {
       title: '调解员',
       dataIndex: 'currentMediatorName',
+      ifShow: allocationStatus === '2',
     },
     {
       title: '调解组织',
       dataIndex: 'orgName',
+      ifShow: allocationStatus === '2',
     },
     {
       title: '分配日期',
       dataIndex: 'assignDate',
+      ifShow: allocationStatus === '2',
     },
     {
       title: '批次号',
@@ -90,7 +97,8 @@ export function getBasicColumns(caseType = 1009): BasicColumn[] {
     {
       title: '锁定状态',
       dataIndex: 'locked',
-      enumProp: StatusEnum
+      enumProp: StatusEnum,
+      ifShow: allocationStatus === '2',
     },
     {
       title: '案件编号',
