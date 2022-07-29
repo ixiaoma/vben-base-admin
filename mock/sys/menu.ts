@@ -7,6 +7,12 @@ export const pathPrifxList = [
   { prifx: 'system', current: 'role', name: '系统管理-角色管理' },
   { prifx: 'system', current: 'dept', toPath: 'org', name: '系统管理-组织管理' },
   { prifx: 'system', current: 'user', name: '系统管理-用户管理' },
+  {
+    prifx: 'manage',
+    current: 'caseAllocation',
+    toPath: 'case-allocation',
+    name: '系统管理-用户管理',
+  },
 ];
 // single
 const dashboardRoute = {

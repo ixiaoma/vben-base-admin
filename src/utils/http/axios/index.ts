@@ -8,7 +8,7 @@ import type { AxiosTransform, CreateAxiosOptions } from './axiosTransform';
 import { VAxios } from './Axios';
 import { useGlobSetting } from '/@/hooks/setting';
 import { useMessage } from '/@/hooks/web/useMessage';
-import { RequestEnum, ResultEnum, ContentTypeEnum } from '/@/enums/httpEnum';
+import { RequestEnum, ContentTypeEnum } from '/@/enums/httpEnum';
 import { isString } from '/@/utils/is';
 import { getToken } from '/@/utils/auth';
 import { setObjToUrlParams, deepMerge } from '/@/utils';
@@ -161,7 +161,7 @@ const transform: AxiosTransform = {
           // Return to the current page after successful login. This step needs to be operated on the login page.
           case 401:
             errMessage = t('sys.api.errMsg401');
-            userStore.setToken(undefined);
+            userStore.setUserInfo(null);
             userStore.logout(true);
             break;
           case 403:

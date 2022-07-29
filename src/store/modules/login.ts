@@ -51,7 +51,7 @@ export const userLoginStore = defineStore({
       return this.userInfo || getAuthCache<UserInfo>(USER_INFO_KEY) || {};
     },
     getToken(): string {
-      return 'true';
+      return 'token'; //this.token || getAuthCache<string>(TOKEN_KEY);
     },
     getRoleList(): RoleEnum[] {
       return this.roleList.length > 0 ? this.roleList : getAuthCache<RoleEnum[]>(ROLES_KEY);
@@ -178,7 +178,7 @@ export const userLoginStore = defineStore({
      * @description: logout
      */
     async logout(goLogin = false) {
-      if (this.getToken) {
+      if (this.getUserInfo?.account) {
         try {
           await doLogout();
         } catch {
