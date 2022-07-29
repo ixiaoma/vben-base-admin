@@ -9,8 +9,8 @@ import { isArray, isBoolean, isFunction, isMap, isString } from '/@/utils/is';
 import { cloneDeep, isEqual } from 'lodash-es';
 import { formatToDate } from '/@/utils/dateUtil';
 import { ACTION_COLUMN_FLAG, DEFAULT_ALIGN, INDEX_COLUMN_FLAG, PAGE_SIZE } from '../const';
-// import { useEnumStore } from '/@/store/modules/enum';
 import { getEnum } from '/@/utils/commonUtil';
+import { formatPhone } from '/@/utils/formatUtil'
 
 function handleItem(item: BasicColumn, ellipsis: boolean) {
   const { key, dataIndex, children } = item;
@@ -47,8 +47,6 @@ function handleIndexColumn(
   const { t } = useI18n();
 
   const { showIndexColumn, indexColumnProps, isTreeTable } = unref(propsRef);
-  // const enumStore = useEnumStore();
-  // const globalEnum = enumStore.getGlobalEnum
   let pushIndexColumns = false;
   if (unref(isTreeTable)) {
     return;
@@ -64,6 +62,11 @@ function handleIndexColumn(
       const chooseEnum = getEnum(column.enumCode);
       column.customRender = ({ record }) => {
         return chooseEnum[record[column.dataIndex]]?.label;
+      };
+    }
+    if(column.enumProp){
+      column.customRender = ({ record }) => {
+        return column.enumProp[record[column.dataIndex]];
       };
     }
   });
@@ -245,7 +248,6 @@ export function useColumns(
   function getColumns(opt?: GetColumnsParams) {
     const { ignoreIndex, ignoreAction, sort } = opt || {};
     let columns = toRaw(unref(getColumnsRef));
-    // console.log(columns);
 
     if (ignoreIndex) {
       columns = columns.filter((item) => item.flag !== INDEX_COLUMN_FLAG);
@@ -308,13 +310,18 @@ export function formatCell(text: string, format: CellFormat, record: Recordable,
   try {
     // date type
     const DATE_FORMAT_PREFIX = 'date|';
-    if (isString(format) && format.startsWith(DATE_FORMAT_PREFIX)) {
+    if (isString(format) && format.startsWith(DATE_FORMAT_PREFIX) && text) {
       const dateFormat = format.replace(DATE_FORMAT_PREFIX, '');
 
       if (!dateFormat) {
         return text;
       }
+      
       return formatToDate(text, dateFormat);
+    }
+
+    if(format === 'phone'){
+      return formatPhone(text)
     }
 
     // Map

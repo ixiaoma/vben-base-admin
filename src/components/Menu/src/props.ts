@@ -54,7 +54,7 @@ export const contentProps = {
     type: Object as PropType<Menu>,
     default: null,
   },
-  showTitle: propTypes.bool.def(true),
+  showTitle: propTypes.bool.def(false),
   level: propTypes.number.def(0),
   isHorizontal: propTypes.bool.def(true),
 };

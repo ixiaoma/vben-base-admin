@@ -1,12 +1,17 @@
+import { getOrgList } from '/@/api/sys/org';
+
+import { StatusEnum } from '/@/enums/commonEnum';
+import { getApiEnumList } from '/@/utils/commonUtil';
+
 import { FormProps } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
-import { getOrgList, getOrgTree } from '/@/api/sys/org';
 
-export function getBasicColumns(): BasicColumn[] {
+export function getBasicColumns(caseType = 1009): BasicColumn[] {
   return [
     {
       title: '调解号',
       dataIndex: 'mediateNo',
+      ifShow: caseType === 1009
     },
     {
       title: '原告',
@@ -35,11 +40,12 @@ export function getBasicColumns(): BasicColumn[] {
     {
       title: '调解状态',
       dataIndex: 'mediationStatus',
+      enumCode: 'MediationStatus',
     },
     {
       title: '协议状态',
       dataIndex: 'agrStatus',
-      enumCode: 'AgrStatusEnum',
+      enumCode: 'AgrStatusEnum', //对应枚举code
     },
     {
       title: '还款状态',
@@ -62,10 +68,6 @@ export function getBasicColumns(): BasicColumn[] {
       dataIndex: 'batchNo',
     },
     {
-      title: '案件编号',
-      dataIndex: 'applyOrgCaseNo',
-    },
-    {
       title: '受理日期',
       dataIndex: 'acceptDate',
     },
@@ -82,20 +84,25 @@ export function getBasicColumns(): BasicColumn[] {
       dataIndex: 'reasonDisplayName',
     },
     {
-      title: '产品',
-      dataIndex: 'prodName',
-    },
-    {
       title: '利息(元)',
       dataIndex: 'interestAmount',
     },
     {
       title: '锁定状态',
       dataIndex: 'locked',
+      enumProp: StatusEnum
+    },
+    {
+      title: '案件编号',
+      dataIndex: 'applyOrgCaseNo',
+    },
+    {
+      title: '产品',
+      dataIndex: 'prodName',
     },
   ];
 }
-
+//show
 export function getFormConfig(): Partial<FormProps> {
   return {
     labelWidth: 100,
@@ -175,70 +182,101 @@ export function getFormConfig(): Partial<FormProps> {
       {
         field: 'receiveCardId',
         component: 'Input',
-        label: '身份证',
+        label: '身份证号',
         colProps: {
           span: 6,
         },
       },
       {
-        field: 'cascader',
-        component: 'Cascader',
-        label: 'Cascader示例',
+        field: 'receivePhone',
+        component: 'Input',
+        label: '手机号',
+        colProps: {
+          span: 6,
+        },
+      },
+      {
+        field: 'reason',
+        label: '案由',
+        component: 'Select',
+        optionEnumCode: 'CaseReasonEnum',
+        // componentProps: {
+        //   options: getEnum('CaseReasonEnum', true)
+        // },
+        colProps: {
+          span: 6,
+        },
+      },
+      {
+        field: 'prodName',
+        label: '借款产品',
+        component: 'Select',
+        // optionEnumCode: 'ProductNameEnum',
+        colProps: {
+          span: 6,
+        },
+      },
+      // {
+      //   field: 'prodName',
+      //   component: 'ApiSelect',
+      //   label: '借款产品',
+      //   colProps: {
+      //     span: 6,
+      //   },
+      //   componentProps: {
+      //     api: () => getApiEnumList('GetProdNameEnum'),
+      //     immediate: false,
+      //     onChange: (e) => {
+      //       console.log('selected:', e);
+      //     },
+      //     // atfer request callback
+      //     onOptionsChange: (options) => {
+      //       console.log('get options', options.length, options);
+      //     },
+      //   },
+      // },
+      {
+        field: 'targetAmtRangeCode',
+        component: 'ApiSelect',
+        label: '标的金额',
         colProps: {
           span: 6,
         },
         componentProps: {
-          options: [
-            {
-              value: 'zhejiang',
-              label: 'Zhejiang',
-              children: [
-                {
-                  value: 'hangzhou',
-                  label: 'Hangzhou',
-                  children: [
-                    {
-                      value: 'xihu',
-                      label: 'West Lake',
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              value: 'jiangsu',
-              label: 'Jiangsu',
-              children: [
-                {
-                  value: 'nanjing',
-                  label: 'Nanjing',
-                  children: [
-                    {
-                      value: 'zhonghuamen',
-                      label: 'Zhong Hua Men',
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      },
-      {
-        field: 'apiTreeSelect',
-        component: 'ApiTreeSelect',
-        label: '远程下拉树',
-        componentProps: {
-          api: getOrgTree,
+          api: () => getApiEnumList('GetMoneyEnum'),
           resultField: 'list',
-          fieldNames: {
-            label: 'name',
-            value: 'code',
-            children: 'children',
+          labelField: 'rangeDisplay',
+          valueField: 'rangeCode',
+          immediate: false,
+          onChange: (e) => {
+            console.log('selected:', e);
+          },
+          // atfer request callback
+          onOptionsChange: (options) => {
+            console.log('get options', options.length, options);
           },
         },
+      },
+      {
+        field: 'ovdDaysRangeCode',
+        component: 'ApiSelect',
+        label: '逾期天数',
         colProps: {
           span: 6,
+        },
+        componentProps: {
+          api: () => getApiEnumList('GetOvdDayEnum'),
+          resultField: 'list',
+          labelField: 'rangeDisplay',
+          valueField: 'rangeCode',
+          immediate: false,
+          onChange: (e) => {
+            console.log('selected:', e);
+          },
+          // atfer request callback
+          onOptionsChange: (options) => {
+            console.log('get options', options.length, options);
+          },
         },
       },
     ],
