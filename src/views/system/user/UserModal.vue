@@ -4,25 +4,6 @@
       <template #nameSignPicSlot="{ model, field }">
         <a-input v-model:value="model[field]" />
       </template>
-      <template #workPlaceSlot="{ model, field }">
-        <!-- <span>{{model}}</span> -->
-        <!-- <div class="user-place"> -->
-        <a-select
-          v-model:value="model[field]"
-          :options="provinceList.map((item) => ({ value: item.value }))"
-        >
-          <!-- <a-select-option v-for="item in provinceList"  :value="item.label">{{item.label}}</a-select-option> -->
-        </a-select>
-        <!-- <a-select
-           v-model:value="model.city"
-          :options="provinceList.map(item => ({ value: item.value }))"
-          >
-      <a-select-option v-for="item in provinceList"  :value="item.label">{{item.label}}</a-select-option>
-      </a-select> -->
-        <a-input v-model:value="model.district" />
-        <!-- </div> -->
-        <!-- <a-input v-model:value="model.detailAddress" /> -->
-      </template>
     </BasicForm>
   </BasicModal>
 </template>
@@ -33,7 +14,6 @@
   import { accountFormSchema } from './user.data';
   import { useUserStore } from '/@/store/modules/user';
   import { useI18n } from '/@/hooks/web/useI18n';
-  import { addressList } from '/@/utils/address';
 
   export default defineComponent({
     name: 'AccountModal',
@@ -45,9 +25,6 @@
       const checkStatus: any = inject('$checkStatus');
       const userStore = useUserStore();
       const rowData = ref<any>({});
-      const provinceList = ref<any>([]);
-      console.log(addressList);
-      provinceList.value = addressList;
       const [registerForm, { setFieldsValue, updateSchema, resetFields, validate }] = useForm({
         labelWidth: 100,
         schemas: accountFormSchema,
@@ -63,6 +40,8 @@
         setModalProps({ confirmLoading: false });
         isUpdate.value = !!data?.isUpdate;
         rowData.value = data.record;
+        data.record.workPlace = [data.record.province, data.record.city, data.record.district];
+        data.record.picture = data.record.certNoFrontPath + ',' + data.record.certNoBackPath;
         if (unref(isUpdate)) {
           setFieldsValue({
             ...data.record,
@@ -91,6 +70,10 @@
           let result: any;
           setModalProps({ confirmLoading: true });
           const values = await validate();
+          values.province = values?.workPlace[0];
+          values.city = values?.workPlace[1];
+          values.district = values?.workPlace[2];
+          delete values?.workPlace;
           if (unref(isUpdate)) {
             // 更新
             values.id = rowData?.value?.id;
@@ -128,10 +111,7 @@
       //   }
       // }
 
-      return { registerModal, registerForm, getTitle, handleSubmit, provinceList };
+      return { registerModal, registerForm, getTitle, handleSubmit, rowData };
     },
   });
 </script>
-<style lang="less" scoped>
-  @import '/@/styles/user.less';
-</style>

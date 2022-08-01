@@ -262,6 +262,7 @@
             unref(getComponentsProps)?.placeholder || createPlaceholderMessage(component);
         }
         if (component === 'Select' && component) {
+          propsData.mode = mode;
           if (optionEnumCode) {
             propsData.options = getEnum(optionEnumCode, true);
           }

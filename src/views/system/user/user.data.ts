@@ -3,6 +3,7 @@ import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
 import { formatToDateTime } from '/@/utils/dateUtil';
 import { vueHFn } from '/@/utils/tableInnerHandle';
+import { addressList } from '/@/utils/address';
 
 export const columns: BasicColumn[] = [
   {
@@ -85,9 +86,23 @@ export const accountFormSchema: FormSchema[] = [
   {
     field: 'picture',
     label: '证件照片',
-    component: 'InputPassword',
+    component: 'Input',
     required: true,
     ifShow: true,
+  },
+  {
+    field: 'certNoFrontPath',
+    label: '身份证正面',
+    component: 'Input',
+    required: true,
+    show: false,
+  },
+  {
+    field: 'certNoBackPath',
+    label: '身份证反面',
+    component: 'Input',
+    required: true,
+    show: false,
   },
   {
     field: 'name',
@@ -145,21 +160,51 @@ export const accountFormSchema: FormSchema[] = [
     field: 'roleCodes',
     component: 'ApiSelect',
     mode: 'multiple',
-    componentProps: {
-      api: getRoleList,
-      resultField: 'list',
-      params: { current: 1, pageSize: 9999 },
-      labelField: 'roleName',
-      valueField: 'roleCode',
+    componentProps: ({ formModel }) => {
+      return {
+        api: getRoleList,
+        resultField: 'list',
+        params: { current: 1, pageSize: 9999 },
+        labelField: 'roleName',
+        valueField: 'roleCode',
+        onChange: (_code, item): void => {
+          formModel.roleNames = item.map((ele) => ele.label);
+        },
+        // onOptionsChange:(val) =>{
+        //    console.log(val)
+        // }
+      };
     },
     required: true,
   },
   {
+    field: 'roleNames',
+    label: '角色名称',
+    component: 'Select',
+    show: false,
+  },
+  {
     field: 'workPlace',
     label: '工作地点',
-    component: 'Select',
+    component: 'Cascader',
+    componentProps: () => {
+      return {
+        fieldNames: {
+          value: 'label',
+        },
+        options: addressList,
+      };
+    },
     required: true,
-    slot: 'workPlaceSlot',
+    // slot: 'workPlaceSlot',
+  },
+  {
+    field: 'detailAddress',
+    label: ' ',
+    component: 'Input',
+    required: false,
+    show: true,
+    // slot: 'workDetailPlaceSlot',
   },
   {
     field: 'professionalArea',
@@ -171,7 +216,7 @@ export const accountFormSchema: FormSchema[] = [
     field: 'nameSignPic',
     label: '调解员签名',
     component: 'Upload',
-    required: true,
+    required: false,
     ifShow: true,
     slot: 'nameSignPicSlot',
   },
