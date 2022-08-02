@@ -196,7 +196,6 @@ export const accountFormSchema: FormSchema[] = [
       };
     },
     required: true,
-    // slot: 'workPlaceSlot',
   },
   {
     field: 'detailAddress',
@@ -204,7 +203,6 @@ export const accountFormSchema: FormSchema[] = [
     component: 'Input',
     required: false,
     show: true,
-    // slot: 'workDetailPlaceSlot',
   },
   {
     field: 'professionalArea',
@@ -216,6 +214,11 @@ export const accountFormSchema: FormSchema[] = [
     field: 'nameSignPic',
     label: '调解员签名',
     component: 'Upload',
+    // componentProps: () => {
+    //   return {
+    //     listType:'picture-card'
+    //   };
+    // },
     required: false,
     ifShow: true,
     slot: 'nameSignPicSlot',

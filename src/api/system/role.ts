@@ -11,13 +11,13 @@ import {
 } from './model/roleModel';
 
 enum Api {
-  getRoleList = '/api/smartf-authx/authxRole/listPage', // 获取角色列表
-  addRoleList = '/api/smartf-authx/authxRole/add', // 新增角色
-  updateRoleList = '/api/smartf-authx/authxRole/updateById', // 更新角色
-  delRoleList = '/api/smartf-authx/authxRole/deleteByIdLogical', // 删除角色
-  // getRoleDetail = '/api/smartf-authx/authxRole/getById', // 获取角色详情
-  updateBindResource = '/api/smartf-authx/authxRole/bindResource', // 更新角色绑定资源
-  getListRoleResource = '/api/smartf-authx/authxRole/listRoleResource', // 查询角色所拥有的权限
+  GetRoleList = '/api/smartf-authx/authxRole/listPage', // 获取角色列表
+  AddRoleList = '/api/smartf-authx/authxRole/add', // 新增角色
+  UpdateRoleList = '/api/smartf-authx/authxRole/updateById', // 更新角色
+  DelRoleList = '/api/smartf-authx/authxRole/deleteByIdLogical', // 删除角色
+  // GetRoleDetail = '/api/smartf-authx/authxRole/getById', // 获取角色详情
+  UpdateBindResource = '/api/smartf-authx/authxRole/bindResource', // 更新角色绑定资源
+  GetListRoleResource = '/api/smartf-authx/authxRole/listRoleResource', // 查询角色所拥有的权限
 }
 
 /**
@@ -25,7 +25,7 @@ enum Api {
  */
 
 export const getRoleList = (params: RoleListParamsModel) => {
-  return defHttp.post<RoleResourceResultModel>({ url: Api.getRoleList, params });
+  return defHttp.post<RoleResourceResultModel>({ url: Api.GetRoleList, params });
 };
 /**
  * @description:新增角色
@@ -33,7 +33,7 @@ export const getRoleList = (params: RoleListParamsModel) => {
 
 export const addRoleList = (params: addRoleParamsModel, mode: ErrorMessageMode = 'modal') => {
   return defHttp.post<null>(
-    { url: Api.addRoleList, params },
+    { url: Api.AddRoleList, params },
     {
       isReturnNativeResponse: true,
       errorMessageMode: mode,
@@ -46,7 +46,7 @@ export const addRoleList = (params: addRoleParamsModel, mode: ErrorMessageMode =
 
 export const updateRoleList = (params: UpdateRoleParamsModel, mode: ErrorMessageMode = 'modal') => {
   return defHttp.post<null>(
-    { url: Api.updateRoleList, params },
+    { url: Api.UpdateRoleList, params },
     {
       isReturnNativeResponse: true,
       errorMessageMode: mode,
@@ -59,7 +59,7 @@ export const updateRoleList = (params: UpdateRoleParamsModel, mode: ErrorMessage
 
 export const delRoleList = (params: delRoleParamsModel, mode: ErrorMessageMode = 'modal') => {
   return defHttp.post<null>(
-    { url: Api.delRoleList, params },
+    { url: Api.DelRoleList, params },
     {
       isReturnNativeResponse: true,
       errorMessageMode: mode,
@@ -88,7 +88,7 @@ export const updateBindResource = (
   mode: ErrorMessageMode = 'modal',
 ) => {
   return defHttp.post<null>(
-    { url: Api.updateBindResource, params },
+    { url: Api.UpdateBindResource, params },
     {
       isReturnNativeResponse: true,
       errorMessageMode: mode,
@@ -104,7 +104,7 @@ export const getListRoleResource = (
   mode: ErrorMessageMode = 'message',
 ) => {
   return defHttp.post<RoleResourceResultModel>(
-    { url: Api.getListRoleResource, params },
+    { url: Api.GetListRoleResource, params },
     {
       isReturnNativeResponse: false,
       errorMessageMode: mode,

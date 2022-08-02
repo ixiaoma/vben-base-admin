@@ -15,6 +15,7 @@ import {
   Empty,
   Select,
   Cascader,
+  Modal,
 } from 'ant-design-vue';
 
 export function registerGlobComp(app: App) {
@@ -32,6 +33,7 @@ export function registerGlobComp(app: App) {
     .use(Radio)
     .use(Divider)
     .use(Empty)
+    .use(Modal)
     .use(Cascader)
     .use(Select);
 }
