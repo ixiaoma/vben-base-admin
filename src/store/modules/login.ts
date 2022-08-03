@@ -51,7 +51,7 @@ export const userLoginStore = defineStore({
       return this.userInfo || getAuthCache<UserInfo>(USER_INFO_KEY) || {};
     },
     getToken(): string {
-      return 'token'; //this.token || getAuthCache<string>(TOKEN_KEY);
+      return this.token || getAuthCache<string>(TOKEN_KEY);
     },
     getRoleList(): RoleEnum[] {
       return this.roleList.length > 0 ? this.roleList : getAuthCache<RoleEnum[]>(ROLES_KEY);
@@ -114,6 +114,7 @@ export const userLoginStore = defineStore({
       try {
         const { mode, ...loginParams } = params;
         const result = await loginApi(loginParams, mode);
+        this.setToken(new Date().toDateString());
         // this.afterLoginAction(goHome);
         return result;
       } catch (error) {
@@ -132,6 +133,7 @@ export const userLoginStore = defineStore({
       try {
         const { mode, ...LoginByPhoneParams } = params;
         const result = await loginByPhoneApi(LoginByPhoneParams, mode);
+        this.setToken(new Date().toDateString());
         // this.afterLoginAction(goHome);
         return result;
       } catch (error) {
@@ -178,7 +180,7 @@ export const userLoginStore = defineStore({
      * @description: logout
      */
     async logout(goLogin = false) {
-      if (this.getUserInfo?.account) {
+      if (this.getToken) {
         try {
           await doLogout();
         } catch {

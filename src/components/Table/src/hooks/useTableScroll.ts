@@ -56,8 +56,14 @@ export function useTableScroll(
   let bodyEl: HTMLElement | null;
 
   async function calcTableHeight() {
-    const { resizeHeightOffset, pagination, maxHeight, isCanResizeParent, useSearchForm } =
-      unref(propsRef);
+    const {
+      resizeHeightOffset,
+      pagination,
+      maxHeight,
+      isCanResizeParent,
+      useSearchForm,
+      resizeWidthScroll,
+    } = unref(propsRef);
     const tableData = unref(getDataSourceRef);
 
     const table = unref(tableElRef);
@@ -87,7 +93,9 @@ export function useTableScroll(
     } else {
       !tableEl.classList.contains('hide-scrollbar-x') && tableEl.classList.add('hide-scrollbar-x');
     }
-
+    if (resizeWidthScroll) {
+      bodyEl.scrollLeft = 0;
+    }
     bodyEl!.style.height = 'unset';
 
     if (!unref(getCanResize) || (tableData && tableData.length === 0)) return;
@@ -151,8 +159,6 @@ export function useTableScroll(
 
       const headerCellHeight =
         (tableEl.querySelector('.ant-table-title') as HTMLElement)?.offsetHeight ?? 0;
-
-      console.log(wrapHeight - formHeight - headerCellHeight - tablePadding - paginationMargin);
       bottomIncludeBody =
         wrapHeight - formHeight - headerCellHeight - tablePadding - paginationMargin;
     } else {
@@ -193,7 +199,9 @@ export function useTableScroll(
     columns.forEach((item) => {
       width += Number.parseInt(item.width as string) || 0;
     });
-    const unsetWidthColumns = columns.filter((item) => !Reflect.has(item, 'width'));
+    const unsetWidthColumns = columns.filter(
+      (item) => !Reflect.has(item, 'width') && (!Reflect.has(item, 'ifShow') || item.ifShow),
+    );
 
     const len = unsetWidthColumns.length;
     if (len !== 0) {
@@ -211,7 +219,7 @@ export function useTableScroll(
     return {
       x: unref(getScrollX),
       y: canResize ? tableHeight : null,
-      scrollToFirstRowOnChange: false,
+      scrollToFirstRowOnChange: true,
       ...scroll,
     };
   });

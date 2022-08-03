@@ -10,7 +10,7 @@
             <DownOutlined />
           </a>
           <template #overlay>
-            <a-menu @click="handleMenuClick">
+            <a-menu @select="handleMenuClick" selectable v-model:selectedKeys="selectType.caseType">
               <a-menu-item v-for="item in caseTypeList" :key="item.value">
                 {{ item.label }}
               </a-menu-item>
@@ -58,40 +58,32 @@
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
 
   import { isSelect } from '/@/utils/commonUtil';
+  import { getEnumArray } from '/@/enums/commonEnum';
   import { getBasicColumns, getFormConfig } from './allocation.data';
   import { getCaseBaseList, getCaseAllocationList } from '/@/api/manage/caseallocation';
 
   interface CaseState {
-    caseType: number;
+    caseType: Array<number>;
     caseTypeName: string | undefined;
   }
 
-  const caseTypeList = [
-    {
-      value: 1009,
-      label: '要素式案件',
-    },
-    {
-      value: 1001,
-      label: '通用案件',
-    },
-    {
-      value: 1002,
-      label: '执前督促案件',
-    },
-  ];
-
+  const caseTypeList = getEnumArray('CaseTypeEnum');
   const activeKey = ref('1');
 
   const selectType = reactive<CaseState>({
-    caseType: 1009,
+    caseType: [1009],
     caseTypeName: '要素式案件',
   });
 
   const tableProps = computed(() => {
     return {
       api: activeKey.value === '1' ? getCaseBaseList : getCaseAllocationList,
-      columns: getBasicColumns(activeKey.value),
+      columns: getBasicColumns(activeKey.value, selectType.caseType[0]),
+      formConfig: getFormConfig(activeKey.value, selectType.caseType[0]),
+      searchInfo: {
+        caseType: selectType.caseType[0],
+      },
+      resizeWidthScroll: true,
     };
   });
 
@@ -103,11 +95,7 @@
   const [registerTable, { getForm, setProps, reload }] = useTable({
     ...unref(tableProps),
     useSearchForm: true, //是否展示搜索区域
-    formConfig: getFormConfig(), //查询表单字段配置
     showIndexColumn: false, //是否展示序号列
-    searchInfo: {
-      caseType: selectType.caseType,
-    },
     actionColumn: {
       width: 120,
       title: '操作',
@@ -116,13 +104,8 @@
   });
   //切换案件类型
   function handleMenuClick({ key }) {
-    selectType.caseType = key;
     selectType.caseTypeName = caseTypeList.find((ele) => ele.value === key)?.label;
-    const searchInfo = {
-      caseType: selectType.caseType,
-    };
-    setProps({ searchInfo });
-    reload();
+    handleChangeTab();
   }
   function handleChangeTab() {
     setProps(unref(tableProps));

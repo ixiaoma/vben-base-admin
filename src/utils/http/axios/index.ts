@@ -161,7 +161,7 @@ const transform: AxiosTransform = {
           // Return to the current page after successful login. This step needs to be operated on the login page.
           case 401:
             errMessage = t('sys.api.errMsg401');
-            userStore.setUserInfo(null);
+            userStore.setToken(undefined);
             userStore.logout(true);
             break;
           case 403:

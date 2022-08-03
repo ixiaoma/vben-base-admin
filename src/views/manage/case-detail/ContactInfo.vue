@@ -65,6 +65,7 @@
               dataIndex: 'action',
             }
           : undefined,
+      resizeWidthScroll: true,
     };
   });
 
@@ -72,6 +73,7 @@
   const [registerTable, { setProps, reload }] = useTable({
     ...unref(tableProps),
     maxHeight: 200,
+    canResize: true,
     searchInfo: {
       caseNo,
     },
