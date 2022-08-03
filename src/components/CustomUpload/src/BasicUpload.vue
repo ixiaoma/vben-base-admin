@@ -9,8 +9,9 @@
       :before-upload="beforeUpload"
       :show-upload-list="showUploadList"
       :list-type="listType"
-      :isImageUrl="() => true"
-      @change="handleChange"
+      :headers="newHeaders"
+      :data="data"
+      :customRequest="uploadApiByItem"
       @preview="handlePreview"
       @remove="handleRemoveImg"
     >
@@ -75,6 +76,7 @@
   import FileList from './FileList.vue';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { propTypes } from '/@/utils/propTypes';
+  import { USER_INFO_KEY } from '/@/enums/cacheEnum';
 
   export default defineComponent({
     name: 'CustomUpload',
@@ -86,17 +88,23 @@
         default: () => [],
       },
       action: propTypes.string.def(''),
-      imageUrl: propTypes.string.def(''),
+      keyName: propTypes.string.def(''),
+      // accept: propTypes.string.def(''),
+      headers: propTypes.any.def({}),
+      data: propTypes.any.def({}),
+      imageUrl: propTypes.any.def(''),
       uploadChoseText: propTypes.string.def(''),
       showHelpText: propTypes.bool.def(false),
       showUploadList: propTypes.bool.def(true),
+      // customRequest: propTypes.any.def(),
       // customPlaceholder: propTypes.bool.def(true),
       customPlaceholderImg: propTypes.string.def(),
       isFileList: propTypes.bool.def(false), // 待完善
     },
     emits: ['change', 'register', 'delete'],
     setup(props, { emit }) {
-      const checkStatus: any = inject('$checkStatus');
+      // const checkStatus: any = inject('$checkStatus');
+      const getCache: any = inject('$getCache');
       // const loginStore = userLoginStore();
       const previewVisible = ref(false);
       const previewImage = ref('');
@@ -108,15 +116,10 @@
       //   是否正在上传
       const isUploadingRef = ref(false);
       const fileListRef = ref<FileItem[]>([]);
-      const imgUrl = ref<string>('');
+      const imgUrl = ref<any>('');
+      const newHeaders = ref<any>({});
       const { accept, helpText, maxNumber, maxSize } = toRefs(props);
       const { t } = useI18n();
-      // const obj: any = {
-      //   thumbUrl: props.imageUrl,
-      //   url: props.imageUrl,
-      // }
-      // fileListRef.value =  [...unref(fileListRef), obj];
-      // imgUrl.value = props.imageUrl;
       const { getStringAccept, getHelpText } = useUploadType({
         acceptRef: accept,
         helpTextRef: helpText,
@@ -126,6 +129,20 @@
 
       const { createMessage } = useMessage();
 
+      const setNewProps = computed(() => {
+        const { keyName, imageUrl, headers } = props;
+        return {
+          keyName,
+          imageUrl,
+          headers: { 'TENANT-ID': getCache(USER_INFO_KEY).tnt, ...headers },
+        };
+      });
+      const obj: any = {
+        thumbUrl: setNewProps.value.imageUrl,
+      };
+      fileListRef.value = setNewProps.value.imageUrl ? [...unref(fileListRef), obj] : [];
+      imgUrl.value = setNewProps.value.imageUrl;
+      newHeaders.value = setNewProps.value.headers;
       const isUploadList = computed(() => {
         if (props.showUploadList) {
           return fileListRef.value.length <= 0;
@@ -160,16 +177,9 @@
           : t('component.upload.startUpload');
       });
 
-      // 上传前校验
-      function beforeUpload(file: File) {
+      // 生成图片缩略图
+      function thumbUrlHandle(file: File) {
         const { size, name } = file;
-        const { maxSize } = props;
-        // 设置最大值，则判断
-        if (maxSize && file.size / 1024 / 1024 >= maxSize) {
-          createMessage.error(t('component.upload.maxSizeMultiple', [maxSize]));
-          return false;
-        }
-
         const commonItem = {
           uuid: buildUUID(),
           file,
@@ -178,7 +188,6 @@
           percent: 0,
           type: name.split('.').pop(),
         };
-        // 生成图片缩略图
         if (checkImgType(file)) {
           // beforeUpload，如果异步会调用自带上传方法
           // file.url = await getBase64(file);
@@ -194,7 +203,74 @@
         } else {
           fileListRef.value = [...unref(fileListRef), commonItem];
         }
-        // return true;
+      }
+
+      // 上传前校验
+      function beforeUpload(file: File) {
+        const { maxSize } = props;
+        // 设置最大值，则判断
+        if (maxSize && file.size / 1024 / 1024 >= maxSize) {
+          createMessage.error(t('component.upload.maxSizeMultiple', [maxSize]));
+          return false;
+        }
+        thumbUrlHandle(file);
+      }
+
+      // 图片上传状态处理
+      // function handleChange(info) {
+      //   if (info.file.status === 'uploading') {
+      //     isUploadingRef.value = true;
+      //     return;
+      //   }
+      //   if (info.file.status === 'error') {
+      //     isUploadingRef.value = false;
+      //     // if(info.file.response.code === 401){
+      //     //   loginStore.logout();
+      //     // }else{
+      //     // checkStatus(info.file.response.code);
+      //     // }
+      //     return;
+      //   }
+      //   if (info.file.status === 'done') {
+      //      thumbUrlHandle(info.file.originFileObj);
+      //     props.showUploadList && (imgUrl.value = fileListRef.value[0].thumbUrl);
+      //     isUploadingRef.value = false;
+      //   }
+      //   isUploadingRef.value = false;
+      //   console.log(props.keyName)
+      //   emit('change', props.keyName ? {[props.keyName]: info.responseData}  : info.responseData);
+      // }
+
+      // 删除图片
+      function handleRemoveImg() {
+        imgUrl.value = '';
+        fileListRef.value = [];
+        isUploadingRef.value = false;
+        // emit('delete', fileListRef);
+        emit('change', props.keyName ? { [props.keyName]: '' } : '');
+      }
+      // 预览弹框关闭
+      function handleCancel() {
+        previewVisible.value = false;
+        previewTitle.value = '';
+      }
+      // 预览
+      const handlePreview = async (file) => {
+        previewImage.value = file.thumbUrl;
+        previewVisible.value = true;
+        previewTitle.value =
+          file.name || file.thumbUrl.substring(file.thumbUrl.lastIndexOf('/') + 1);
+      };
+
+      // 点击关闭：则所有操作不保存，包括上传的
+      async function handleCloseFunc() {
+        if (!isUploadingRef.value) {
+          fileListRef.value = [];
+          return true;
+        } else {
+          createMessage.warning(t('component.upload.uploadWait'));
+          return false;
+        }
       }
 
       // 删除
@@ -212,40 +288,40 @@
       //   });
       // }
 
-      async function uploadApiByItem(item: FileItem) {
+      async function uploadApiByItem(item: any) {
         const { api } = props;
         if (!api || !isFunction(api)) {
           return warn('upload api must exist and be a function');
         }
         try {
           item.status = UploadResultStatus.UPLOADING;
-          const { data } = await props.api?.(
-            {
-              data: {
-                ...(props.uploadParams || {}),
-              },
-              file: item.file,
-              name: props.name,
-              filename: props.filename,
-            },
+          isUploadingRef.value = true;
+          let formData = new FormData();
+          formData.append('file', item.file);
+          const result = await props.api?.(
+            formData,
             function onUploadProgress(progressEvent: ProgressEvent) {
               const complete = ((progressEvent.loaded / progressEvent.total) * 100) | 0;
               item.percent = complete;
             },
           );
           item.status = UploadResultStatus.SUCCESS;
-          item.responseData = data;
-          return {
-            success: true,
-            error: null,
-          };
+          isUploadingRef.value = false;
+          item.responseData = result;
+          // emit('change', result);
+          // return {
+          //   success: true,
+          //   error: null,
+          // };
         } catch (e) {
           item.status = UploadResultStatus.ERROR;
-          return {
-            success: false,
-            error: e,
-          };
+          isUploadingRef.value = false;
+          // return {
+          //   success: false,
+          //   error: e,
+          // };
         }
+        emit('change', props.keyName ? { [props.keyName]: item.responseData } : item.responseData);
       }
 
       // 点击开始上传
@@ -300,59 +376,6 @@
         emit('change', fileList);
       }
 
-      // 点击关闭：则所有操作不保存，包括上传的
-      async function handleCloseFunc() {
-        if (!isUploadingRef.value) {
-          fileListRef.value = [];
-          return true;
-        } else {
-          createMessage.warning(t('component.upload.uploadWait'));
-          return false;
-        }
-      }
-
-      // 图片上传状态处理
-      function handleChange(info: any) {
-        if (info.file.status === 'uploading') {
-          isUploadingRef.value = true;
-          return;
-        }
-        if (info.file.status === 'error') {
-          isUploadingRef.value = false;
-          // if(info.file.response.code === 401){
-          //   loginStore.logout();
-          // }else{
-          checkStatus(info.file.response.code);
-          // }
-          return;
-        }
-        if (info.file.status === 'done') {
-          props.showUploadList && (imgUrl.value = fileListRef.value[0].url);
-          isUploadingRef.value = false;
-        }
-        emit('change', fileListRef);
-      }
-
-      // 删除图片
-      function handleRemoveImg() {
-        imgUrl.value = '';
-        fileListRef.value = [];
-        isUploadingRef.value = false;
-        emit('delete', fileListRef);
-      }
-      // 预览弹框关闭
-      function handleCancel() {
-        previewVisible.value = false;
-        previewTitle.value = '';
-      }
-      // 预览
-      const handlePreview = async (file) => {
-        previewImage.value = file.thumbUrl;
-        previewVisible.value = true;
-        previewTitle.value =
-          file.name || file.thumbUrl.substring(file.thumbUrl.lastIndexOf('/') + 1);
-      };
-
       return {
         columns: createTableColumns() as any[],
         actionColumn: createActionColumn(handleRemove) as any,
@@ -368,7 +391,7 @@
         handleCloseFunc,
         getIsSelectFile,
         getUploadBtnText,
-        handleChange,
+        // handleChange,
         t,
         imgUrl,
         previewVisible,
@@ -378,6 +401,8 @@
         handlePreview,
         handleRemoveImg,
         isUploadList,
+        uploadApiByItem,
+        newHeaders,
       };
     },
   });
@@ -388,6 +413,11 @@
       height: 100%;
       width: 100%;
     }
+
+    // :deep(.ant-upload-list-item){
+    //   width:200px;
+    //   height:150px;
+    // }
 
     :deep(.ant-upload-select) {
       position: relative;

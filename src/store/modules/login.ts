@@ -161,7 +161,6 @@ export const userLoginStore = defineStore({
     },
     async getUserInfoAction(): Promise<UserInfo | null> {
       const userInfo = await getUserInfo();
-      console.log(userInfo);
       const { roleResCodeList = [] } = userInfo;
       this.setRoleList(roleResCodeList);
       // if (isArray(roleResCodeList)) {

@@ -84,11 +84,12 @@ export const searchFormSchema: FormSchema[] = [
 
 export const accountFormSchema: FormSchema[] = [
   {
-    field: 'picture',
+    field: 'IdPicture',
     label: '证件照片',
     component: 'Input',
     required: true,
     ifShow: true,
+    slot: 'IdPictureSlot',
   },
   {
     field: 'certNoFrontPath',

@@ -109,9 +109,9 @@ export const updateAdminUser = (
 /**
  * @description:图片上传
  */
-export const uploadImgAxios = () => {
+export const uploadImgAxios = (params: any) => {
   return defHttp.post<GetUserListResultModel>(
-    { url: Api.UploadImg },
+    { url: Api.UploadImg, params },
     // {
     //   isReturnNativeResponse: true,
     //   errorMessageMode: mode,
