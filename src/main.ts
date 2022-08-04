@@ -16,6 +16,8 @@ import { setupI18n } from '/@/locales/setupI18n';
 import { registerGlobComp } from '/@/components/registerGlobComp';
 import { checkStatus } from '/@/utils/http/axios/checkStatus';
 import { getCache, setCache, clearCache } from '/@/utils/auth';
+// import { TNT_KEY } from '/@/enums/cacheEnum';
+// import { urlDisassembly } from '/@/utils/env';
 
 async function bootstrap() {
   const app = createApp(App);
@@ -24,7 +26,7 @@ async function bootstrap() {
   app.provide('$getCache', getCache);
   app.provide('$setCaches', setCache);
   app.provide('$clearCache', clearCache);
-
+  // setCache(TNT_KEY, urlDisassembly().tnt);
   // Configure store
   setupStore(app);
 

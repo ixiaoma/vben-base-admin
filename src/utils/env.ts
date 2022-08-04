@@ -7,7 +7,8 @@ import { getConfigFileName } from '../../build/getConfigFileName';
 // 域名拆解 获取租户id
 export const urlDisassembly = () => {
   const PATH_HOST: string = window.location.host;
-  const TNT = isDevMode() ? 'TTCSZ6CN' : PATH_HOST.split('.')[0];
+  const { VITE_TNT } = getAppEnvConfig();
+  const TNT = isDevMode() ? VITE_TNT : PATH_HOST.split('.')[0];
   return { key: `${getEnv()}_${TNT}`.toUpperCase(), tnt: TNT };
 };
 
@@ -30,6 +31,7 @@ export function getAppEnvConfig() {
     : window[ENV_NAME as any]) as unknown as GlobEnvConfig;
 
   const {
+    VITE_TNT,
     VITE_GLOB_APP_TITLE,
     VITE_GLOB_API_URL,
     VITE_GLOB_APP_SHORT_NAME,
@@ -44,6 +46,7 @@ export function getAppEnvConfig() {
   }
 
   return {
+    VITE_TNT,
     VITE_GLOB_APP_TITLE,
     VITE_GLOB_API_URL,
     VITE_GLOB_APP_SHORT_NAME,

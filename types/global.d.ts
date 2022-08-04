@@ -56,6 +56,7 @@ declare global {
   }
 
   declare interface ViteEnv {
+    VITE_TNT: string;
     VITE_PORT: number;
     VITE_USE_MOCK: boolean;
     VITE_USE_PWA: boolean;

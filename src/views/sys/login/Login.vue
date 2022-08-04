@@ -57,7 +57,6 @@
   const TNTID = urlDisassembly().tnt;
   const checkStatus: any = inject('$checkStatus');
   const setCaches: any = inject('$setCaches');
-
   const { t } = useI18n();
   const { prefixCls } = useDesign('login');
   const { setLoginState, getLoginState } = useLoginState();
