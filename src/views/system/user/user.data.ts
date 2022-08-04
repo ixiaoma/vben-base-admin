@@ -4,7 +4,8 @@ import { FormSchema } from '/@/components/Table';
 import { formatToDateTime } from '/@/utils/dateUtil';
 import { vueHFn } from '/@/utils/tableInnerHandle';
 import { addressList } from '/@/utils/address';
-
+import { useI18n } from '/@/hooks/web/useI18n';
+const { t } = useI18n();
 export const columns: BasicColumn[] = [
   {
     title: '用户账号',
@@ -87,7 +88,13 @@ export const accountFormSchema: FormSchema[] = [
     field: 'IdPicture',
     label: '证件照片',
     component: 'Input',
-    required: true,
+    rules: [
+      {
+        required: true,
+        // message: t('component.upload.validatMessage'),
+        message: t('routes.system.user.validatMessage'),
+      },
+    ],
     ifShow: true,
     slot: 'IdPictureSlot',
   },

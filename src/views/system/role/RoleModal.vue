@@ -76,7 +76,11 @@
       });
 
       const getTitle = computed(() =>
-        unref(isPrimision) ? '分配权限' : !unref(isUpdate) ? '新增角色' : '编辑角色',
+        unref(isPrimision)
+          ? t('routes.role.assignPermissions')
+          : !unref(isUpdate)
+          ? `${t('common.addNewText')}${t('routes.role.name')}`
+          : `${t('common.editText')}${t('routes.role.name')}`,
       );
       /**
        * @description: 勾选数据

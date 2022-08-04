@@ -3,20 +3,20 @@
     <OrgTree class="w-1/4 xl:w-1/5" @select="handleSelect" />
     <BasicTable @register="registerTable" class="w-3/4 xl:w-4/5" :searchInfo="searchInfo">
       <template #toolbar>
-        <a-button type="primary" @click="handleCreate" v-if="isAdd && handlePrimission('add')"
-          >添加</a-button
-        >
+        <a-button type="primary" @click="handleCreate" v-if="isAdd && handlePrimission('add')">{{
+          t('common.addText')
+        }}</a-button>
       </template>
       <template #action="{ record }">
         <TableAction
           :actions="[
             {
-              label: '编辑',
+              label: t('common.editText'),
               onClick: handleEdit.bind(null, record),
               ifShow: handlePrimission('edit', record),
             },
             {
-              label: '删除',
+              label: t('common.delText'),
               color: 'error',
               onClick: handleDelete.bind(null, record),
               ifShow: handlePrimission('del', record),
@@ -209,6 +209,7 @@
         searchInfo,
         handlePrimission,
         isAdd,
+        t,
       };
     },
   });

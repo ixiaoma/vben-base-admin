@@ -89,15 +89,12 @@
       },
       action: propTypes.string.def(''),
       keyName: propTypes.string.def(''),
-      // accept: propTypes.string.def(''),
       headers: propTypes.any.def({}),
       data: propTypes.any.def({}),
       imageUrl: propTypes.any.def(''),
       uploadChoseText: propTypes.string.def(''),
       showHelpText: propTypes.bool.def(false),
       showUploadList: propTypes.bool.def(true),
-      // customRequest: propTypes.any.def(),
-      // customPlaceholder: propTypes.bool.def(true),
       customPlaceholderImg: propTypes.string.def(),
       isFileList: propTypes.bool.def(false), // 待完善
     },
@@ -106,20 +103,20 @@
       // const checkStatus: any = inject('$checkStatus');
       const getCache: any = inject('$getCache');
       // const loginStore = userLoginStore();
+      const { t } = useI18n();
       const previewVisible = ref(false);
       const previewImage = ref('');
-      const previewTitle = ref('预览');
+      const previewTitle = ref(t('component.cropper.preview'));
       const state = reactive<{ fileList: FileItem[] }>({
         fileList: [],
       });
-
+      console.log(previewTitle);
       //   是否正在上传
       const isUploadingRef = ref(false);
       const fileListRef = ref<FileItem[]>([]);
       const imgUrl = ref<any>('');
       const newHeaders = ref<any>({});
       const { accept, helpText, maxNumber, maxSize } = toRefs(props);
-      const { t } = useI18n();
       const { getStringAccept, getHelpText } = useUploadType({
         acceptRef: accept,
         helpTextRef: helpText,
@@ -246,7 +243,7 @@
         imgUrl.value = '';
         fileListRef.value = [];
         isUploadingRef.value = false;
-        // emit('delete', fileListRef);
+        // emit('delete', props.keyName);
         emit('change', props.keyName ? { [props.keyName]: '' } : '');
       }
       // 预览弹框关闭

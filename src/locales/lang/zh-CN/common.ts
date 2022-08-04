@@ -4,6 +4,10 @@ export default {
   cancelText: '取消',
   loadingText: '加载中...',
   saveText: '保存',
+  addNewText: '新增',
+  addText: '添加',
+  editText: '编辑',
+  modifyText: '修改',
   delText: '删除',
   resetText: '重置',
   searchText: '搜索',
@@ -11,6 +15,7 @@ export default {
 
   inputText: '请输入',
   chooseText: '请选择',
+  uploadText: '请上传',
 
   redo: '刷新',
   back: '返回',

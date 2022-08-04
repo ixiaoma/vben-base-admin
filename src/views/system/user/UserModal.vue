@@ -1,11 +1,5 @@
 <template>
-  <BasicModal
-    v-bind="$attrs"
-    @register="registerModal"
-    :title="getTitle"
-    :width="800"
-    @ok="handleSubmit"
-  >
+  <BasicModal v-bind="$attrs" @register="registerModal" :title="getTitle" @ok="handleSubmit">
     <BasicForm @register="registerForm">
       <template #nameSignPicSlot="{ field }">
         <BasicCustomUpload
@@ -14,6 +8,7 @@
           @change="uploadChange"
           :keyName="field"
           :key="formTimer"
+          :accept="['.png']"
         />
       </template>
       <template #IdPictureSlot>
@@ -25,7 +20,8 @@
             @change="uploadChange"
             keyName="certNoFrontPath"
             :key="formTimer + 1"
-            uploadChoseText="身份证(人像面)"
+            :uploadChoseText="t('routes.user.IDcardPortrait')"
+            :accept="['.png', '.jpg', '.jpeg', 'bmp']"
           />
           <BasicCustomUpload
             :api="uploadImgAxios"
@@ -34,10 +30,11 @@
             @change="uploadChange"
             keyName="certNoBackPath"
             :key="formTimer + 2"
-            uploadChoseText="身份证(国徽面)"
+            :uploadChoseText="t('routes.user.IDcardNationalEmblem')"
+            :accept="['.png', '.jpg', '.jpeg', 'bmp']"
           />
         </div>
-        <div class="text-tag">请上传清晰的原件照片，支持上传jpg、jpeg、png、bmp格式</div>
+        <div class="text-tag">{{ t('routes.user.tips') }}</div>
       </template>
     </BasicForm>
   </BasicModal>
@@ -106,6 +103,11 @@
             `${downloadImgUrl()}${certNoBackPath}`,
           ];
           nameSignPicUrl.value = `${downloadImgUrl()}${nameSignPic}`;
+          uploadData.value = {
+            certNoFrontPath,
+            certNoBackPath,
+            nameSignPic,
+          };
           rowData.value = data.record;
 
           setFieldsValue({
@@ -117,7 +119,11 @@
         formTimer.value = +new Date();
       });
 
-      const getTitle = computed(() => (!unref(isUpdate) ? '新增用户' : '编辑用户'));
+      const getTitle = computed(() =>
+        !unref(isUpdate)
+          ? `${t('common.addNewText')}${t('routes.system.user.name')}`
+          : `${t('common.editText')}${t('routes.system.user.name')}`,
+      );
 
       // function getIdCardPic(val: any, index: number) {
       //   if (val) {
@@ -133,13 +139,15 @@
        */
       function uploadChange(val) {
         uploadData.value = { ...uploadData.value, ...val };
-        const frontPath = uploadData.value.certNoFrontPath || rowData.value.certNoFrontPath;
-        const backPath = uploadData.value.certNoBackPath || rowData.value.certNoBackPath;
+        const frontPath = uploadData.value.certNoFrontPath;
+        const backPath = uploadData.value.certNoBackPath;
         const obj = {
-          IdPicture: `${frontPath},${backPath}`,
+          IdPicture: frontPath && backPath ? `${frontPath},${backPath}` : '',
           certNoFrontPath: frontPath,
           certNoBackPath: backPath,
         };
+        console.log(obj);
+        console.log({ ...rowData, ...obj });
         setFieldsValue({ ...rowData, ...obj });
       }
 
@@ -202,6 +210,7 @@
         formTimer,
         uploadImgAxios,
         IdPictureUrls,
+        t,
       };
     },
   });
