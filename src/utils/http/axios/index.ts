@@ -165,7 +165,7 @@ const transform: AxiosTransform = {
           case 401:
             errMessage = t('sys.api.errMsg401');
             userStore.setToken(undefined);
-            userStore.logout(true);
+            userStore.logout(true, config?.requestOptions?.loginOut);
             break;
           case 403:
             errMessage = t('sys.api.errMsg403');
