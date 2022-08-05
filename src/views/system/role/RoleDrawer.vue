@@ -15,7 +15,7 @@
           :fieldNames="{ title: 'menuName', key: 'id' }"
           checkable
           toolbar
-          title="菜单分配"
+          :title="t('routes.system.role.dialogTitle')"
         />
       </template>
     </BasicForm>
@@ -27,7 +27,7 @@
   import { formSchema } from './role.data';
   import { BasicDrawer, useDrawerInner } from '/@/components/Drawer';
   import { BasicTree, TreeItem } from '/@/components/Tree';
-
+  import { useI18n } from '/@/hooks/web/useI18n';
   import { getMenuList } from '/@/api/demo/system';
 
   export default defineComponent({
@@ -35,6 +35,7 @@
     components: { BasicDrawer, BasicForm, BasicTree },
     emits: ['success', 'register'],
     setup(_, { emit }) {
+      const { t } = useI18n();
       const isUpdate = ref(true);
       const treeData = ref<TreeItem[]>([]);
 
@@ -60,7 +61,11 @@
         }
       });
 
-      const getTitle = computed(() => (!unref(isUpdate) ? '新增角色' : '编辑角色'));
+      const getTitle = computed(() =>
+        !unref(isUpdate)
+          ? `${t('common.addNewText')}${t('routes.system.role.name')}`
+          : `${t('common.editText')}${t('routes.system.role.name')}`,
+      );
 
       async function handleSubmit() {
         try {
@@ -81,6 +86,7 @@
         getTitle,
         handleSubmit,
         treeData,
+        t,
       };
     },
   });

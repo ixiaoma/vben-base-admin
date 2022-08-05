@@ -4,6 +4,10 @@ export default {
   cancelText: 'Cancel',
   loadingText: 'Loading...',
   saveText: 'Save',
+  addNewText: 'Add new',
+  addText: 'Add',
+  editText: 'Edit',
+  modifyText: 'modify',
   delText: 'Delete',
   resetText: 'Reset',
   searchText: 'Search',
@@ -11,6 +15,7 @@ export default {
 
   inputText: 'Please enter',
   chooseText: 'Please choose',
+  uploadText: 'Please upload',
 
   redo: 'Refresh',
   back: 'Back',

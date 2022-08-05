@@ -10,7 +10,7 @@ import { useGlobSetting } from '/@/hooks/setting';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { RequestEnum, ContentTypeEnum } from '/@/enums/httpEnum';
 import { isString } from '/@/utils/is';
-import { getToken } from '/@/utils/auth';
+import { getToken, getTnt } from '/@/utils/auth';
 import { setObjToUrlParams, deepMerge } from '/@/utils';
 import { useErrorLogStoreWithOut } from '/@/store/modules/errorLog';
 import { useI18n } from '/@/hooks/web/useI18n';
@@ -121,6 +121,9 @@ const transform: AxiosTransform = {
   requestInterceptors: (config, options) => {
     // 请求之前处理config
     const token = getToken();
+    const TNT = getTnt();
+    (config as Recordable).headers['tnt'] = TNT;
+    (options as Recordable).headers['tnt'] = TNT;
     if (token && (config as Recordable)?.requestOptions?.withToken !== false) {
       // jwt token
       (config as Recordable).headers.Authorization = options.authenticationScheme
@@ -162,7 +165,7 @@ const transform: AxiosTransform = {
           case 401:
             errMessage = t('sys.api.errMsg401');
             userStore.setToken(undefined);
-            userStore.logout(true);
+            userStore.logout(true, config?.requestOptions?.loginOut);
             break;
           case 403:
             errMessage = t('sys.api.errMsg403');

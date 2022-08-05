@@ -49,3 +49,43 @@
     opacity: 0.75;
   }
 }
+
+.text-danger {
+  color: @danger-color;
+}
+
+.paddingFn(@className,@value) {
+  .@{className} {
+    @{className}: @value;
+  }
+}
+
+.for (@i) when(@i < 50) {
+  .padding-top-@{i} {
+    padding-top: ~'@{i}px';
+  }
+  .padding-right-@{i} {
+    padding-right: ~'@{i}px';
+  }
+  .padding-bottom-@{i} {
+    padding-bottom: ~'@{i}px';
+  }
+  .padding-left-@{i} {
+    padding-left: ~'@{i}px';
+  }
+  .margin-top-@{i} {
+    margin-top: ~'@{i}px';
+  }
+  .margin-right-@{i} {
+    margin-right: ~'@{i}px';
+  }
+  .margin-bottom-@{i} {
+    margin-bottom: ~'@{i}px';
+  }
+  .margin-lef-t@{i} {
+    margin-left: ~'@{i}px';
+  }
+  .for(@i+5);
+}
+
+.for(5);

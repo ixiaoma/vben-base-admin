@@ -54,7 +54,7 @@
   import { BasicModal, useModalInner } from '/@/components/Modal';
   import { BasicForm, useForm } from '/@/components/Form/index';
   import { BasicCustomUpload } from '/@/components/CustomUpload';
-  import { accountFormSchema } from './user.data';
+  import { tntSearchFormSchema } from './org.data';
   import { useUserStore } from '/@/store/modules/user';
   import { useI18n } from '/@/hooks/web/useI18n';
   import { uploadImgUrl, downloadImgUrl, uploadImgAxios } from '/@/api/system/user';
@@ -79,7 +79,7 @@
       const firstIn = ref<boolean>(true);
       const [registerForm, { setFieldsValue, updateSchema, resetFields, validate }] = useForm({
         labelWidth: 100,
-        schemas: accountFormSchema,
+        schemas: tntSearchFormSchema,
         baseColProps: { span: 24 },
         showActionButtonGroup: false,
         actionColOptions: {

@@ -3,7 +3,9 @@ import { BasicColumn } from '/@/components/Table';
 import { FormSchema } from '/@/components/Table';
 import { formatToDateTime } from '/@/utils/dateUtil';
 import { vueHFn } from '/@/utils/tableInnerHandle';
-
+import { addressList } from '/@/utils/address';
+import { useI18n } from '/@/hooks/web/useI18n';
+const { t } = useI18n();
 export const columns: BasicColumn[] = [
   {
     title: '用户账号',
@@ -23,7 +25,6 @@ export const columns: BasicColumn[] = [
   {
     title: '角色',
     dataIndex: 'roleNames',
-    width: 200,
     customRender: ({ record }) => {
       let result = '';
       if (record?.roleNames) {
@@ -35,6 +36,7 @@ export const columns: BasicColumn[] = [
   {
     title: '状态',
     dataIndex: 'lockState',
+    width: 100,
     customRender: ({ record }) => {
       let result = '';
       switch (record.lockState) {
@@ -83,11 +85,31 @@ export const searchFormSchema: FormSchema[] = [
 
 export const accountFormSchema: FormSchema[] = [
   {
-    field: 'picture',
+    field: 'IdPicture',
     label: '证件照片',
-    component: 'InputPassword',
-    required: true,
+    component: 'Input',
+    rules: [
+      {
+        required: true,
+        message: t('routes.system.user.validatIDCardMessage'),
+      },
+    ],
     ifShow: true,
+    colSlot: 'IdPictureSlot',
+  },
+  {
+    field: 'certNoFrontPath',
+    label: '身份证正面',
+    component: 'Input',
+    required: true,
+    show: false,
+  },
+  {
+    field: 'certNoBackPath',
+    label: '身份证反面',
+    component: 'Input',
+    required: true,
+    show: false,
   },
   {
     field: 'name',
@@ -142,24 +164,64 @@ export const accountFormSchema: FormSchema[] = [
 
   {
     label: '角色',
-    field: 'roleNames',
+    field: 'roleCodes',
     component: 'ApiSelect',
-    componentProps: {
-      api: getRoleList,
-      mode: 'multiple',
-      resultField: 'list',
-      params: { current: 1, pageSize: 9999 },
-      labelField: 'roleName',
-      valueField: 'roleCode',
+    mode: 'multiple',
+    // changeEvent:'blur',
+    componentProps: ({ formModel, formActionType }) => {
+      return {
+        api: getRoleList,
+        resultField: 'list',
+        params: { current: 1, pageSize: 9999 },
+        labelField: 'roleName',
+        valueField: 'roleCode',
+        onChange: (code, item): void => {
+          const isMediator = code.includes('MEDIATOR');
+          formModel.roleNames = item.map((ele) => ele.label);
+          formActionType.updateSchema({
+            field: 'nameSignPic',
+            required: isMediator,
+            ifShow: isMediator,
+          });
+        },
+        // onOptionsChange:(val) =>{
+        //    console.log(val)
+        // }
+      };
     },
     required: true,
   },
   {
+    field: 'roleNames',
+    label: '角色名称',
+    component: 'Select',
+    show: false,
+  },
+  {
     field: 'workPlace',
     label: '工作地点',
-    component: 'Input',
+    component: 'Cascader',
+    componentProps: () => {
+      return {
+        fieldNames: {
+          value: 'label',
+        },
+        options: addressList,
+      };
+    },
     required: true,
-    slot: 'workPlaceSlot',
+  },
+  {
+    field: 'detailAddress',
+    label: '详细地址',
+    component: 'Input',
+    rules: [
+      {
+        required: true,
+        message: t('routes.system.user.validatAddressMessage'),
+      },
+    ],
+    // slot: 'detailAddressSlot',
   },
   {
     field: 'professionalArea',
@@ -171,8 +233,8 @@ export const accountFormSchema: FormSchema[] = [
     field: 'nameSignPic',
     label: '调解员签名',
     component: 'Upload',
-    required: true,
-    ifShow: true,
+    required: false,
+    ifShow: false,
     slot: 'nameSignPicSlot',
   },
 

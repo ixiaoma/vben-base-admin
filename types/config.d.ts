@@ -148,6 +148,7 @@ export interface GlobConfig {
   shortName: string;
 }
 export interface GlobEnvConfig {
+  VITE_TNT: string;
   // Site title
   VITE_GLOB_APP_TITLE: string;
   // Service interface url

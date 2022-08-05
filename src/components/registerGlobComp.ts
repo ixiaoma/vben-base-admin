@@ -12,6 +12,9 @@ import {
   Popover,
   Radio,
   Divider,
+  Select,
+  Cascader,
+  Modal,
   Dropdown,
   Menu,
   Tabs,
@@ -32,6 +35,9 @@ export function registerGlobComp(app: App) {
     .use(Popover)
     .use(Radio)
     .use(Divider)
+    .use(Modal)
+    .use(Cascader)
+    .use(Select)
     .use(Dropdown)
     .use(Menu)
     .use(Tabs)

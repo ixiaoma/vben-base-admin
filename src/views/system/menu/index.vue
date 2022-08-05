@@ -3,26 +3,26 @@
     <BasicTable @register="registerTable" @fetch-success="onFetchSuccess">
       <template #toolbar>
         <a-button type="primary" @click="handleCreate" v-show="handlePrimission('add')">
-          添加
+          {{ t('common.addText') }}
         </a-button>
       </template>
       <template #action="{ record }">
         <TableAction
           :actions="[
             {
-              label: '新增',
+              label: t('common.addText'),
               // icon: 'clarity:note-edit-line',
               onClick: handleAdd.bind(null, record),
               ifShow: handlePrimission('add', record),
             },
             {
-              label: '编辑',
+              label: t('common.editText'),
               // icon: 'clarity:note-edit-line',
               onClick: handleEdit.bind(null, record),
               ifShow: handlePrimission('edit', record),
             },
             {
-              label: '删除',
+              label: t('common.delText'),
               // icon: 'ant-design:delete-outlined',
               color: 'error',
               onClick: handleDelete.bind(null, record),
@@ -178,6 +178,7 @@
         onFetchSuccess,
         hasPermission,
         handlePrimission,
+        t,
       };
     },
   });

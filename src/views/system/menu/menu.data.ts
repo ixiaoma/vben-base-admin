@@ -33,9 +33,7 @@ export const columns: BasicColumn[] = [
     dataIndex: 'resType',
     width: 80,
     customRender: ({ record }) => {
-      const status = record.resType;
-      const enable = status === 'MENU';
-      const text = enable ? '菜单' : '按钮';
+      const text = record.resType === 'MENU' ? '菜单' : '按钮';
       return vueHFn({ data: text });
     },
   },

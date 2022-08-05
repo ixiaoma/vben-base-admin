@@ -125,6 +125,7 @@ export interface FormProps {
   colon?: boolean;
 }
 export interface FormSchema {
+  mode?: string;
   // Field name
   field: string;
   //枚举code
