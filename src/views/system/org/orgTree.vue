@@ -13,34 +13,54 @@
     />
   </div>
 </template>
-<script lang="ts">
-  import { defineComponent, onMounted, ref } from 'vue';
+<script lang="ts" setup>
+  import { onMounted, ref } from 'vue';
+  import { string } from 'vue-types';
 
   import { BasicTree, TreeItem } from '/@/components/Tree';
   import { useOrgStore } from '/@/store/modules/org';
 
-  export default defineComponent({
-    name: 'DeptTree',
-    components: { BasicTree },
-
-    emits: ['select'],
-    setup(_, { emit }) {
-      const treeData = ref<TreeItem[]>([]);
-      const orgStore = useOrgStore();
-      const timer = ref<number>();
-      async function fetch() {
-        treeData.value = (await orgStore.getOrgTreeFun()) as unknown as TreeItem[];
-        timer.value = +new Date();
-      }
-
-      function handleSelect(keys, node) {
-        emit('select', node, keys[0]);
-      }
-
-      onMounted(() => {
-        fetch();
-      });
-      return { treeData, handleSelect, timer };
+  const props: any = defineProps({
+    pageSource: {
+      type: string,
+      default: '',
     },
+  });
+  const emits = defineEmits(['select']);
+  const treeData = ref<TreeItem[]>([]);
+  const orgStore = useOrgStore();
+  const timer = ref<number>();
+  async function fetch() {
+    const result = (await orgStore.getOrgTreeFun()) as unknown as TreeItem[];
+    if (props.pageSource === 'ORG') {
+      treeData.value = [
+        {
+          name: '组织管理',
+          code: '0',
+          orgCode: '0',
+          type: 'SYS',
+          children: result,
+          userAdd: '0',
+          key: '0',
+        },
+      ];
+    } else {
+      treeData.value = result;
+    }
+    timer.value = +new Date();
+  }
+
+  function handleSelect(keys, node) {
+    emits('select', node, keys[0]);
+  }
+
+  onMounted(() => {
+    fetch();
+  });
+
+  defineExpose({
+    treeData,
+    handleSelect,
+    timer,
   });
 </script>
