@@ -41,17 +41,16 @@
   </a-card>
 </template>
 <script lang="ts" setup name="CaseAllocation">
-  import { ref, unref, computed } from 'vue';
-  import { useRoute } from 'vue-router';
+  import { ref, unref, computed, useAttrs } from 'vue';
 
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { getPhoneColumns, getAddressColumns } from './casedetail.data';
+  import { getPhoneColumns, getAddressColumns, RecordProps } from './casedetail.data';
   import { getContactInfoList, getAddressInfoList } from '/@/api/manage/caseallocation';
 
-  const mode = ref('phone');
+  const attrs = useAttrs();
+  const { caseNo } = unref(attrs.recordData) as RecordProps;
 
-  const { query } = useRoute();
-  const { caseNo } = query;
+  const mode = ref('phone');
 
   const tableProps = computed(() => {
     return {
@@ -60,7 +59,7 @@
       actionColumn:
         mode.value === 'phone'
           ? {
-              width: 120,
+              width: 100,
               title: '操作',
               dataIndex: 'action',
             }
@@ -73,7 +72,7 @@
   const [registerTable, { setProps, reload }] = useTable({
     ...unref(tableProps),
     maxHeight: 200,
-    canResize: true,
+    canResize: false,
     searchInfo: {
       caseNo,
     },

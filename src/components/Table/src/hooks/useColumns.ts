@@ -10,7 +10,7 @@ import { cloneDeep, isEqual } from 'lodash-es';
 import { formatToDate } from '/@/utils/dateUtil';
 import { ACTION_COLUMN_FLAG, DEFAULT_ALIGN, INDEX_COLUMN_FLAG, PAGE_SIZE } from '../const';
 import { getEnum } from '/@/utils/commonUtil';
-import { formatPhone } from '/@/utils/formatUtil'
+import { formatPhone, regFenToYuanToThousands, regYuanToFen } from '/@/utils/formatUtil';
 
 function handleItem(item: BasicColumn, ellipsis: boolean) {
   const { key, dataIndex, children } = item;
@@ -64,7 +64,7 @@ function handleIndexColumn(
         return chooseEnum[record[column.dataIndex]]?.label;
       };
     }
-    if(column.enumProp){
+    if (column.enumProp) {
       column.customRender = ({ record }) => {
         return column.enumProp[record[column.dataIndex]];
       };
@@ -316,14 +316,15 @@ export function formatCell(text: string, format: CellFormat, record: Recordable,
       if (!dateFormat) {
         return text;
       }
-      
+
       return formatToDate(text, dateFormat);
+    } else if (format === 'phone') {
+      return formatPhone(text);
+    } else if (format === 'fenToyuan') {
+      return regFenToYuanToThousands(text);
+    } else if (format === 'yuanTofen') {
+      return regYuanToFen(text);
     }
-
-    if(format === 'phone'){
-      return formatPhone(text)
-    }
-
     // Map
     if (isMap(format)) {
       return format.get(text);

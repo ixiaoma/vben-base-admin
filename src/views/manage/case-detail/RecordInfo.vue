@@ -25,15 +25,14 @@
   </a-card>
 </template>
 <script lang="ts" setup name="CaseAllocation">
-  import { ref, unref, computed } from 'vue';
-  import { useRoute } from 'vue-router';
+  import { ref, unref, computed, useAttrs } from 'vue';
 
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
-  import { getMeditorColumns, getActionColumns } from './casedetail.data';
+  import { getMeditorColumns, getActionColumns, RecordProps } from './casedetail.data';
   import { getWorkPlaceMediateRecord, getActionRecord } from '/@/api/manage/caseallocation';
 
-  const { query } = useRoute();
-  const { caseNo } = query;
+  const attrs = useAttrs();
+  const { caseNo } = unref(attrs.recordData) as RecordProps;
 
   const mode = ref('meditorRecord');
 
@@ -44,7 +43,7 @@
       actionColumn:
         mode.value === 'meditorRecord'
           ? {
-              width: 120,
+              width: 100,
               title: '操作',
               dataIndex: 'action',
             }
@@ -56,6 +55,7 @@
   const [registerTable, { setProps, reload }] = useTable({
     ...unref(tableProps),
     maxHeight: 200,
+    canResize: false,
     searchInfo: {
       caseNo,
     },

@@ -7,7 +7,7 @@
         :label="item.label"
         :contentStyle="{ fontSize: '14px' }"
       >
-        <RepayTable v-if="item.field === 'repayInfo'" />
+        <RepayTable v-if="item.field === 'repayInfo'" v-bind="$attrs" />
         <div
           class="ellipsis-text btn-text"
           :title="item.value"
@@ -23,49 +23,55 @@
   </a-card>
 </template>
 <script lang="ts" setup>
-  import { ref } from 'vue';
-  import { useRoute } from 'vue-router';
+  import { ref, unref, useAttrs } from 'vue';
 
   import RepayTable from './RepayTable.vue';
 
-  import { getBaseInfoField } from './casedetail.data';
+  import { getBaseInfoField, RecordProps } from './casedetail.data';
   import { getCaseDetail } from '/@/api/manage/caseallocation';
 
   import { formatToDateTime } from '/@/utils/dateUtil';
   import { getEnum, chainVerify } from '/@/utils/commonUtil';
   import { regFenToYuanToThousands } from '/@/utils/formatUtil';
 
-  const { query } = useRoute();
-  const { caseNo, mediateNo } = query;
+  const attrs = useAttrs();
+  const { caseNo, mediateNo, caseType, assignStatus } = unref(attrs.recordData) as RecordProps;
 
-  const baseInfoList = ref(getBaseInfoField());
+  const baseInfoList = ref(getBaseInfoField(caseType, assignStatus));
 
   async function getBaseInfo() {
     const params = { caseNo };
     const res = await getCaseDetail(params);
-    baseInfoList.value.forEach((ele) => {
-      if (ele.field === 'mediateNo') {
-        ele.value = mediateNo;
-      } else {
-        const fieldValue = res[ele.field];
-        if (ele.type === 'money') {
-          ele.value = regFenToYuanToThousands(fieldValue);
-        } else if (ele.type === 'date') {
-          ele.value = formatToDateTime();
+    baseInfoList.value = baseInfoList.value
+      .filter((item) => !Reflect.has(item, 'show') || item.show)
+      ?.map((ele) => {
+        let valueData: any = undefined;
+        if (ele.field === 'mediateNo') {
+          valueData = mediateNo;
         } else {
-          if (ele.optionEnumCode) {
-            ele.value = getEnum(ele.optionEnumCode, false, fieldValue || 'UN_CHAINED');
+          const fieldValue = res[ele.field];
+          if (ele.type === 'money') {
+            valueData = regFenToYuanToThousands(fieldValue);
+          } else if (ele.type === 'date') {
+            valueData = formatToDateTime(fieldValue);
           } else {
-            ele.value = fieldValue;
+            if (ele.optionEnumCode) {
+              valueData = getEnum(ele.optionEnumCode, false, fieldValue || 'UN_CHAINED');
+            } else {
+              valueData = fieldValue;
+            }
           }
         }
-      }
-    });
+        return {
+          ...ele,
+          value: valueData,
+        };
+      });
   }
+
   getBaseInfo();
 </script>
 <style lang="less" scoped>
-
   ::v-deep(.ant-descriptions-item-label) {
     position: relative;
     padding-left: 10px;

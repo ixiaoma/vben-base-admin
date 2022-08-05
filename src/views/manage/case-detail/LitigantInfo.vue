@@ -1,14 +1,18 @@
 <template>
   <a-card title="当事人">
-    <a-empty :image="Empty.PRESENTED_IMAGE_SIMPLE" v-if="!litigantList?.length"/>
+    <a-empty :image="Empty.PRESENTED_IMAGE_SIMPLE" v-if="!litigantList?.length" />
     <div class="list-item" v-else v-for="(item, index) in litigantList" :key="index">
       <div class="item-header">
         <div class="row">
           <div>
-            <user-outlined :style="{ color: getColor(item.itemData?.litigantType)}" fill/>
-            <span class="litigant-title">{{getEnum('LitigantTypeEnum', false, item.itemData?.litigantType)}}</span>
+            <user-outlined :style="{ color: getColor(item.itemData?.litigantType) }" fill />
+            <span class="litigant-title">{{
+              getEnum('LitigantTypeEnum', false, item.itemData?.litigantType)
+            }}</span>
           </div>
-          <a href="#" v-if="['accuser', 'accused'].includes(item.itemData?.litigantType)">添加代理人</a>
+          <a href="#" v-if="['accuser', 'accused'].includes(item.itemData?.litigantType)"
+            >添加代理人</a
+          >
           <div v-else>
             <a href="#">编辑</a>
             <a-divider type="vertical" />
@@ -16,7 +20,7 @@
           </div>
         </div>
         <div class="row bottom-row">
-          <span class="litigant-name">{{item.itemData?.litigantName}}</span>
+          <span class="litigant-name">{{ item.itemData?.litigantName }}</span>
         </div>
       </div>
       <a-descriptions :column="1" size="small" class="item-content">
@@ -33,68 +37,70 @@
   </a-card>
 </template>
 <script lang="ts" setup>
-  import { ref } from 'vue';
-  import { useRoute } from 'vue-router';
+  import { ref, unref, useAttrs } from 'vue';
   import { Empty } from 'ant-design-vue';
   import { UserOutlined } from '@ant-design/icons-vue';
 
   import { getEnum } from '/@/utils/commonUtil';
 
-  import { getLitigantInfo } from './casedetail.data';
-  import { getWorkPlaceLitigantInfo, getCaseLitigantInfo } from '/@/api/manage/caseallocation';
+  import { getLitigantInfo, RecordProps } from './casedetail.data';
+  import { getCaseLitigantInfo } from '/@/api/manage/caseallocation';
+  //getWorkPlaceLitigantInfo,
+  const attrs = useAttrs();
+  const { caseNo } = unref(attrs.recordData) as RecordProps;
 
-  const litigantInfo = getLitigantInfo()
-  const litigantList = ref<any[]>([])
-  
+  const litigantInfo = getLitigantInfo();
+  const litigantList = ref<any[]>([]);
+
   async function getLitigantList() {
-    const { query } = useRoute();
-    const { caseNo } = query;
-    const params = { caseNo }
-    const res = await getCaseLitigantInfo(params)
-    litigantList.value = res.list?.map(ele => {
-      const fieldInfo = Reflect.has(litigantInfo, ele.litigantType) ? litigantInfo[ele.litigantType] : litigantInfo['default_list']
+    const params = { caseNo };
+    const res = await getCaseLitigantInfo(params);
+    litigantList.value = res.list?.map((ele) => {
+      const fieldInfo = Reflect.has(litigantInfo, ele.litigantType)
+        ? litigantInfo[ele.litigantType]
+        : litigantInfo['default_list'];
       return {
         fieldInfo,
-        itemData: ele
-      }
-    })
+        itemData: ele,
+      };
+    });
   }
-  getLitigantList()
+  getLitigantList();
 
-  function getColor(type){
-    return type === 'accuser' ? '#448EF7' : type === 'accused' ? '#F39B49' : '#7573F2'
+  function getColor(type) {
+    return type === 'accuser' ? '#448EF7' : type === 'accused' ? '#F39B49' : '#7573F2';
   }
-  
 </script>
 <style lang="less" scoped>
-  .list-item{
+  .list-item {
     margin-bottom: 16px;
     box-shadow: 0px 2px 4px 1px @weak-primay-color;
 
-    .item-header{
+    .item-header {
       padding: 16px;
       background-color: @weak-primay-color;
 
-      .row{
+      .row {
         display: flex;
         justify-content: space-between;
 
-        .litigant-title{
+        .litigant-title {
           margin-left: 8px;
-          color: @weak-grey-color
+          color: @weak-grey-color;
         }
 
-        .litigant-name{
+        .litigant-name {
           padding-left: 22px;
           font-size: 18px;
         }
       }
     }
 
-    .item-content{
+    .item-content {
       padding: 16px 30px;
 
-      ::v-deep(.ant-descriptions-item-label),::v-deep(.ant-descriptions-item-content){
+      ::v-deep(.ant-descriptions-item-label),
+      ::v-deep(.ant-descriptions-item-content) {
         color: @weak-grey-color;
       }
     }
