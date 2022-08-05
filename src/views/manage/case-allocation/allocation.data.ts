@@ -1,109 +1,135 @@
-import { getOrgList } from '/@/api/sys/org';
+import { getApplyOrgList, getMeditionOrgList } from '/@/api/system/org';
 
-import { StatusEnum } from '/@/enums/commonEnum';
+import { StatusEnum, getEnumArray } from '/@/enums/commonEnum';
 import { getApiEnumList } from '/@/utils/commonUtil';
 
 import { FormProps } from '/@/components/Table';
 import { BasicColumn } from '/@/components/Table/src/types/table';
 
-export function getBasicColumns(caseType = 1009): BasicColumn[] {
+export function getBasicColumns(allocationStatus = '1', caseType = 1009): BasicColumn[] {
   return [
     {
       title: '调解号',
       dataIndex: 'mediateNo',
-      ifShow: caseType === 1009
+      ifShow: caseType === 1009 && allocationStatus === '2',
     },
     {
-      title: '原告',
+      title: caseType === 1009 ? '原告' : caseType === 1001 ? '原告姓名或名称' : '申请人',
       dataIndex: 'applyName',
     },
     {
-      title: '被告',
+      title: caseType === 1009 ? '被告' : caseType === 1001 ? '被告姓名或名称' : '被申请人',
       dataIndex: 'receiveName',
-    },
-    {
-      title: '身份证号',
-      dataIndex: 'receiveCardId',
-    },
-    {
-      title: '标的金额(元)',
-      dataIndex: 'targetAmount',
-    },
-    {
-      title: '逾期天数',
-      dataIndex: 'ovdDays',
-    },
-    {
-      title: '联系状态',
-      dataIndex: 'contactStatus',
-    },
-    {
-      title: '调解状态',
-      dataIndex: 'mediationStatus',
-      enumCode: 'MediationStatus',
-    },
-    {
-      title: '协议状态',
-      dataIndex: 'agrStatus',
-      enumCode: 'AgrStatusEnum', //对应枚举code
-    },
-    {
-      title: '还款状态',
-      dataIndex: 'repayStatus',
-    },
-    {
-      title: '调解员',
-      dataIndex: 'currentMediatorName',
-    },
-    {
-      title: '调解组织',
-      dataIndex: 'orgName',
-    },
-    {
-      title: '分配日期',
-      dataIndex: 'assignDate',
-    },
-    {
-      title: '批次号',
-      dataIndex: 'batchNo',
-    },
-    {
-      title: '受理日期',
-      dataIndex: 'acceptDate',
-    },
-    {
-      title: '手机号',
-      dataIndex: 'receivePhone',
-    },
-    {
-      title: '所在城市',
-      dataIndex: 'receiveAddress',
     },
     {
       title: '案由',
       dataIndex: 'reasonDisplayName',
     },
     {
+      title: '身份证号',
+      dataIndex: 'receiveCardId',
+      ifShow: caseType === 1009,
+    },
+    {
+      title: '标的金额(元)',
+      dataIndex: 'targetAmount',
+      ifShow: caseType !== 1001,
+    },
+    {
+      title: '生效文书文号',
+      dataIndex: 'legalDocumentCode',
+      ifShow: caseType === 1002,
+    },
+    {
+      title: '督促案号',
+      dataIndex: 'superviseCaseNumber',
+      ifShow: caseType === 1002,
+    },
+    {
+      title: '逾期天数',
+      dataIndex: 'ovdDays',
+      ifShow: caseType === 1009,
+    },
+    {
+      title: '联系状态',
+      dataIndex: 'contactStatus',
+      ifShow: caseType === 1009 && allocationStatus === '2',
+    },
+    {
+      title: '调解状态',
+      dataIndex: 'mediationStatus',
+      enumCode: 'MediationStatus',
+      ifShow: caseType === 1009 && allocationStatus === '2',
+    },
+    {
+      title: '协议状态',
+      dataIndex: 'agrStatus',
+      enumCode: 'AgrStatusEnum', //对应枚举code
+      ifShow: caseType === 1009 && allocationStatus === '2',
+    },
+    {
+      title: '还款状态',
+      dataIndex: 'repayStatus',
+      ifShow: caseType === 1009 && allocationStatus === '2',
+    },
+    {
+      title: '调解员',
+      dataIndex: 'currentMediatorName',
+      ifShow: allocationStatus === '2',
+    },
+    {
+      title: '调解组织',
+      dataIndex: 'orgName',
+      ifShow: caseType === 1009 && allocationStatus === '2',
+    },
+    {
+      title: '分配日期',
+      dataIndex: 'assignDate',
+      ifShow: caseType != 1001 && allocationStatus === '2',
+    },
+    {
+      title: '批次号',
+      dataIndex: 'batchNo',
+      ifShow: caseType === 1009,
+    },
+    {
+      title: caseType === 1001 ? '提交日期' : '受理日期',
+      dataIndex: 'acceptDate',
+    },
+    {
+      title: '手机号',
+      dataIndex: 'receivePhone',
+      ifShow: caseType === 1009,
+    },
+    {
+      title: '所在城市',
+      dataIndex: 'receiveAddress',
+      ifShow: caseType === 1009,
+    },
+    {
       title: '利息(元)',
       dataIndex: 'interestAmount',
+      ifShow: caseType === 1009,
     },
     {
       title: '锁定状态',
       dataIndex: 'locked',
-      enumProp: StatusEnum
+      enumProp: StatusEnum,
+      ifShow: caseType === 1009 && allocationStatus === '2',
     },
     {
       title: '案件编号',
-      dataIndex: 'applyOrgCaseNo',
+      dataIndex: caseType === 1001 ? 'caseNo' : 'applyOrgCaseNo',
     },
     {
       title: '产品',
       dataIndex: 'prodName',
+      ifShow: caseType === 1009,
     },
   ];
 }
-//show
-export function getFormConfig(): Partial<FormProps> {
+
+export function getFormConfig(allocationStatus = '1', caseType = 1009): Partial<FormProps> {
   return {
     labelWidth: 100,
     schemas: [
@@ -127,6 +153,7 @@ export function getFormConfig(): Partial<FormProps> {
         colProps: {
           span: 6,
         },
+        show: caseType === 1009,
       },
       {
         field: 'applyOrgCaseNo',
@@ -139,12 +166,12 @@ export function getFormConfig(): Partial<FormProps> {
       {
         field: 'applyCode',
         component: 'ApiSelect',
-        label: '原告',
+        label: caseType === 1009 ? '原告' : caseType === 1001 ? '原告姓名或名称' : '申请人',
         colProps: {
           span: 6,
         },
         componentProps: {
-          api: getOrgList,
+          api: getApplyOrgList,
           params: {
             orgType: 'FINANCE_ORG',
             pageSize: 999,
@@ -166,7 +193,16 @@ export function getFormConfig(): Partial<FormProps> {
       {
         field: 'receiveName',
         component: 'Input',
-        label: '被告',
+        label: caseType === 1009 ? '被告' : caseType === 1001 ? '被告姓名或名称' : '被申请人',
+        colProps: {
+          span: 6,
+        },
+      },
+      {
+        field: 'reason',
+        label: '案由',
+        component: 'Select',
+        optionEnumCode: 'CaseReasonEnum',
         colProps: {
           span: 6,
         },
@@ -178,6 +214,7 @@ export function getFormConfig(): Partial<FormProps> {
         colProps: {
           span: 6,
         },
+        show: caseType === 1009,
       },
       {
         field: 'receiveCardId',
@@ -186,6 +223,7 @@ export function getFormConfig(): Partial<FormProps> {
         colProps: {
           span: 6,
         },
+        show: caseType === 1009,
       },
       {
         field: 'receivePhone',
@@ -194,18 +232,7 @@ export function getFormConfig(): Partial<FormProps> {
         colProps: {
           span: 6,
         },
-      },
-      {
-        field: 'reason',
-        label: '案由',
-        component: 'Select',
-        optionEnumCode: 'CaseReasonEnum',
-        // componentProps: {
-        //   options: getEnum('CaseReasonEnum', true)
-        // },
-        colProps: {
-          span: 6,
-        },
+        show: caseType === 1009,
       },
       {
         field: 'prodName',
@@ -215,6 +242,7 @@ export function getFormConfig(): Partial<FormProps> {
         colProps: {
           span: 6,
         },
+        show: caseType === 1009,
       },
       // {
       //   field: 'prodName',
@@ -258,17 +286,32 @@ export function getFormConfig(): Partial<FormProps> {
         },
       },
       {
-        field: 'ovdDaysRangeCode',
-        component: 'ApiSelect',
-        label: '逾期天数',
+        field: 'currentMediatorName',
+        component: 'Input',
+        label: '调解员',
         colProps: {
           span: 6,
         },
+        show: allocationStatus === '2',
+      },
+      {
+        field: 'orgCode',
+        component: 'ApiSelect',
+        label: '调解组织',
+        colProps: {
+          span: 6,
+        },
+        show: caseType === 1009 && allocationStatus === '2',
         componentProps: {
-          api: () => getApiEnumList('GetOvdDayEnum'),
+          api: getMeditionOrgList,
+          params: {
+            orgType: 'MEDIATE_ORG',
+            pageSize: 999,
+            current: 1,
+          },
           resultField: 'list',
-          labelField: 'rangeDisplay',
-          valueField: 'rangeCode',
+          labelField: 'orgName',
+          valueField: 'orgCode',
           immediate: false,
           onChange: (e) => {
             console.log('selected:', e);
@@ -278,6 +321,76 @@ export function getFormConfig(): Partial<FormProps> {
             console.log('get options', options.length, options);
           },
         },
+      },
+      {
+        field: '[assignDateBegin, assignDateEnd]',
+        component: 'RangePicker',
+        label: '分配日期',
+        colProps: {
+          span: 12,
+        },
+        show: allocationStatus === '2',
+        componentProps: {
+          class: 'time-full',
+          format: 'YYYY-MM-DD',
+          valueFormat: 'YYYY-MM-DD  HH:mm:ss',
+        },
+      },
+      {
+        field: 'agrStatus',
+        label: '协议状态',
+        component: 'Select',
+        optionEnumCode: 'AgrStatusEnum',
+        colProps: {
+          span: 6,
+        },
+        show: caseType === 1009 && allocationStatus === '2',
+      },
+      {
+        field: 'mediationStatus',
+        label: '调解状态',
+        component: 'Select',
+        optionEnumCode: 'MediationStatus',
+        colProps: {
+          span: 6,
+        },
+        show: caseType === 1009 && allocationStatus === '2',
+      },
+      {
+        field: 'locked',
+        label: '锁定状态',
+        component: 'Select',
+        componentProps: {
+          options: getEnumArray('StatusEnum'),
+        },
+        colProps: {
+          span: 6,
+        },
+        show: caseType === 1009 && allocationStatus === '2',
+      },
+      {
+        field: 'contactStatus',
+        label: '联系状态',
+        component: 'Select',
+        colProps: {
+          span: 6,
+        },
+        componentProps: {
+          options: getEnumArray('ContactStatusEnum'),
+        },
+        show: caseType === 1009 && allocationStatus === '2',
+      },
+      {
+        field: 'repayStatus',
+        label: '还款状态',
+        component: 'Select',
+        componentProps: {
+          options: getEnumArray('RepaymentStatusEnum'),
+        },
+        colProps: {
+          span: 6,
+        },
+        show: caseType === 1009 && allocationStatus === '2',
       },
     ],
   };

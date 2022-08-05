@@ -103,6 +103,7 @@ export const basicProps = {
   ellipsis: { type: Boolean, default: true },
   isCanResizeParent: { type: Boolean, default: false },
   canResize: { type: Boolean, default: true },
+  resizeWidthScroll: { type: Boolean, default: false },
   clearSelectOnPageChange: propTypes.bool,
   resizeHeightOffset: propTypes.number.def(0),
   rowSelection: {

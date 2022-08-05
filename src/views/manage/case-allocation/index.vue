@@ -1,18 +1,24 @@
 <template>
   <div class="case-allocation">
-    <a-dropdown :trigger="['click']">
-      <a class="ant-dropdown-link" @click.prevent>
-        Click me
-        <DownOutlined />
-      </a>
-      <template #overlay>
-        <a-menu>
-          <a-menu-item v-for="item in caseTypeList" :key="item.value">
-            {{item.label}}
-          </a-menu-item>
-        </a-menu>
+    <a-tabs v-model:activeKey="activeKey" class="top-tab" @change="handleChangeTab">
+      <a-tab-pane key="1" tab="待分配" />
+      <a-tab-pane key="2" tab="已分配" />
+      <template #leftExtra>
+        <a-dropdown>
+          <a class="ant-dropdown-link" @click.prevent>
+            {{ selectType.caseTypeName }}
+            <DownOutlined />
+          </a>
+          <template #overlay>
+            <a-menu @select="handleMenuClick" selectable v-model:selectedKeys="selectType.caseType">
+              <a-menu-item v-for="item in caseTypeList" :key="item.value">
+                {{ item.label }}
+              </a-menu-item>
+            </a-menu>
+          </template>
+        </a-dropdown>
       </template>
-    </a-dropdown>
+    </a-tabs>
     <BasicTable
       @register="registerTable"
       :rowSelection="{
@@ -42,50 +48,69 @@
   </div>
 </template>
 <script lang="ts" setup name="CaseAllocation">
-  import { ref } from 'vue';
+  import { ref, unref, reactive, computed } from 'vue';
   import { useRouter } from 'vue-router';
 
   import AssignModal from './AssignModal.vue';
-  import { DownOutlined } from '@ant-design/icons-vue'
+  import { DownOutlined } from '@ant-design/icons-vue';
 
   import { useModal } from '/@/components/Modal';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
 
   import { isSelect } from '/@/utils/commonUtil';
+  import { getEnumArray } from '/@/enums/commonEnum';
   import { getBasicColumns, getFormConfig } from './allocation.data';
-  import { getCaseAllocationList } from '/@/api/manage/caseallocation';
+  import { getCaseBaseList, getCaseAllocationList } from '/@/api/manage/caseallocation';
 
-  const caseTypeList =  [
-    {
-      value: 1009,
-      label: '要素式案件'
-    },{
-      value: 1001,
-      label: '通用案件'
-    },{
-      value: 1002,
-      label: '执前督促案件'
-    }
-  ]
+  interface CaseState {
+    caseType: Array<number>;
+    caseTypeName: string | undefined;
+  }
+
+  const caseTypeList = getEnumArray('CaseTypeEnum');
+  const activeKey = ref('1');
+
+  const selectType = reactive<CaseState>({
+    caseType: [1009],
+    caseTypeName: '要素式案件',
+  });
+
+  const tableProps = computed(() => {
+    return {
+      api: activeKey.value === '1' ? getCaseBaseList : getCaseAllocationList,
+      columns: getBasicColumns(activeKey.value, selectType.caseType[0]),
+      formConfig: getFormConfig(activeKey.value, selectType.caseType[0]),
+      searchInfo: {
+        caseType: selectType.caseType[0],
+      },
+      resizeWidthScroll: true,
+    };
+  });
 
   const router = useRouter();
   const checkedKeys = ref<Array<string | number>>([]); //当前列表选中的key
 
   const [registerModal, { openModal }] = useModal();
 
-  const [registerTable, { getForm }] = useTable({
-    api: getCaseAllocationList,
-    columns: getBasicColumns(), //表头字段配置
+  const [registerTable, { getForm, setProps, reload }] = useTable({
+    ...unref(tableProps),
     useSearchForm: true, //是否展示搜索区域
-    formConfig: getFormConfig(), //查询表单字段配置
     showIndexColumn: false, //是否展示序号列
-    //rowKey: 'id', //如果返回数据的key为"id"可不写这行
     actionColumn: {
       width: 120,
       title: '操作',
       dataIndex: 'action',
     },
   });
+  //切换案件类型
+  function handleMenuClick({ key }) {
+    selectType.caseTypeName = caseTypeList.find((ele) => ele.value === key)?.label;
+    handleChangeTab();
+  }
+  function handleChangeTab() {
+    setProps(unref(tableProps));
+    reload();
+  }
   //获取form表单数据
   function handleAssign() {
     if (!isSelect(checkedKeys.value)) {
@@ -114,3 +139,21 @@
     console.log('submit', data);
   }
 </script>
+<style lang="less" scoped>
+  .top-tab {
+    background-color: #fff;
+    padding: 0 20px;
+
+    ::v-deep(.ant-tabs-nav) {
+      margin: 0;
+    }
+
+    ::v-deep(.ant-tabs-tab) {
+      padding: 9px 0;
+    }
+
+    .ant-dropdown-link {
+      margin-right: 40px;
+    }
+  }
+</style>

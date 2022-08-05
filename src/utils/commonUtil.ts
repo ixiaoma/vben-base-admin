@@ -1,7 +1,7 @@
 import { message } from 'ant-design-vue';
 
 import { useEnumStore } from '/@/store/modules/enum';
-import { Persistent } from '/@/utils/cache/persistent';
+import { getCache, setCache } from '/@/utils/auth';
 
 import { getApiEnum, getChainVerifyUrl } from '/@/api/common/enum';
 
@@ -45,13 +45,13 @@ export function getApiEnumList(code: string) {
     return;
   }
   return new Promise((resolve) => {
-    const data = Persistent.getSession(code);
+    const data = getCache(code, true);
     if (data) {
       resolve(data);
       return;
     }
     getApiEnum(code).then((res) => {
-      Persistent.setSession(code, { list: res }, true);
+      setCache(code, { list: res }, true);
       resolve({ list: res });
     });
   });
@@ -59,13 +59,13 @@ export function getApiEnumList(code: string) {
 
 //区块链--上链查证
 export function chainVerify(urlEnum = 'ChainVerifyUrl') {
-  const url: any = Persistent.getSession(urlEnum);
+  const url: any = getCache(urlEnum, true);
   if (url) {
     window.open(url);
     return;
   }
   getChainVerifyUrl().then((res) => {
-    Persistent.setSession(urlEnum, res, true);
+    setCache(urlEnum, res, true);
     window.open(res);
   });
 }

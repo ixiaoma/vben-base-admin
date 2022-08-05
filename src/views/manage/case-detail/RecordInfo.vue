@@ -15,14 +15,14 @@
               },
               {
                 icon: 'ant-design:form-outlined',
-                onClick: handleEdit.bind(null, record)
-              }
+                onClick: handleEdit.bind(null, record),
+              },
             ]"
           />
         </template>
       </template>
     </BasicTable>
-  </a-card> 
+  </a-card>
 </template>
 <script lang="ts" setup name="CaseAllocation">
   import { ref, unref, computed } from 'vue';
@@ -35,21 +35,25 @@
   const { query } = useRoute();
   const { caseNo } = query;
 
-  const mode = ref('meditorRecord')
+  const mode = ref('meditorRecord');
 
-  const tableProps = computed(()=>{
+  const tableProps = computed(() => {
     return {
       api: mode.value === 'meditorRecord' ? getWorkPlaceMediateRecord : getActionRecord,
       columns: mode.value === 'meditorRecord' ? getMeditorColumns() : getActionColumns(),
-      actionColumn: mode.value === 'meditorRecord' ? {
-        width: 120,
-        title: '操作',
-        dataIndex: 'action',
-      } : undefined
-    }
-  })
+      actionColumn:
+        mode.value === 'meditorRecord'
+          ? {
+              width: 120,
+              title: '操作',
+              dataIndex: 'action',
+            }
+          : undefined,
+      resizeWidthScroll: true,
+    };
+  });
   //初始化列表数据
-  const [registerTable, {setProps, reload}] = useTable({
+  const [registerTable, { setProps, reload }] = useTable({
     ...unref(tableProps),
     maxHeight: 200,
     searchInfo: {
@@ -59,18 +63,14 @@
     showIndexColumn: false, //是否展示序号列
   });
   //电话/地址列表切换
-  function radioChange(){
-    setProps(unref(tableProps))
-    reload()
+  function radioChange() {
+    setProps(unref(tableProps));
+    reload();
   }
 
-  function handleCall(){
+  function handleCall() {}
 
-  }
-
-  function handleEdit(){
-
-  }
+  function handleEdit() {}
 </script>
 <style lang="less" scoped>
   .pop-table {

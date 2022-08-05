@@ -200,7 +200,8 @@ export interface BasicTableProps<T = any> {
   canResize?: boolean;
   // 自适应高度偏移， 计算结果-偏移量
   resizeHeightOffset?: number;
-
+  //是否使横向滚动条回到顶部
+  resizeWidthScroll?: boolean;
   // 在分页改变的时候清空选项
   clearSelectOnPageChange?: boolean;
   //

@@ -96,7 +96,7 @@ export function getPhoneColumns(): BasicColumn[] {
     {
       title: '电话号码',
       dataIndex: 'phone',
-      format: 'phone'
+      format: 'phone', // 'yuanTofen' //'fenToyuan'
     },
     {
       title: '来源',
@@ -105,7 +105,7 @@ export function getPhoneColumns(): BasicColumn[] {
     {
       title: '号码检测',
       dataIndex: 'isValid',
-      enumProp: ValidEnum
+      enumProp: ValidEnum,
     },
     {
       title: '外呼状态',
@@ -127,7 +127,7 @@ export function getPhoneColumns(): BasicColumn[] {
     {
       title: '备注',
       dataIndex: 'memo',
-    }
+    },
   ];
 }
 //联系信息--地址列表字段
@@ -149,8 +149,8 @@ export function getAddressColumns(): BasicColumn[] {
     {
       title: '是否有效',
       dataIndex: 'isValid',
-      enumProp: ValidEnum
-    }
+      enumProp: ValidEnum,
+    },
   ];
 }
 //记录信息--调解记录列表字段
@@ -172,12 +172,12 @@ export function getMeditorColumns(): BasicColumn[] {
     {
       title: '行动类型',
       dataIndex: 'actionType',
-      enumCode: 'MediationRecordType'
+      enumCode: 'MediationRecordType',
     },
     {
       title: '联系号码',
       dataIndex: 'contactPhone',
-      format: 'phone'
+      format: 'phone',
     },
     {
       title: '联系结果',
@@ -199,7 +199,7 @@ export function getMeditorColumns(): BasicColumn[] {
     {
       title: '备注',
       dataIndex: 'memo',
-    }
+    },
   ];
 }
 //记录信息--操作记录列表字段
@@ -217,26 +217,28 @@ export function getActionColumns(): BasicColumn[] {
     {
       title: '操作内容',
       dataIndex: 'actionType',
-    }
+    },
   ];
 }
 
 export function getLitigantInfo() {
   const commonList = [
-    {label: '手机号', field: 'litigantPhone'},
-    {label: '身份证号', field: 'litigantIdCard'},
-  ]
+    { label: '手机号', field: 'litigantPhone' },
+    { label: '身份证号', field: 'litigantIdCard' },
+  ];
   return {
-    'accuser': [ //原告
-      {label: '联系人姓名', field: 'litigantName'},
-      {label: '法定代表人', field: 'legalPersonName'},
-      {label: '联系人手机号', field: 'litigantPhone'},
-      {label: '企业信用代码', field: 'litigantIdCard'},
+    accuser: [
+      //原告
+      { label: '联系人姓名', field: 'litigantName' },
+      { label: '法定代表人', field: 'legalPersonName' },
+      { label: '联系人手机号', field: 'litigantPhone' },
+      { label: '企业信用代码', field: 'litigantIdCard' },
     ],
-    'accused': [ //被告
+    accused: [
+      //被告
       ...commonList,
-      {label: '地址', field: 'address'},
+      { label: '地址', field: 'address' },
     ],
-    'default_list': commonList
-  }
+    default_list: commonList,
+  };
 }
