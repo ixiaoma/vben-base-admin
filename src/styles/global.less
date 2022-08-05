@@ -4,38 +4,3 @@
 button:focus {
   outline: none;
 }
-
-.for (@i) when(@i < 5) {
-  @size: @i * 10;
-
-  .for(@i+1);
-  .margin-bottom@{size} {
-    margin-bottom: @size + 'px !important';
-  }
-  // .padding-top@{size}: {
-  //   padding-bottom: @size + 'px';
-  // }
-  // .padding-right@{size}: {
-  //   padding-bottom: @size + 'px';
-  // }
-  // .padding-bottom@{size}: {
-  //   padding-bottom: @size + 'px';
-  // }
-  // .padding-left@{size}: {
-  //   padding-bottom: @size + 'px';
-  // }
-  // .margin-top@{size}: {
-  //   padding-bottom: @size + 'px';
-  // }
-  // .margin-right@{size}: {
-  //   padding-bottom: @size + 'px';
-  // }
-  // .margin-bottom@{size}: {
-  //   padding-bottom: @size + 'px';
-  // }
-  // .margin-left@{size}: {
-  //   padding-bottom: @size + 'px';
-  // }
-}
-
-.for(1);

@@ -143,6 +143,7 @@
       function handleCreate() {
         openModal(true, {
           treeData: selectedTreeData,
+          record: { lockState: '未锁定' },
           isUpdate: false,
         });
       }

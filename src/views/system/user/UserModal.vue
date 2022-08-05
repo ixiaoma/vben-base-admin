@@ -1,6 +1,9 @@
 <template>
   <BasicModal v-bind="$attrs" @register="registerModal" :title="getTitle" @ok="handleSubmit">
     <BasicForm @register="registerForm">
+      <!-- <template #detailAddressSlot="{ model,field }">
+       <a-input class="detail-adress" v-model:value ="model[field]"></a-input>
+      </template> -->
       <template #nameSignPicSlot="{ field }">
         <BasicCustomUpload
           :api="uploadImgAxios"
@@ -12,29 +15,36 @@
         />
       </template>
       <template #IdPictureSlot>
-        <div class="ID-card-box">
-          <BasicCustomUpload
-            :api="uploadImgAxios"
-            :customPlaceholderImg="FRONT_IMG"
-            :imageUrl="IdPictureUrls[0]"
-            @change="uploadChange"
-            keyName="certNoFrontPath"
-            :key="formTimer + 1"
-            :uploadChoseText="t('routes.user.IDcardPortrait')"
-            :accept="['.png', '.jpg', '.jpeg', 'bmp']"
-          />
-          <BasicCustomUpload
-            :api="uploadImgAxios"
-            :customPlaceholderImg="BACK_IMG"
-            :imageUrl="IdPictureUrls[1]"
-            @change="uploadChange"
-            keyName="certNoBackPath"
-            :key="formTimer + 2"
-            :uploadChoseText="t('routes.user.IDcardNationalEmblem')"
-            :accept="['.png', '.jpg', '.jpeg', 'bmp']"
-          />
-        </div>
-        <div class="text-tag">{{ t('routes.user.tips') }}</div>
+        <a-form-item label="证件照片" required>
+          <div class="ID-card-box">
+            <BasicCustomUpload
+              :api="uploadImgAxios"
+              :customPlaceholderImg="FRONT_IMG"
+              :imageUrl="IdPictureUrls[0]"
+              @change="uploadChange"
+              keyName="certNoFrontPath"
+              :key="formTimer + 1"
+              :uploadChoseText="t('routes.system.user.IDcardPortrait')"
+              :accept="['.png', '.jpg', '.jpeg', 'bmp']"
+            />
+            <BasicCustomUpload
+              :api="uploadImgAxios"
+              :customPlaceholderImg="BACK_IMG"
+              :imageUrl="IdPictureUrls[1]"
+              @change="uploadChange"
+              keyName="certNoBackPath"
+              :key="formTimer + 2"
+              :uploadChoseText="t('routes.system.user.IDcardNationalEmblem')"
+              :accept="['.png', '.jpg', '.jpeg', 'bmp']"
+            />
+          </div>
+          <div class="text-tag">{{ t('routes.system.user.tips') }}</div>
+          <div
+            class="text-danger padding-left-20"
+            v-if="IdPictureTipShow || getIdCardPicStatus()"
+            >{{ t('routes.system.user.validatIDCardMessage') }}</div
+          >
+        </a-form-item>
       </template>
     </BasicForm>
   </BasicModal>
@@ -66,6 +76,7 @@
       const IdPictureUrls = ref<string[]>([]);
       const formTimer = ref<any>(null);
       const uploadData = ref<any>({});
+      const firstIn = ref<boolean>(true);
       const [registerForm, { setFieldsValue, updateSchema, resetFields, validate }] = useForm({
         labelWidth: 100,
         schemas: accountFormSchema,
@@ -78,10 +89,11 @@
 
       const [registerModal, { setModalProps, closeModal }] = useModalInner(async (data) => {
         resetFields();
-        nameSignPicUrl.value = '';
         setModalProps({ confirmLoading: false });
         isUpdate.value = !!data?.isUpdate;
         treeData.value = data?.treeData;
+        // 是否调解员角色
+        let isMediator = false;
         if (unref(isUpdate)) {
           const {
             province,
@@ -92,8 +104,7 @@
             nameSignPic,
             roleCodes,
           } = data.record;
-          // 是否调解员角色
-          const isMediator = roleCodes.includes('MEDIATOR');
+          isMediator = roleCodes.includes('MEDIATOR');
           // 省市县数据处理
           data.record.workPlace = [province, city, district];
           // 图片数据处理
@@ -109,13 +120,22 @@
             nameSignPic,
           };
           rowData.value = data.record;
-
-          setFieldsValue({
-            ...data.record,
-          });
-
-          updateSchema({ field: 'nameSignPic', required: isMediator, ifShow: isMediator });
+          firstIn.value = false;
+        } else {
+          IdPictureUrls.value = [];
+          uploadData.value = {};
+          rowData.value = {};
+          nameSignPicUrl.value = '';
+          firstIn.value = true;
         }
+
+        updateSchema([
+          { field: 'nameSignPic', required: isMediator, ifShow: isMediator },
+          { field: 'account', componentProps: { disabled: unref(isUpdate) } },
+        ]);
+        setFieldsValue({
+          ...data.record,
+        });
         formTimer.value = +new Date();
       });
 
@@ -124,15 +144,15 @@
           ? `${t('common.addNewText')}${t('routes.system.user.name')}`
           : `${t('common.editText')}${t('routes.system.user.name')}`,
       );
+      const IdPictureTipShow = computed(() => {
+        if (firstIn.value === true) return false;
+        return getIdCardPicStatus();
+      });
 
-      // function getIdCardPic(val: any, index: number) {
-      //   if (val) {
-      //     console.log(val)
-      //     return val.split(',')[index];
-      //   }else{
-      //     return '';
-      //   }
-      // }
+      function getIdCardPicStatus() {
+        if (firstIn.value === true) return false;
+        return uploadData.value?.certNoFrontPath && uploadData.value?.certNoBackPath ? false : true;
+      }
 
       /**
        * @description: 获取图片上传返回值
@@ -142,12 +162,11 @@
         const frontPath = uploadData.value.certNoFrontPath;
         const backPath = uploadData.value.certNoBackPath;
         const obj = {
-          IdPicture: frontPath && backPath ? `${frontPath},${backPath}` : '',
+          IdPicture: getIdCardPicStatus() ? `${frontPath},${backPath}` : '',
           certNoFrontPath: frontPath,
           certNoBackPath: backPath,
         };
-        console.log(obj);
-        console.log({ ...rowData, ...obj });
+        firstIn.value = false;
         setFieldsValue({ ...rowData, ...obj });
       }
 
@@ -155,9 +174,11 @@
        * @description: 确定提交
        */
       async function handleSubmit() {
+        firstIn.value = false;
         try {
           let result: any;
           setModalProps({ confirmLoading: true });
+          getIdCardPicStatus();
           const values = await validate();
 
           // 参数处理
@@ -183,7 +204,7 @@
           if (result.data.success) {
             setModalProps({ confirmLoading: true });
             checkStatus(result.data.errorCode, t('sys.api.saveSuccessMsg'), 'message', 'success');
-            closeModal();
+            closeModal(resetFields);
             emit('success', { isUpdate: !unref(isUpdate), values: unref(rowData) });
           } else {
             checkStatus(
@@ -210,6 +231,8 @@
         formTimer,
         uploadImgAxios,
         IdPictureUrls,
+        IdPictureTipShow,
+        getIdCardPicStatus,
         t,
       };
     },

@@ -91,12 +91,11 @@ export const accountFormSchema: FormSchema[] = [
     rules: [
       {
         required: true,
-        // message: t('component.upload.validatMessage'),
-        message: t('routes.system.user.validatMessage'),
+        message: t('routes.system.user.validatIDCardMessage'),
       },
     ],
     ifShow: true,
-    slot: 'IdPictureSlot',
+    colSlot: 'IdPictureSlot',
   },
   {
     field: 'certNoFrontPath',
@@ -168,15 +167,22 @@ export const accountFormSchema: FormSchema[] = [
     field: 'roleCodes',
     component: 'ApiSelect',
     mode: 'multiple',
-    componentProps: ({ formModel }) => {
+    // changeEvent:'blur',
+    componentProps: ({ formModel, formActionType }) => {
       return {
         api: getRoleList,
         resultField: 'list',
         params: { current: 1, pageSize: 9999 },
         labelField: 'roleName',
         valueField: 'roleCode',
-        onChange: (_code, item): void => {
+        onChange: (code, item): void => {
+          const isMediator = code.includes('MEDIATOR');
           formModel.roleNames = item.map((ele) => ele.label);
+          formActionType.updateSchema({
+            field: 'nameSignPic',
+            required: isMediator,
+            ifShow: isMediator,
+          });
         },
         // onOptionsChange:(val) =>{
         //    console.log(val)
@@ -207,10 +213,15 @@ export const accountFormSchema: FormSchema[] = [
   },
   {
     field: 'detailAddress',
-    label: ' ',
+    label: '详细地址',
     component: 'Input',
-    required: false,
-    show: true,
+    rules: [
+      {
+        required: true,
+        message: t('routes.system.user.validatAddressMessage'),
+      },
+    ],
+    // slot: 'detailAddressSlot',
   },
   {
     field: 'professionalArea',
@@ -222,13 +233,8 @@ export const accountFormSchema: FormSchema[] = [
     field: 'nameSignPic',
     label: '调解员签名',
     component: 'Upload',
-    // componentProps: () => {
-    //   return {
-    //     listType:'picture-card'
-    //   };
-    // },
     required: false,
-    ifShow: true,
+    ifShow: false,
     slot: 'nameSignPicSlot',
   },
 

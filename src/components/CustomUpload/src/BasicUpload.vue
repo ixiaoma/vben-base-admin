@@ -110,7 +110,6 @@
       const state = reactive<{ fileList: FileItem[] }>({
         fileList: [],
       });
-      console.log(previewTitle);
       //   是否正在上传
       const isUploadingRef = ref(false);
       const fileListRef = ref<FileItem[]>([]);

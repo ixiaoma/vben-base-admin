@@ -93,8 +93,9 @@ export function useModal(): UseModalReturnType {
       }
     },
 
-    closeModal: () => {
+    closeModal: (callBack: any) => {
       getInstance()?.setModalProps({ visible: false });
+      callBack && callBack();
     },
   };
   return [register, methods];
@@ -146,8 +147,9 @@ export const useModalInner = (callbackFn?: Fn): UseModalInnerReturnType => {
         getInstance()?.setModalProps({ confirmLoading: loading });
       },
 
-      closeModal: () => {
+      closeModal: (callBack) => {
         getInstance()?.setModalProps({ visible: false });
+        callBack && callBack();
       },
 
       setModalProps: (props: Partial<ModalProps>) => {

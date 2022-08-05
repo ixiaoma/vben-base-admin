@@ -122,7 +122,7 @@ export default {
     uploadWait: '请等待文件上传结束后操作',
     reUploadFailed: '重新上传失败文件',
 
-    validatMessage: '请上传文件',
+    validatIDCardMessage: '请上传文件',
   },
   verify: {
     error: '验证失败！',

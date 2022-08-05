@@ -10,7 +10,8 @@ export default {
   },
 
   user: {
-    validatMessage: 'Please upload your ID photo',
+    validatIDCardMessage: 'Please upload your ID photo',
+    validatAddressMessage: 'Please enter the detailed address',
     IDcardPortrait: 'ID card (portrait)',
     IDcardNationalEmblem: 'ID card (national emblem)',
     tips: 'Please upload clear original photos, which support uploading JPG, JPEG, PNG and BMP formats',
