@@ -22,10 +22,6 @@ export function getBasicColumns(allocationStatus = '1', caseType = 1009): BasicC
       dataIndex: 'receiveName',
     },
     {
-      title: '案由',
-      dataIndex: 'reasonDisplayName',
-    },
-    {
       title: '身份证号',
       dataIndex: 'receiveCardId',
       ifShow: caseType === 1009,
@@ -33,6 +29,7 @@ export function getBasicColumns(allocationStatus = '1', caseType = 1009): BasicC
     {
       title: '标的金额(元)',
       dataIndex: 'targetAmount',
+      format: 'fenToyuan',
       ifShow: caseType !== 1001,
     },
     {
@@ -85,7 +82,7 @@ export function getBasicColumns(allocationStatus = '1', caseType = 1009): BasicC
     {
       title: '分配日期',
       dataIndex: 'assignDate',
-      ifShow: caseType != 1001 && allocationStatus === '2',
+      ifShow: allocationStatus === '2',
     },
     {
       title: '批次号',
@@ -105,6 +102,10 @@ export function getBasicColumns(allocationStatus = '1', caseType = 1009): BasicC
       title: '所在城市',
       dataIndex: 'receiveAddress',
       ifShow: caseType === 1009,
+    },
+    {
+      title: '案由',
+      dataIndex: 'reasonDisplayName',
     },
     {
       title: '利息(元)',
@@ -147,6 +148,20 @@ export function getFormConfig(allocationStatus = '1', caseType = 1009): Partial<
         },
       },
       {
+        field: '[assignDateBegin, assignDateEnd]',
+        component: 'RangePicker',
+        label: '分配日期',
+        colProps: {
+          span: 12,
+        },
+        show: allocationStatus === '2',
+        componentProps: {
+          class: 'time-full',
+          format: 'YYYY-MM-DD',
+          valueFormat: 'YYYY-MM-DD  HH:mm:ss',
+        },
+      },
+      {
         field: 'batchNo',
         component: 'Input',
         label: '批次号',
@@ -164,9 +179,18 @@ export function getFormConfig(allocationStatus = '1', caseType = 1009): Partial<
         },
       },
       {
+        field: 'mediateNo',
+        component: 'Input',
+        label: '调解号',
+        colProps: {
+          span: 6,
+        },
+        show: caseType === 1009 && allocationStatus === '2',
+      },
+      {
         field: 'applyCode',
         component: 'ApiSelect',
-        label: caseType === 1009 ? '原告' : caseType === 1001 ? '原告姓名或名称' : '申请人',
+        label: caseType === 1002 ? '申请人' : '原告',
         colProps: {
           span: 6,
         },
@@ -193,16 +217,7 @@ export function getFormConfig(allocationStatus = '1', caseType = 1009): Partial<
       {
         field: 'receiveName',
         component: 'Input',
-        label: caseType === 1009 ? '被告' : caseType === 1001 ? '被告姓名或名称' : '被申请人',
-        colProps: {
-          span: 6,
-        },
-      },
-      {
-        field: 'reason',
-        label: '案由',
-        component: 'Select',
-        optionEnumCode: 'CaseReasonEnum',
+        label: caseType === 1002 ? '被申请人' : '被告',
         colProps: {
           span: 6,
         },
@@ -233,6 +248,15 @@ export function getFormConfig(allocationStatus = '1', caseType = 1009): Partial<
           span: 6,
         },
         show: caseType === 1009,
+      },
+      {
+        field: 'reason',
+        label: '案由',
+        component: 'Select',
+        optionEnumCode: 'CaseReasonEnum',
+        colProps: {
+          span: 6,
+        },
       },
       {
         field: 'prodName',
@@ -270,8 +294,32 @@ export function getFormConfig(allocationStatus = '1', caseType = 1009): Partial<
         colProps: {
           span: 6,
         },
+        show: caseType !== 1001,
         componentProps: {
           api: () => getApiEnumList('GetMoneyEnum'),
+          resultField: 'list',
+          labelField: 'rangeDisplay',
+          valueField: 'rangeCode',
+          immediate: false,
+          onChange: (e) => {
+            console.log('selected:', e);
+          },
+          // atfer request callback
+          onOptionsChange: (options) => {
+            console.log('get options', options.length, options);
+          },
+        },
+      },
+      {
+        field: 'ovdDays',
+        component: 'ApiSelect',
+        label: '逾期天数',
+        colProps: {
+          span: 6,
+        },
+        show: caseType === 1009,
+        componentProps: {
+          api: () => getApiEnumList('GetOvdDayEnum'),
           resultField: 'list',
           labelField: 'rangeDisplay',
           valueField: 'rangeCode',
@@ -292,7 +340,7 @@ export function getFormConfig(allocationStatus = '1', caseType = 1009): Partial<
         colProps: {
           span: 6,
         },
-        show: allocationStatus === '2',
+        show: caseType !== 1009 && allocationStatus === '2',
       },
       {
         field: 'orgCode',
@@ -320,20 +368,6 @@ export function getFormConfig(allocationStatus = '1', caseType = 1009): Partial<
           onOptionsChange: (options) => {
             console.log('get options', options.length, options);
           },
-        },
-      },
-      {
-        field: '[assignDateBegin, assignDateEnd]',
-        component: 'RangePicker',
-        label: '分配日期',
-        colProps: {
-          span: 12,
-        },
-        show: allocationStatus === '2',
-        componentProps: {
-          class: 'time-full',
-          format: 'YYYY-MM-DD',
-          valueFormat: 'YYYY-MM-DD  HH:mm:ss',
         },
       },
       {

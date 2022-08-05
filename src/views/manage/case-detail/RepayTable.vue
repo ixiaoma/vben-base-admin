@@ -7,13 +7,14 @@
   </a-popover>
 </template>
 <script lang="ts" setup name="CaseAllocation">
-  import { useRoute } from 'vue-router';
+  import { unref, useAttrs } from 'vue';
 
   import { BasicTable, useTable } from '/@/components/Table';
   import { getRepayList } from '/@/api/manage/caseallocation';
+  import { RecordProps } from './casedetail.data.js';
 
-  const { query } = useRoute();
-  const { caseNo } = query;
+  const attrs = useAttrs();
+  const { caseNo } = unref(attrs.recordData) as RecordProps;
 
   const [registerTable] = useTable({
     api: getRepayList,
@@ -33,6 +34,7 @@
       },
     ], //表头字段配置
     maxHeight: 200,
+    canResize: false,
     searchInfo: {
       //额外的请求参数
       caseNo,

@@ -6,7 +6,14 @@ interface BaseInfo {
   from?: string;
   value?: any;
   slot?: string;
+  show?: boolean;
   optionEnumCode?: string;
+}
+
+export interface RecordProps {
+  caseNo: string;
+  mediateNo: string;
+  [key: string]: string;
 }
 
 import { BasicColumn } from '/@/components/Table/src/types/table';
@@ -14,7 +21,7 @@ import { BasicColumn } from '/@/components/Table/src/types/table';
 import { ValidEnum } from '/@/enums/commonEnum';
 
 //基本信息字段
-export function getBaseInfoField(): Array<BaseInfo> {
+export function getBaseInfoField(caseType, assignStatus): Array<BaseInfo> {
   return [
     {
       label: '标的金额',
@@ -52,6 +59,7 @@ export function getBaseInfoField(): Array<BaseInfo> {
     {
       label: '调解号',
       field: 'mediateNo',
+      show: caseType == 1009 && assignStatus === 'ASSIGNED',
     },
     {
       label: '案由',

@@ -1,12 +1,9 @@
 <template>
   <div class="case-allocation">
-    <TopTabs
-      v-model:activeKey="activeKey"
-      @register="regiseterTabs"
-      @update:activeKey="handleChangeTab"
-    >
-      <a-tab-pane key="1" tab="待分配" :closable="false" />
-      <a-tab-pane key="2" tab="已分配" :closable="false" />
+    <a-tabs v-model:activeKey="activeKey" class="top-tab" @change="handleChangeTab">
+      <a-tab-pane key="1" tab="待分配" />
+      <a-tab-pane key="2" tab="已分配" />
+      <a-tab-pane v-for="item in detailList" :key="item.id" :tab="item.receiveName" />
       <template #leftExtra>
         <a-dropdown>
           <a class="ant-dropdown-link" @click.prevent>
@@ -22,7 +19,7 @@
           </template>
         </a-dropdown>
       </template>
-    </TopTabs>
+    </a-tabs>
     <BasicTable
       v-show="['1', '2'].includes(activeKey)"
       @register="registerTable"
@@ -54,12 +51,12 @@
 </template>
 <script lang="ts" setup name="CaseAllocation">
   import { ref, unref, reactive, computed } from 'vue';
+  import { useRouter } from 'vue-router';
 
   import AssignModal from './AssignModal.vue';
   import { DownOutlined } from '@ant-design/icons-vue';
 
   import { useModal } from '/@/components/Modal';
-  import { TopTabs, useTopTabs } from '/@/components/TopTabs';
   import { BasicTable, useTable, TableAction } from '/@/components/Table';
 
   import { isSelect } from '/@/utils/commonUtil';
@@ -74,6 +71,7 @@
 
   const caseTypeList = getEnumArray('CaseTypeEnum');
   const activeKey = ref('1');
+  const detailList = ref([]);
 
   const selectType = reactive<CaseState>({
     caseType: [1009],
@@ -92,22 +90,21 @@
     };
   });
 
+  const router = useRouter();
   const checkedKeys = ref<Array<string | number>>([]); //当前列表选中的key
 
   const [registerModal, { openModal }] = useModal();
 
-  const [registerTable, { setProps, reload }] = useTable({
+  const [registerTable, { getForm, setProps, reload }] = useTable({
     ...unref(tableProps),
     useSearchForm: true, //是否展示搜索区域
     showIndexColumn: false, //是否展示序号列
     actionColumn: {
-      width: 100,
+      width: 120,
       title: '操作',
       dataIndex: 'action',
     },
   });
-
-  const [regiseterTabs, { openTabs }] = useTopTabs();
   //切换案件类型
   function handleMenuClick({ key }) {
     selectType.caseTypeName = caseTypeList.find((ele) => ele.value === key)?.label;
@@ -123,17 +120,54 @@
       return;
     }
     openModal(true);
+    console.log('查询区域数据', getForm().getFieldsValue());
   }
   //列表复选框勾选
   function onSelectChange(selectedRowKeys: (string | number)[]) {
+    console.log(selectedRowKeys);
     checkedKeys.value = selectedRowKeys;
   }
   //跳转详情页
-  function handleDetail(records: ReadonlyRecordable) {
-    openTabs(records);
+  function handleDetail({
+    mediateNo,
+    caseNo,
+    caseType,
+    assignStatus,
+    mediationStatus,
+    delegateStatus,
+  }: ReadonlyRecordable) {
+    router.push({
+      name: 'CaseDetail',
+      query: {
+        mediateNo,
+        caseNo,
+        caseType,
+        assignStatus,
+        delegateStatus,
+        mediationStatus,
+      },
+    });
   }
   //弹框emit的方法
   function submitSuccess(data) {
-    console.log(data);
+    console.log('submit', data);
   }
 </script>
+<style lang="less" scoped>
+  .top-tab {
+    background-color: #fff;
+    padding: 0 20px;
+
+    ::v-deep(.ant-tabs-nav) {
+      margin: 0;
+    }
+
+    ::v-deep(.ant-tabs-tab) {
+      padding: 9px 0;
+    }
+
+    .ant-dropdown-link {
+      margin-right: 40px;
+    }
+  }
+</style>

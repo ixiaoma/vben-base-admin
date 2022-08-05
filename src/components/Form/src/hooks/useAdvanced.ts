@@ -70,7 +70,6 @@ export default function ({
       parseInt(itemCol.sm as string) ||
       (itemCol.span as number) ||
       BASIC_COL_LEN;
-
     const lgWidth = parseInt(itemCol.lg as string) || mdWidth;
     const xlWidth = parseInt(itemCol.xl as string) || lgWidth;
     const xxlWidth = parseInt(itemCol.xxl as string) || xlWidth;

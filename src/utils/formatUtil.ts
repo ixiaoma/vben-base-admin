@@ -1,13 +1,13 @@
 // 手机号掩码
 export function formatPhone(val: string) {
-  if(!val){
-    return null
+  if (!val) {
+    return null;
   }
-  if(val.length != 11){
-    return val
+  if (val.length != 11) {
+    return val;
   }
   const pat = /(\d{3})\d*(\d{4})/;
-  return val ? val.replace(pat, "$1****$2") : '';
+  return val ? val.replace(pat, '$1****$2') : '';
 }
 
 /**
@@ -17,11 +17,11 @@ export function formatPhone(val: string) {
  */
 
 const toDecimal2 = (x) => {
-  var f = parseFloat(x);
+  let f = parseFloat(x);
   if (isNaN(f)) {
     return false;
   }
-  var f = Math.round(x * 100) / 100;
+  f = Math.round(x * 100) / 100;
   let s = f.toString();
   let rs = s.indexOf('.');
   if (rs < 0) {
@@ -94,9 +94,9 @@ export const regFenToYuanToThousands = (fen) => {
 };
 
 // 元转分 - 解决精度问题 yuan:要转换的钱，单位元； digit：转换倍数
-export const regYuanToFen = (yuan, digit) => {
-  let m = 0,
-    s1 = yuan.toString(),
+export const regYuanToFen = (yuan, digit = 100) => {
+  let m = 0;
+  const s1 = yuan.toString(),
     s2 = digit.toString();
   try {
     m += s1.split('.')[1].length;

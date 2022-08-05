@@ -87,6 +87,7 @@
 
       const actionColOpt = computed(() => {
         const { showAdvancedButton, actionSpan: span, actionColOptions } = props;
+
         const actionSpan = 24 - span;
         const advancedSpanObj = showAdvancedButton
           ? { span: actionSpan < 6 ? 24 : actionSpan }
