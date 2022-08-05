@@ -3,20 +3,20 @@
     <OrgTree class="w-1/4 xl:w-1/5" @select="handleSelect" />
     <BasicTable @register="registerTable" class="w-3/4 xl:w-4/5" :searchInfo="searchInfo">
       <template #toolbar>
-        <a-button type="primary" @click="handleCreate" v-if="isAdd && handlePrimission('add')"
-          >添加</a-button
-        >
+        <a-button type="primary" @click="handleCreate" v-if="isAdd && handlePrimission('add')">{{
+          t('common.addText')
+        }}</a-button>
       </template>
       <template #action="{ record }">
         <TableAction
           :actions="[
             {
-              label: '编辑',
+              label: t('common.editText'),
               onClick: handleEdit.bind(null, record),
               ifShow: handlePrimission('edit', record),
             },
             {
-              label: '删除',
+              label: t('common.delText'),
               color: 'error',
               onClick: handleDelete.bind(null, record),
               ifShow: handlePrimission('del', record),
@@ -143,6 +143,7 @@
       function handleCreate() {
         openModal(true, {
           treeData: selectedTreeData,
+          record: { lockState: '未锁定' },
           isUpdate: false,
         });
       }
@@ -167,7 +168,7 @@
             const result: any = await userStore.delUserFun({ id: record.id });
             if (result.data.success) {
               checkStatus(result.data.errorCode, t('sys.api.delSuccessMsg'), 'message', 'success');
-              const params: any = { isUpdate: false };
+              const params: any = { isUpdate: false, values: record };
               handleSuccess(params);
             } else {
               checkStatus(
@@ -183,8 +184,8 @@
        */
       function handleSuccess({ isUpdate, values }) {
         if (isUpdate) {
-          // 演示不刷新表格直接更新内部数据。
-          // 注意：updateTableDataRecord要求表格的rowKey属性为string并且存在于每一行的record的keys中
+          //   // 演示不刷新表格直接更新内部数据。
+          //   // 注意：updateTableDataRecord要求表格的rowKey属性为string并且存在于每一行的record的keys中
           const result = updateTableDataRecord(values.id, values);
           console.log(result);
         } else {
@@ -209,6 +210,7 @@
         searchInfo,
         handlePrimission,
         isAdd,
+        t,
       };
     },
   });

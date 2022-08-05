@@ -26,6 +26,8 @@ export interface RequestOptions {
   withToken?: boolean;
   // 请求重试机制
   retryRequest?: RetryRequest;
+  // 是否退出请求
+  loginOut?: boolean;
 }
 
 export interface RetryRequest {

@@ -12,7 +12,13 @@ import {
   SendSmsCodeParams,
   LoginByPhoneParams,
 } from '/@/api/sys/model/userModel';
-import { getUserInfo, loginApi, sendSmsCodeApi, loginByPhoneApi, doLogout } from '/@/api/sys/user';
+import {
+  getUserInfo,
+  loginApi,
+  sendSmsCodeApi,
+  loginByPhoneApi,
+  doLogout,
+} from '../../api/sys/login';
 import { useI18n } from '/@/hooks/web/useI18n';
 import { useMessage } from '/@/hooks/web/useMessage';
 import { router } from '/@/router';
@@ -163,7 +169,6 @@ export const userLoginStore = defineStore({
     },
     async getUserInfoAction(): Promise<UserInfo | null> {
       const userInfo = await getUserInfo();
-      console.log(userInfo);
       const { roleResCodeList = [] } = userInfo;
       this.setRoleList(roleResCodeList);
       // if (isArray(roleResCodeList)) {
@@ -179,12 +184,12 @@ export const userLoginStore = defineStore({
     /**
      * @description: logout
      */
-    async logout(goLogin = false) {
-      if (this.getToken) {
+    async logout(goLogin = false, isLoginOut = false) {
+      if (!isLoginOut) {
         try {
           await doLogout();
         } catch {
-          console.log('注销Token失败');
+          console.log('注销失败');
         }
       }
       this.setToken(undefined);

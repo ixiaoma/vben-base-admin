@@ -1,4 +1,7 @@
 import { defHttp } from '/@/utils/http/axios';
+import { isDevFn } from '../../../build/utils';
+import { getEnv, getAppEnvConfig } from '/@/utils/env';
+const { VITE_GLOB_API_URL } = getAppEnvConfig();
 import {
   GetUserListResultModel,
   UserParamsModel,
@@ -24,14 +27,13 @@ enum Api {
 /**
  * @description:获取用户列表
  */
-
 export const getUserList = (params: UserParamsModel) => {
   return defHttp.post<GetUserListResultModel>({ url: Api.GetUserList, params });
 };
+
 /**
  * @description:新增用户
  */
-
 export const addUser = (params: AddUserParamsModel, mode: ErrorMessageMode = 'modal') => {
   return defHttp.post<GetUserListResultModel>(
     { url: Api.AddUser, params },
@@ -41,10 +43,10 @@ export const addUser = (params: AddUserParamsModel, mode: ErrorMessageMode = 'mo
     },
   );
 };
+
 /**
  * @description:更新用户
  */
-
 export const updateUser = (params: UpdateUserParamsModel, mode: ErrorMessageMode = 'modal') => {
   return defHttp.post<GetUserListResultModel>(
     { url: Api.UpdateUser, params },
@@ -54,10 +56,10 @@ export const updateUser = (params: UpdateUserParamsModel, mode: ErrorMessageMode
     },
   );
 };
+
 /**
  * @description:删除用户
  */
-
 export const delUser = (params: DelUserParamsModel, mode: ErrorMessageMode = 'modal') => {
   return defHttp.post<GetUserListResultModel>(
     { url: Api.DelUser, params },
@@ -67,17 +69,17 @@ export const delUser = (params: DelUserParamsModel, mode: ErrorMessageMode = 'mo
     },
   );
 };
+
 /**
  * @description:获取超级管理员用户列表
  */
-
 export const getAdminUserList = (params: UserParamsModel) => {
   return defHttp.post<GetUserListResultModel>({ url: Api.GetAdminUserList, params });
 };
+
 /**
  * @description:新增超级管理员用户
  */
-
 export const addAdminUser = (params: AddUserParamsModel, mode: ErrorMessageMode = 'modal') => {
   return defHttp.post<GetUserListResultModel>(
     { url: Api.AddAdminUser, params },
@@ -87,10 +89,10 @@ export const addAdminUser = (params: AddUserParamsModel, mode: ErrorMessageMode 
     },
   );
 };
+
 /**
  * @description:更新超级管理员用户
  */
-
 export const updateAdminUser = (
   params: UpdateUserParamsModel,
   mode: ErrorMessageMode = 'modal',
@@ -102,4 +104,36 @@ export const updateAdminUser = (
       errorMessageMode: mode,
     },
   );
+};
+
+/**
+ * @description:图片上传
+ */
+export const uploadImgAxios = (params: any) => {
+  return defHttp.post<GetUserListResultModel>(
+    { url: Api.UploadImg, params },
+    // {
+    //   isReturnNativeResponse: true,
+    //   errorMessageMode: mode,
+    // },
+  );
+};
+export const uploadImgUrl = () => {
+  return isDevFn(getEnv()) ? `${VITE_GLOB_API_URL}${Api.UploadImg}` : Api.UploadImg;
+};
+
+/**
+ * @description:图片下载
+ */
+export const downloadImg = () => {
+  return defHttp.post<GetUserListResultModel>(
+    { url: Api.DownLoadImg },
+    {
+      isReturnNativeResponse: false,
+    },
+  );
+};
+
+export const downloadImgUrl = () => {
+  return isDevFn(getEnv()) ? `${VITE_GLOB_API_URL}${Api.DownLoadImg}` : Api.DownLoadImg;
 };

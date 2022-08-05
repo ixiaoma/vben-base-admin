@@ -223,6 +223,7 @@
           renderComponentContent,
           component,
           field,
+          mode,
           changeEvent = 'change',
           valueField,
           optionEnumCode,
@@ -261,6 +262,7 @@
             unref(getComponentsProps)?.placeholder || createPlaceholderMessage(component);
         }
         if (component === 'Select' && component) {
+          propsData.mode = mode;
           if (optionEnumCode) {
             propsData.options = getEnum(optionEnumCode, true);
           }
@@ -268,6 +270,9 @@
           propsData.filterOption = (input: string, option: any) => {
             return option.label.includes(input);
           };
+        }
+        if (component === 'ApiSelect' && component) {
+          propsData.mode = mode;
         }
         propsData.codeField = field;
         propsData.formValues = unref(getValues);

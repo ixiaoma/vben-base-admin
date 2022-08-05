@@ -77,8 +77,11 @@
           { field: 'path', label: isButton(data.record?.resType) ? '权限标识' : '路由地址' },
         ]);
       });
-
-      const getTitle = computed(() => (!unref(isUpdate) ? '新增菜单' : '编辑菜单'));
+      const getTitle = computed(() =>
+        !unref(isUpdate)
+          ? `${t('common.addNewText')}${t('routes.system.menu.name')}`
+          : `${t('common.editText')}${t('routes.system.menu.name')}`,
+      );
 
       /**
        * @description: 确定提交

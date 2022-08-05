@@ -121,6 +121,7 @@ export interface FormSchema<T = any> extends FormProps {
 
 /** 表单项 */
 export interface FormItemSchema<T = string> {
+  mode?: string;
   /** 字段名 */
   field: T extends string ? string : GetFieldKeys<T>;
   // Event name triggered by internal value change, default change

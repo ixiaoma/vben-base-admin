@@ -3,25 +3,25 @@
     <BasicTable @register="registerTable">
       <template #toolbar>
         <a-button type="primary" @click="handleCreate" v-show="handlePrimission('add')">
-          添加
+          {{ t('common.addText') }}
         </a-button>
       </template>
       <template #action="{ record }">
         <TableAction
           :actions="[
             {
-              label: '编辑',
+              label: t('common.editText'),
               // icon: 'clarity:note-edit-line',
               onClick: handleEdit.bind(null, record),
               ifShow: handlePrimission('edit', record),
             },
             {
-              label: '分配权限',
+              label: t('routes.system.role.assignPermissions'),
               onClick: handlePrimisionBtn.bind(null, record),
               ifShow: handlePrimission('primission', record),
             },
             {
-              label: '删除',
+              label: t('common.delText'),
               // icon: 'ant-design:delete-outlined',
               color: 'error',
               onClick: handleDelete.bind(null, record),
@@ -178,6 +178,7 @@
         handleSuccess,
         handlePrimission,
         handlePrimisionBtn,
+        t,
       };
     },
   });
